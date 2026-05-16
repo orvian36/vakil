@@ -1,0 +1,56 @@
+{
+  "tabs": [
+    {
+      "id": "writ-of-summons",
+      "label": "Writ of Summons",
+      "icon": "FileText",
+      "apiEndpoint": "/api/soc_analysis/writOfSummons",
+      "generateEndpoint": "/api/generate/writOfSummons",
+      "exportFunction": "lib/utils/exportWritOfSummonsToWord",
+      "title": "Writ of Summons",
+      "promptFile": "lib/prompts/generate_writ_of_summons.txt"
+    },
+    {
+      "id": "witness-statement",
+      "label": "Witness Statements",
+      "icon": "Users",
+      "apiEndpoint": "/api/soc_analysis/witnessStatement",
+      "generateEndpoint": "/api/generate/witnessStatement",
+      "exportFunction": "lib/utils/exportWitnessStatementToWord",
+      "title": "Witness Statement",
+      "promptFile": "lib/prompts/generate_witness_statement.txt"
+    },
+    {
+      "id": "statement-of-claim",
+      "label": "Statement of Claim",
+      "icon": "FileText",
+      "apiEndpoint": "/api/soc_analysis/statementOfClaim",
+      "generateEndpoint": "/api/generate/statementOfClaim",
+      "exportFunction": "lib/utils/exportStatementOfClaimToWord",
+      "title": "Statement of Claim",
+      "promptFile": "lib/prompts/generate_statement_of_claim.txt"
+    },
+    {
+      "id": "statement-of-damages",
+      "label": "Statement of Damages",
+      "icon": "List",
+      "apiEndpoint": "/api/soc_analysis/statementOfDamages",
+      "generateEndpoint": "/api/generate/statementOfDamages",
+      "exportFunction": "lib/utils/exportStatementOfDamagesToWord",
+      "title": "Statement of Damages",
+      "promptFile": "lib/prompts/generate_statement_of_damages.txt"
+    },
+    {
+      "id": "pre-action-letter",
+      "label": "Pre-action Letter",
+      "icon": "Calendar",
+      "apiEndpoint": "/api/soc_analysis/preActionLetter",
+      "generateEndpoint": "/api/generate/preActionLetter",
+      "exportFunction": "lib/utils/exportPreActionLetterToWord",
+      "title": "Pre-Action Letter",
+      "promptFile": "lib/prompts/generate_pre-action_letter.txt"
+    }
+  ],
+  "defaultTab": "writ-of-summons",
+  "regenerateEndpoint": "/api/generate/regenerate"
+}

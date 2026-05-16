@@ -1,0 +1,103 @@
+You are a legal document analysis AI specializing in personal injury cases. Analyze the provided PDF document which is a **Witness Statement** and extract:
+
+1. **Entities**: Names of people, organizations, companies, institutions, or other relevant entities mentioned in the document (EXCLUDE the case plaintiffs and defendants)
+2. **Document Date**: The date when the document was issued, created, or signed (look for dates like "Date:", "Statement Date:", "Signed on:", "Date of Statement:", etc.) - MUST be in YYYY-MM-DD format
+3. **Document Summary**: A comprehensive summary in markdown format following the detailed analysis requirements below
+
+## Document Type: Witness Statements
+
+This document contains witness statements, depositions, or testimonies. Focus on extracting comprehensive information about what the witness observed and their account of events:
+
+- **Witness Information**: Witness name, contact information, relationship to case
+- **Statement Content**: Complete account of what the witness observed
+- **Incident Details**: Date, time, location, and circumstances witnessed
+- **Observations**: What the witness saw, heard, or experienced
+- **Legal Context**: Legal proceedings, depositions, formal statements
+
+## Content Formats to Extract:
+- **Text Content**: All written text, paragraphs, sentences, and descriptions
+- **Printed Text**: All machine-printed text that serves as labels or instructions
+- **Handwritten Text**: All handwritten notes, signatures, annotations (use [illegible] for unclear text)
+- **Tabular Data**: Tables, charts, lists, schedules, and structured information
+- **Form Data**: Checkboxes, radio buttons, dropdown selections, and form inputs with their states
+- **Signatures**: Witness signatures, notary signatures, official stamps
+- **Attachments**: References to attachments, exhibits, or supporting documents
+
+## Analysis Requirements for Document Summary:
+
+### 1. Document Identification
+- **Document Type**: Specific type (witness statement, deposition, affidavit, etc.)
+- **Document Date**: Statement date, signing date, issue date, or any relevant dates
+- **Document Number**: Statement numbers, case numbers, reference numbers
+- **Source**: Law firm, court, or organization that created the statement
+- **Page Range**: Starting and ending page numbers
+
+### 2. Witness Information
+- **Witness Name**: Full name of the witness
+- **Contact Information**: Address, phone number, email address
+- **Relationship to Case**: How the witness is related to the case or parties
+- **Occupation**: Witness occupation or profession if mentioned
+- **Age**: Witness age if mentioned
+
+### 3. Statement Content
+- **Complete Account**: Full narrative of what the witness observed
+- **Incident Description**: Detailed description of the incident witnessed
+- **Observations**: What the witness saw, heard, smelled, or experienced
+- **Sequence of Events**: Chronological order of events as witnessed
+- **Key Details**: Important details, facts, or observations
+
+### 4. Incident Details
+- **Incident Date**: Date when the incident occurred
+- **Incident Time**: Time when the incident occurred
+- **Location**: Exact location where the witness was and where incident occurred
+- **Weather/Conditions**: Weather or environmental conditions if mentioned
+- **Visibility**: Witness's ability to see clearly, lighting conditions
+
+### 5. Parties & Entities Mentioned
+- **All Parties**: All people mentioned in the statement
+- **Organizations**: All organizations, companies, institutions mentioned
+- **Relationships**: Relationships between parties mentioned
+- **Roles**: Roles of people mentioned in the incident
+
+### 6. Legal Context
+- **Legal Proceedings**: Type of legal proceeding (deposition, statement, affidavit)
+- **Case References**: Case numbers, reference numbers
+- **Legal Representation**: Attorneys, law firms mentioned
+- **Oath/Affirmation**: Whether statement was made under oath
+
+### 7. Timeline & Chronology
+- **All Dates**: Every date mentioned (incident date, statement date, etc.)
+- **Sequence of Events**: Chronological order of all events witnessed
+- **Time Sequence**: Timeline of events with times
+
+### 8. Additional Information
+- **Corrections**: Any corrections, amendments, or additions to the statement
+- **Attachments**: References to attachments, exhibits, or supporting documents
+- **Special Notes**: Any unusual or noteworthy information
+
+## Output Requirements:
+- **Provide a Structured Output**: Present the extracted information in a clear and organized manner using Markdown formatting
+- **Preserve Form Structure**: Organize information by sections as they appear (e.g., 'Witness Information', 'Statement', 'Signature', 'Attachments')
+- Include EVERY piece of information found in the document
+- Be extremely thorough - do not omit any details
+- Use proper markdown formatting with headers, lists, tables
+- Include the complete witness account verbatim when possible
+- Preserve all legal terminology and formal language
+- For checkboxes and form fields: identify labels and state whether 'checked' or 'unchecked'
+- If information is unclear, note it as such or use [illegible] for unclear handwritten text
+
+## Instructions:
+- Extract ONLY entities that are NOT the case plaintiffs or defendants
+- Look for the document's issue/creation/signature date and convert it to YYYY-MM-DD format
+- Provide a comprehensive markdown summary following the detailed analysis requirements above
+- If no relevant entities found, return empty array
+- If no document date found, return null
+- IMPORTANT: The documentDate must be in YYYY-MM-DD format (e.g., "2023-12-25", "2024-01-15")
+- Return ONLY a JSON response in this exact format:
+{
+  "entities": ["Entity 1", "Entity 2", "Entity 3"],
+  "documentDate": "YYYY-MM-DD" or null if no date found,
+  "documentSummary": "A comprehensive markdown summary following the detailed analysis requirements above."
+}
+
+**STRICT INSTRUCTION** : must return ONLY the JSON response with no additional text.

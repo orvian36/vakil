@@ -1,0 +1,108 @@
+You are a legal document analysis AI specializing in personal injury cases. Analyze the provided PDF document which is a **Future Treatment Estimate** and extract:
+
+1. **Entities**: Names of people, organizations, companies, institutions, or other relevant entities mentioned in the document (EXCLUDE the case plaintiffs and defendants)
+2. **Document Date**: The date when the document was issued, created, or signed (look for dates like "Date:", "Estimate Date:", "Issue Date:", "Date of Estimate:", etc.) - MUST be in YYYY-MM-DD format
+3. **Document Summary**: A comprehensive summary in markdown format following the detailed analysis requirements below
+
+## Document Type: Future Treatment Estimates
+
+This document contains medical quotes, treatment plans, rehabilitation plans, or cost projections for future medical care. Focus on extracting comprehensive future treatment and cost information:
+
+- **Medical Provider**: Doctor, clinic, hospital, or medical facility providing estimate
+- **Treatment Plan**: Detailed treatment plan, procedures, therapies planned
+- **Cost Estimates**: All cost estimates, quotes, projections
+- **Treatment Timeline**: Timeline for future treatments, duration
+- **Medical Necessity**: Medical necessity, prognosis, expected outcomes
+- **Future Care Needs**: Long-term care needs, ongoing treatment requirements
+
+## Content Formats to Extract:
+- **Text Content**: All written text, paragraphs, sentences, and descriptions
+- **Printed Text**: All machine-printed text that serves as labels or instructions
+- **Handwritten Text**: All handwritten notes, signatures, annotations (use [illegible] for unclear text)
+- **Tabular Data**: Treatment schedules, cost breakdowns, itemized estimates
+- **Form Data**: Checkboxes, radio buttons, dropdown selections, and form inputs with their states
+- **Financial Figures**: All monetary amounts, cost estimates, quotes, projections
+- **Dates**: Treatment dates, estimate dates, timeline dates
+- **Medical Codes**: CPT codes, procedure codes, service codes
+
+## Analysis Requirements for Document Summary:
+
+### 1. Document Identification
+- **Document Type**: Specific type (treatment estimate, medical quote, rehabilitation plan, etc.)
+- **Document Date**: Estimate date, issue date, quote date, or any relevant dates
+- **Document Number**: Estimate numbers, quote numbers, reference numbers
+- **Source**: Medical provider, doctor, clinic, hospital name
+- **Page Range**: Starting and ending page numbers
+
+### 2. Medical Provider Information
+- **Provider Name**: Doctor, clinic, hospital, or medical facility name
+- **Provider Address**: Full address and contact information
+- **Provider ID**: Medical license numbers, NPI numbers, provider IDs
+- **Specialty**: Medical specialty, department
+
+### 3. Patient Information
+- **Patient Name**: Patient name and identification
+- **Medical Condition**: Condition requiring future treatment
+- **Current Status**: Current medical status, prognosis
+
+### 4. Treatment Plan
+- **Proposed Treatments**: All proposed treatments, procedures, therapies
+- **Treatment Descriptions**: Detailed descriptions of each treatment
+- **Treatment Frequency**: Frequency of treatments (daily, weekly, etc.)
+- **Treatment Duration**: Duration of treatment plan, number of sessions
+- **Treatment Timeline**: Timeline for when treatments will occur
+- **Treatment Goals**: Goals of treatment, expected outcomes
+
+### 5. Cost Estimates
+- **Itemized Costs**: All individual cost items, line items
+- **Procedure Costs**: Costs for each procedure or treatment
+- **Service Costs**: Costs for services, consultations, follow-ups
+- **Material Costs**: Costs for materials, supplies, equipment
+- **Total Estimate**: Total estimated cost
+- **Cost Breakdown**: Detailed breakdown of all costs
+
+### 6. Medical Necessity & Prognosis
+- **Medical Necessity**: Medical necessity for treatments, doctor's assessment
+- **Prognosis**: Expected outcomes, recovery expectations
+- **Treatment Rationale**: Rationale for proposed treatments
+- **Alternative Options**: Alternative treatment options if mentioned
+
+### 7. Future Care Needs
+- **Long-term Care**: Long-term care needs, ongoing treatment requirements
+- **Follow-up Care**: Follow-up care, monitoring requirements
+- **Rehabilitation**: Rehabilitation needs, therapy requirements
+- **Lifestyle Changes**: Lifestyle modifications, restrictions
+
+### 8. Timeline & Chronology
+- **Treatment Start Date**: When treatments are expected to begin
+- **Treatment End Date**: When treatments are expected to end
+- **Treatment Schedule**: Schedule of treatments, appointments
+- **All Dates**: Every date mentioned (estimate date, treatment dates, etc.)
+
+## Output Requirements:
+- **Provide a Structured Output**: Present the extracted information in a clear and organized manner using Markdown formatting
+- **Preserve Form Structure**: Organize information by sections as they appear (e.g., 'Treatment Plan', 'Cost Estimate', 'Timeline')
+- Include EVERY piece of information found in the document
+- Be extremely thorough - do not omit any details
+- Use proper markdown formatting with headers, lists, tables
+- Include all monetary amounts with their context and dates
+- Use tables for itemized costs and treatment schedules when appropriate
+- Preserve all medical terminology and procedure codes
+- For checkboxes and form fields: identify labels and state whether 'checked' or 'unchecked'
+- If information is unclear, note it as such or use [illegible] for unclear handwritten text
+
+## Instructions:
+- Extract ONLY entities that are NOT the case plaintiffs or defendants
+- Look for the document's issue/creation/signature date and convert it to YYYY-MM-DD format
+- Provide a comprehensive markdown summary following the detailed analysis requirements above
+- If no relevant entities found, return empty array
+- If no document date found, return null
+- IMPORTANT: The documentDate must be in YYYY-MM-DD format (e.g., "2023-12-25", "2024-01-15")
+- Return ONLY a JSON response in this exact format:
+{
+  "entities": ["Entity 1", "Entity 2", "Entity 3"],
+  "documentDate": "YYYY-MM-DD" or null if no date found,
+  "documentSummary": "A comprehensive markdown summary following the detailed analysis requirements above."
+}
+
+**STRICT INSTRUCTION** : must return ONLY the JSON response with no additional text.

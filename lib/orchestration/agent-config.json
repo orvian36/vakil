@@ -1,0 +1,58 @@
+[
+  {
+    "agent-name": "fetch-chronology",
+    "msg": "Loading Chronology",
+    "input variable": "none",
+    "output variable": "chronology"
+  },
+  {
+    "agent-name": "fetch-particulars",
+    "msg": "Loading Particulars",
+    "input variable": "none",
+    "output variable": "particulars"
+  },
+  {
+    "agent-name": "fetch-writ-of-summons-files",
+    "msg": "Loading Writ of Summons Supporting Documents",
+    "input variable": "none",
+    "output variable": "writ_of_summons_files"
+  },
+  {
+    "agent-name": "generate-writ-of-summons",
+    "msg": "Generating Writ of Summons",
+    "input variable": ["writ_of_summons_files"],
+    "output variable": "writ_of_summons"
+  },
+  {
+    "agent-name": "generate-witness-statement",
+    "msg": "Generating Witness Statement",
+    "input variable": ["chronology", "particulars"],
+    "output variable": "witness_statement"
+  },
+  {
+    "agent-name": "generate-statement-of-claim",
+    "msg": "Generating Statement of Claim",
+    "input variable": ["chronology", "particulars"],
+    "output variable": "statement_of_claim"
+  },
+  {
+    "agent-name": "generate-statement-of-damages",
+    "msg": "Generating Statement of Damages",
+    "input variable": ["chronology", "particulars"],
+    "output variable": "statement_of_damages"
+  },
+  {
+    "agent-name": "generate-pre-action-letter",
+    "msg": "Generating Pre-Action Letter",
+    "input variable": ["chronology", "particulars"],
+    "output variable": "pre_action_letter"
+  },
+  {
+    "agent-name": "translate-witness-statement",
+    "msg": "Translating Witness Statement to Chinese",
+    "input variable": ["witness_statement"],
+    "output variable": "witness_statement_chinese"
+  }
+]
+
+

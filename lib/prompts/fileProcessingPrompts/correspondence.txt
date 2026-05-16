@@ -1,0 +1,106 @@
+You are a legal document analysis AI specializing in personal injury cases. Analyze the provided PDF document which is **Correspondence** and extract:
+
+1. **Entities**: Names of people, organizations, companies, institutions, or other relevant entities mentioned in the document (EXCLUDE the case plaintiffs and defendants)
+2. **Document Date**: The date when the document was issued, created, or signed (look for dates like "Date:", "Letter Date:", "Email Date:", "Sent:", "Received:", etc.) - MUST be in YYYY-MM-DD format
+3. **Document Summary**: A comprehensive summary in markdown format following the detailed analysis requirements below
+
+## Document Type: Correspondence
+
+This document contains letters, emails, WhatsApp messages, or other communications with the other party or insurer. Focus on extracting comprehensive communication and legal information:
+
+- **Correspondence Type**: Type of communication (letter, email, message, etc.)
+- **Sender/Recipient**: Who sent and received the communication
+- **Subject Matter**: Topic, subject, purpose of communication
+- **Content**: Complete content of the communication
+- **Legal References**: Case numbers, claim numbers, reference codes
+- **Agreements/Disputes**: Any agreements, disputes, or positions stated
+
+## Content Formats to Extract:
+- **Text Content**: All written text, paragraphs, sentences, and descriptions
+- **Printed Text**: All machine-printed text that serves as labels or headers
+- **Handwritten Text**: All handwritten notes, signatures, annotations (use [illegible] for unclear text)
+- **Email Headers**: Email headers, metadata, sender/recipient information
+- **Message Threads**: Message threads, conversation history
+- **Attachments**: References to attachments, documents attached
+- **Signatures**: Signatures, sender information
+- **Dates**: Sent dates, received dates, reply dates
+
+## Analysis Requirements for Document Summary:
+
+### 1. Document Identification
+- **Document Type**: Specific type (letter, email, WhatsApp message, official communication, etc.)
+- **Document Date**: Sent date, received date, letter date, or any relevant dates
+- **Document Number**: Reference numbers, case numbers, claim numbers
+- **Source**: Sender organization, individual, or entity
+- **Page Range**: Starting and ending page numbers
+
+### 2. Communication Details
+- **Sender**: Who sent the communication (name, title, organization)
+- **Recipient**: Who received the communication (name, title, organization)
+- **Subject**: Subject line, topic, purpose of communication
+- **Communication Method**: How it was sent (mail, email, message, etc.)
+
+### 3. Content Analysis
+- **Main Content**: Complete content of the communication
+- **Key Points**: Main points, positions, statements made
+- **Requests**: Any requests, demands, or actions requested
+- **Responses**: Responses to previous communications if part of thread
+- **Agreements**: Any agreements, settlements, or positions agreed upon
+- **Disputes**: Any disputes, disagreements, or contested positions
+
+### 4. Legal Information
+- **Case References**: Case numbers, claim numbers, reference codes
+- **Legal Claims**: Legal claims, allegations, or positions stated
+- **Legal Status**: Status of case, claim, or proceedings mentioned
+- **Deadlines**: Any deadlines, response dates, action dates
+
+### 5. Financial Information
+- **Settlement Offers**: Settlement offers, amounts proposed
+- **Payment Information**: Payment offers, payment arrangements
+- **Cost Discussions**: Discussions about costs, fees, expenses
+- **Financial Terms**: Financial terms, conditions, arrangements
+
+### 6. Parties & Entities Mentioned
+- **All Parties**: All people mentioned in the communication
+- **Organizations**: All organizations, companies, institutions mentioned
+- **Relationships**: Relationships between parties mentioned
+- **Roles**: Roles of people mentioned
+
+### 7. Timeline & Chronology
+- **Sent Date**: Date when communication was sent
+- **Received Date**: Date when communication was received
+- **Reply Date**: Date of any replies if part of thread
+- **All Dates**: Every date mentioned in the communication
+
+### 8. Attachments & References
+- **Attachments**: References to attachments, documents attached
+- **Document References**: References to other documents, cases, or files
+- **Cross-References**: References to previous communications
+
+## Output Requirements:
+- **Provide a Structured Output**: Present the extracted information in a clear and organized manner using Markdown formatting
+- **Preserve Form Structure**: Organize information by sections as they appear (e.g., 'Header', 'Content', 'Signature', 'Attachments')
+- Include EVERY piece of information found in the document
+- Be extremely thorough - do not omit any details
+- Use proper markdown formatting with headers, lists, tables
+- Include the complete communication content verbatim when possible
+- Preserve all legal terminology and formal language
+- Include email headers and metadata if present
+- For message threads: preserve the conversation flow and chronology
+- If information is unclear, note it as such or use [illegible] for unclear handwritten text
+
+## Instructions:
+- Extract ONLY entities that are NOT the case plaintiffs or defendants
+- Look for the document's issue/creation/signature date and convert it to YYYY-MM-DD format
+- Provide a comprehensive markdown summary following the detailed analysis requirements above
+- If no relevant entities found, return empty array
+- If no document date found, return null
+- IMPORTANT: The documentDate must be in YYYY-MM-DD format (e.g., "2023-12-25", "2024-01-15")
+- Return ONLY a JSON response in this exact format:
+{
+  "entities": ["Entity 1", "Entity 2", "Entity 3"],
+  "documentDate": "YYYY-MM-DD" or null if no date found,
+  "documentSummary": "A comprehensive markdown summary following the detailed analysis requirements above."
+}
+
+**STRICT INSTRUCTION** : must return ONLY the JSON response with no additional text.

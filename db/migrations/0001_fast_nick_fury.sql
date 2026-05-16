@@ -1,0 +1,1 @@
+ALTER TABLE "soc_analyses" ADD COLUMN "witness_statement_chinese" text;

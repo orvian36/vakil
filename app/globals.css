@@ -1,0 +1,52 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #ffffff;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Hide Quick Insights panel */
+[class*="quick-insights"],
+[class*="QuickInsights"],
+[id*="quick-insights"],
+[id*="QuickInsights"],
+.insights-panel,
+.financial-insights,
+.confidence-score-panel {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+/* Hide any popup overlays that might contain insights */
+[class*="insights-overlay"],
+[class*="insights-popup"],
+[class*="financial-overlay"] {
+  display: none !important;
+}
+
+/* Placeholder color for all inputs */
+::placeholder {
+  color: #6b7280; /* A dark gray color */
+  opacity: 1; /* Ensure full opacity */
+}
+
+/* Remove any elements with "Confidence Score" text */
+[aria-label*="Confidence Score"],
+[title*="Confidence Score"],
+[data-testid*="insights"] {
+  display: none !important;
+}

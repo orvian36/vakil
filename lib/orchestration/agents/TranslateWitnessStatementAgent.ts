@@ -1,0 +1,117 @@
+import { Agent, AgentContext, AgentResult } from '../types';
+import { queryLLM } from '@/lib/llm';
+import { verifyAccessToken, refreshTokens } from '@/middleware';
+import { SocService } from '@/services/socService';
+import { writeDebugOutput } from './debug-utils';
+
+export class TranslateWitnessStatementAgent implements Agent {
+  name = 'translate-witness-statement';
+
+  async execute(context: AgentContext): Promise<AgentResult> {
+    try {
+      // Get inputs from context
+      const caseId = context.caseId;
+      const witnessStatement = context.witness_statement;
+
+      if (!caseId) {
+        return {
+          success: false,
+          error: 'Case ID is required to translate witness statement'
+        };
+      }
+
+      if (!witnessStatement) {
+        return {
+          success: false,
+          error: 'Witness statement is required to translate to Chinese'
+        };
+      }
+
+      console.log(`[TranslateWitnessStatementAgent] Translating witness statement to Chinese`);
+
+      // Create the translation prompt
+      const prompt = `You are a professional legal translator. Translate the following Witness Statement into accurate, formal, and clear Chinese, preserving all legal terminology and formatting. Ensure the translation is faithful to the original meaning and suitable for use in a legal context. Do not omit or summarize any content. Here is the Witness Statement to translate:
+
+${witnessStatement}
+
+**Critical Formatting: make sure the chinese translation markdown starts with '# 證人陳述書\\n' exactly**`;
+
+      // Verify access token
+      let verification = await verifyAccessToken(context.accessToken);
+
+      if (!verification.valid) {
+        console.log("[TranslateWitnessStatementAgent] Access token invalid, attempting to refresh...");
+        if (context.refreshToken) {
+          const refreshResult = await refreshTokens(context.refreshToken);
+          if (refreshResult.success && refreshResult.access_token && refreshResult.refresh_token) {
+            console.log("[TranslateWitnessStatementAgent] Tokens refreshed successfully.");
+            context.accessToken = refreshResult.access_token;
+            context.refreshToken = refreshResult.refresh_token;
+          } else {
+            console.error("[TranslateWitnessStatementAgent] Token refresh failed.");
+            throw new Error("Failed to refresh access token.");
+          }
+        } else {
+          console.error("[TranslateWitnessStatementAgent] No refresh token available, cannot refresh.");
+          throw new Error("Access token invalid and no refresh token available.");
+        }
+      }
+
+      // Call LLM to translate witness statement
+      const llmResponse = await queryLLM({
+        prompt,
+        accessToken: context.accessToken,
+        model: "google/gemini-3-flash-preview",
+        max_tokens: 60000,
+        appName: "personal-injury",
+        task: "translate-witness-statement-chinese",
+        provider: "deepinfra"
+      });
+
+      if (llmResponse.success && llmResponse.content) {
+        try {
+          // Parse the response
+          let content = llmResponse.content.trim();
+          let thinking = llmResponse.thinking?.trim();
+          content = content.replace(/^```(?:markdown)?\n?/, '').replace(/\n```$/, '');
+
+          // Update the witness statement in the database
+          await SocService.upsertSocAnalysis(caseId, { witnessStatementChinese: content });
+
+          console.log(`[TranslateWitnessStatementAgent] Successfully translated witness statement to Chinese`);
+
+          // Write debug output
+          await writeDebugOutput(this.name, content, { caseId });
+
+          return {
+            success: true,
+            data: content
+          };
+
+        } catch (parseError) {
+          console.error('[TranslateWitnessStatementAgent] Failed to parse LLM response:', parseError);
+          await writeDebugOutput(this.name, { error: 'Failed to parse translated witness statement', parseError: parseError instanceof Error ? parseError.message : 'Unknown error', rawResponse: llmResponse.content }, { caseId });
+          return {
+            success: false,
+            error: 'Failed to parse translated witness statement'
+          };
+        }
+      } else {
+        console.error('[TranslateWitnessStatementAgent] LLM translation failed:', llmResponse.error);
+        await writeDebugOutput(this.name, { error: 'LLM translation failed', llmError: llmResponse.error }, { caseId });
+        return {
+          success: false,
+          error: 'Failed to translate witness statement to Chinese'
+        };
+      }
+
+    } catch (error) {
+      console.error('[TranslateWitnessStatementAgent] Error translating witness statement:', error);
+      await writeDebugOutput(this.name, { error: error instanceof Error ? error.message : 'Unknown error occurred' }, { caseId: context.caseId });
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error occurred while translating witness statement'
+      };
+    }
+  }
+}
