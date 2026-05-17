@@ -9,6 +9,7 @@ export default defineConfig({
     setupFiles: ["tests/helpers/testDb.ts"],
     pool: "forks",
     forks: { singleFork: true },
+    fileParallelism: false,
   },
   resolve: {
     alias: {
