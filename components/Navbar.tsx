@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { ChevronDown, LogOut } from "lucide-react";
 import { User } from "@/types/auth";
 
 interface NavbarProps {
@@ -18,21 +17,19 @@ export default function Navbar({
   isAuthenticated = false,
   onLogout,
 }: NavbarProps) {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as Element;
-      if (!target.closest(".user-menu-container")) {
-        setIsMenuOpen(false);
-      }
+      if (!target.closest(".user-menu-container")) setOpen(false);
     };
-    if (isMenuOpen) document.addEventListener("mousedown", handleClickOutside);
+    if (open) document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [isMenuOpen]);
+  }, [open]);
 
   const handleLogout = async () => {
-    setIsMenuOpen(false);
+    setOpen(false);
     if (onLogout) await onLogout();
   };
 
@@ -40,43 +37,45 @@ export default function Navbar({
   const displayName = user?.name ?? user?.email ?? "User";
 
   return (
-    <nav className="bg-white text-gray-900 border-b border-gray-200">
+    <header className="border-b border-[var(--color-line)] bg-[var(--color-cream-50)]/85 backdrop-blur sticky top-0 z-30">
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-        <Link href="/" className="text-xl font-semibold tracking-tight">
-          {process.env.NEXT_PUBLIC_APP_NAME || "Vakil"}
+        <Link
+          href="/"
+          className="text-2xl tracking-tight text-[var(--color-ink-950)]"
+          style={{ fontFamily: "var(--font-display)" }}
+        >
+          Vakil
         </Link>
 
         {isAuthenticated && user && (
           <div className="relative user-menu-container">
             <button
-              onClick={() => setIsMenuOpen((v) => !v)}
+              onClick={() => setOpen((v) => !v)}
               disabled={isLoading}
-              className="flex items-center gap-2 rounded-md border border-gray-200 bg-gray-50 hover:bg-gray-100 px-3 py-1.5 text-sm"
+              className="focus-saffron flex items-center gap-2 rounded-[var(--radius-button)] border border-[var(--color-line)] bg-white px-3 py-1.5 text-sm"
             >
-              <span className="w-7 h-7 rounded-full bg-blue-600 text-white grid place-items-center font-medium">
+              <span className="w-7 h-7 rounded-full bg-[var(--color-saffron-500)] text-[var(--color-ink-950)] grid place-items-center font-medium">
                 {initials}
               </span>
-              <span className="hidden sm:inline text-gray-700">{displayName}</span>
-              <ChevronDown className="w-4 h-4 text-gray-500" />
+              <span className="hidden sm:inline text-[var(--color-ink-700)]">{displayName}</span>
             </button>
-            {isMenuOpen && (
-              <div className="absolute right-0 mt-2 w-56 rounded-lg bg-white border border-gray-200 shadow-sm p-1.5">
-                <div className="px-3 py-2 text-xs text-gray-500 border-b border-gray-200 truncate">
+            {open && (
+              <div className="absolute right-0 mt-2 w-56 rounded-[var(--radius-card)] bg-white border border-[var(--color-line)] shadow-sm p-1.5">
+                <div className="px-3 py-2 text-xs text-[var(--color-ink-500)] border-b border-[var(--color-line)] truncate">
                   {user.email}
                 </div>
                 <button
                   onClick={handleLogout}
                   disabled={isLoading}
-                  className="w-full flex items-center gap-2 text-left text-sm px-3 py-2 rounded-md hover:bg-gray-100 text-gray-700"
+                  className="w-full text-left text-sm px-3 py-2 rounded-[var(--radius-button)] hover:bg-[var(--color-cream-100)] text-[var(--color-ink-800)]"
                 >
-                  <LogOut className="w-4 h-4" />
-                  <span>Sign out</span>
+                  Sign out
                 </button>
               </div>
             )}
           </div>
         )}
       </div>
-    </nav>
+    </header>
   );
 }

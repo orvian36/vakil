@@ -194,23 +194,23 @@ export default function CaseDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-gray-600">Loading case details...</div>
+      <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center">
+        <div className="text-[var(--color-ink-500)]">Loading case details…</div>
       </div>
     );
   }
 
   if (!caseData) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
+      <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">Case not found</h2>
-          <p className="text-gray-600 mb-4">The requested case could not be found.</p>
+          <h2 className="text-xl mb-2">Case not found</h2>
+          <p className="text-[var(--color-ink-500)] mb-4">The requested case could not be found.</p>
           <button
             onClick={handleBackClick}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+            className="bg-[var(--color-saffron-500)] hover:bg-[var(--color-saffron-600)] text-[var(--color-ink-950)] font-medium px-4 py-2 rounded-[var(--radius-button)]"
           >
-            Back to Dashboard
+            Back to dashboard
           </button>
         </div>
       </div>
@@ -219,30 +219,31 @@ export default function CaseDetailPage() {
 
 
   return (
-    <div className="min-h-screen bg-white">
+    <div>
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-4 sm:px-6 lg:px-8 py-4">
+      <div className="border-b border-[var(--color-line)] bg-[var(--color-cream-50)] px-4 sm:px-6 lg:px-8 py-4">
         <div className="flex items-center justify-between max-w-7xl mx-auto">
           <div className="flex items-center space-x-4">
             <button
               onClick={handleBackClick}
-              className="flex items-center text-gray-600 hover:text-gray-900 transition-colors"
+              className="flex items-center text-[var(--color-ink-500)] hover:text-[var(--color-ink-950)] transition-colors"
+              title="Back to dashboard"
             >
               <ArrowLeft className="h-5 w-5 mr-1" />
             </button>
             <div>
-              <h1 className="text-2xl font-semibold text-gray-900">{caseData.title}</h1>
-              <p className="text-gray-600 mt-1">
-                { `Upload documents for ${caseData.caseType.replace('_', ' ')} case`}
+              <h1 className="text-2xl">{caseData.title}</h1>
+              <p className="text-[var(--color-ink-500)] mt-1 text-sm">
+                {`Drafting workflow for the ${caseData.caseType.replace('_', ' ')} case`}
               </p>
             </div>
           </div>
           <div className="flex items-center space-x-2">
             {caseData.status && (
-              <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                caseData.status === 'completed' ? 'bg-green-100 text-green-800' :
-                caseData.status === 'processing' ? 'bg-blue-100 text-blue-800' :
-                'bg-gray-100 text-gray-800'
+              <span className={`px-3 py-1 rounded-[var(--radius-chip)] text-xs font-medium ${
+                caseData.status === 'completed' ? 'bg-[var(--color-emerald-500)]/15 text-[var(--color-emerald-500)]' :
+                caseData.status === 'processing' ? 'bg-[var(--color-saffron-500)]/15 text-[var(--color-saffron-600)]' :
+                'bg-[var(--color-ink-950)]/10 text-[var(--color-ink-800)]'
               }`}>
                 {caseData.status.charAt(0).toUpperCase() + caseData.status.slice(1)}
               </span>
@@ -289,12 +290,12 @@ export default function CaseDetailPage() {
                 <div key={step.number} className="flex flex-col items-center flex-1 relative z-10">
                   {/* Step Circle with Icon */}
                   <div
-                    className={`relative w-14 h-14 rounded-full flex items-center justify-center transition-all duration-300 ${
+                    className={`relative w-14 h-14 rounded-full flex items-center justify-center transition-all duration-300 font-medium ${
                       isCurrent
-                        ? 'bg-blue-600 text-white shadow-lg shadow-blue-200 scale-110'
+                        ? 'bg-[var(--color-ink-950)] text-[var(--color-cream-50)] scale-105'
                         : isCompleted
-                        ? 'bg-green-600 text-white shadow-md shadow-green-200'
-                        : 'bg-gray-100 text-gray-400'
+                        ? 'bg-[var(--color-saffron-500)] text-[var(--color-ink-950)]'
+                        : 'bg-[var(--color-cream-100)] text-[var(--color-ink-500)] border border-[var(--color-line)]'
                     }`}
                   >
                     {isCompleted ? (
