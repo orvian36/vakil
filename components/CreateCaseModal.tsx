@@ -46,7 +46,7 @@ export default function CreateCaseModal({ isOpen, onClose, onSubmit, initialData
   const addPlaintiff = () => {
     setFormData(prev => ({
       ...prev,
-      parties: [...prev.parties, { name: '', type: 'person', role: 'plaintiff', chineseName: null, id: crypto.randomUUID() }]
+      parties: [...prev.parties, { name: '', type: 'person', role: 'plaintiff', bengaliName: null, id: crypto.randomUUID() }]
     }));
   };
 
@@ -64,20 +64,20 @@ export default function CreateCaseModal({ isOpen, onClose, onSubmit, initialData
     if (match) {
       return {
         englishName: match[1].trim(),
-        chineseName: match[2].trim()
+        bengaliName: match[2].trim()
       };
     }
     return {
       englishName: input,
-      chineseName: null
+      bengaliName: null
     };
   };
 
   const updatePlaintiff = (id: string, value: string) => {
-    const { englishName, chineseName } = parseNameInput(value);
+    const { englishName, bengaliName } = parseNameInput(value);
     setFormData(prev => ({
       ...prev,
-      parties: prev.parties.map((p) => p.id === id ? { ...p, name: englishName, chineseName: chineseName } : p)
+      parties: prev.parties.map((p) => p.id === id ? { ...p, name: englishName, bengaliName: bengaliName } : p)
     }));
     // Note: Plaintiffs are currently stored as string[], so Chinese name cannot be stored directly here.
     // If Chinese name is needed for plaintiffs, the plaintiffs array type would need to change.
@@ -86,7 +86,7 @@ export default function CreateCaseModal({ isOpen, onClose, onSubmit, initialData
   const addDefendant = () => {
     setFormData(prev => ({
       ...prev,
-      parties: [...prev.parties, { name: '', type: 'person', role: 'defendant', chineseName: null, id: crypto.randomUUID() }]
+      parties: [...prev.parties, { name: '', type: 'person', role: 'defendant', bengaliName: null, id: crypto.randomUUID() }]
     }));
   };
 
@@ -101,11 +101,11 @@ export default function CreateCaseModal({ isOpen, onClose, onSubmit, initialData
 
   const updateDefendant = (id: string, field: 'name' | 'type', value: string) => {
     if (field === 'name') {
-      const { englishName, chineseName } = parseNameInput(value);
+      const { englishName, bengaliName } = parseNameInput(value);
       setFormData(prev => ({
         ...prev,
         parties: prev.parties.map((d) =>
-          d.id === id ? { ...d, name: englishName, chineseName: chineseName } : d
+          d.id === id ? { ...d, name: englishName, bengaliName: bengaliName } : d
         )
       }));
     } else {
@@ -155,7 +155,7 @@ export default function CreateCaseModal({ isOpen, onClose, onSubmit, initialData
           .map(p => ({
             id: p.id,
             name: p.name,
-            chineseName: p.chineseName,
+            bengaliName: p.bengaliName,
             type: p.type || 'person',
             role: p.role
           }))
@@ -323,7 +323,7 @@ export default function CreateCaseModal({ isOpen, onClose, onSubmit, initialData
                     </label>
                     <input
                       type="text"
-                      value={plaintiff.name + (plaintiff.chineseName ? ` (${plaintiff.chineseName})` : '')}
+                      value={plaintiff.name + (plaintiff.bengaliName ? ` (${plaintiff.bengaliName})` : '')}
                       onChange={(e) => updatePlaintiff(plaintiff.id, e.target.value)}
                       placeholder="Enter plaintiff name (Chinese Name)"
                       className="w-full px-3 py-2 border border-gray-300 text-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -371,7 +371,7 @@ export default function CreateCaseModal({ isOpen, onClose, onSubmit, initialData
                     </label>
                     <input
                       type="text"
-                      value={defendant.name + (defendant.chineseName ? ` (${defendant.chineseName})` : '')}
+                      value={defendant.name + (defendant.bengaliName ? ` (${defendant.bengaliName})` : '')}
                       onChange={(e) => updateDefendant(defendant.id, 'name', e.target.value)}
                       placeholder="Enter defendant name (Chinese Name)"
                       className="w-full px-3 py-2 border border-gray-300 text-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"

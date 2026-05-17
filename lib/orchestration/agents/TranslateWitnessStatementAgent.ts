@@ -76,7 +76,8 @@ ${witnessStatement}
           content = content.replace(/^```(?:markdown)?\n?/, '').replace(/\n```$/, '');
 
           // Update the witness statement in the database
-          await SocService.upsertSocAnalysis(caseId, { witnessStatementChinese: content });
+          // NOTE: column was renamed in Phase 1; the Chinese-to-Bengali prompt swap happens in Phase 4.
+          await SocService.upsertSocAnalysis(caseId, { witnessStatementBengali: content });
 
           console.log(`[TranslateWitnessStatementAgent] Successfully translated witness statement to Chinese`);
 

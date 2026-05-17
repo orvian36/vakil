@@ -38,6 +38,12 @@ lib/orchestration/agents/debug/
 # vercel
 .vercel
 
+# Prisma local databases
+prisma/dev.db
+prisma/dev.db-journal
+prisma/test.db
+prisma/test.db-journal
+
 # Claude Code local state
 .claude/settings.local.json
 skills-lock.json
