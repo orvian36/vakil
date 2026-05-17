@@ -23,6 +23,8 @@ beforeEach(async () => {
   await testPrisma.caseParty.deleteMany();
   await testPrisma.caseEvidenceType.deleteMany();
   await testPrisma.case.deleteMany();
+  await testPrisma.refreshToken.deleteMany();
+  await testPrisma.user.deleteMany();
 });
 
 afterAll(async () => {
