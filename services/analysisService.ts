@@ -1,41 +1,30 @@
-import { db } from "@/db";
-import { caseAnalyses } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { prisma } from "@/lib/db";
+
+type Status = "pending" | "processing" | "completed" | "failed";
 
 export class AnalysisService {
-    static async createAnalysis(caseId: string, analysisType: "soc" | "defence") {
-      const [analysis] = await db
-        .insert(caseAnalyses)
-        .values({ caseId, analysisType })
-        .returning();
-      return analysis;
-    }
-  
-    static async getAnalysis(caseId: string, analysisType: "soc" | "defence") {
-      return await db.query.caseAnalyses.findFirst({
-        where: (a: typeof caseAnalyses, { and }: { and: any }) =>
-          and(eq(a.caseId, caseId), eq(a.analysisType, analysisType)),
-      });
-    }
-  
-    static async updateAnalysisStatus(
-      analysisId: string,
-      status: "pending" | "processing" | "completed" | "failed",
-      errorMessage?: string
-    ) {
-      const [updated] = await db
-        .update(caseAnalyses)
-        .set({
-          analysisStatus: status,
-          errorMessage,
-          updatedAt: new Date().toISOString(),
-        })
-        .where(eq(caseAnalyses.id, analysisId))
-        .returning();
-      return updated;
-    }
-  
-    static async deleteAnalysis(analysisId: string) {
-      await db.delete(caseAnalyses).where(eq(caseAnalyses.id, analysisId));
-    }
+  static async createAnalysis(caseId: string, analysisType: "soc" | "defence") {
+    return prisma.caseAnalysis.create({ data: { caseId, analysisType } });
   }
+
+  static async getAnalysis(caseId: string, analysisType: "soc" | "defence") {
+    return prisma.caseAnalysis.findUnique({
+      where: { caseId_analysisType: { caseId, analysisType } },
+    });
+  }
+
+  static async updateAnalysisStatus(
+    analysisId: string,
+    status: Status,
+    errorMessage?: string,
+  ) {
+    return prisma.caseAnalysis.update({
+      where: { id: analysisId },
+      data: { analysisStatus: status, errorMessage },
+    });
+  }
+
+  static async deleteAnalysis(analysisId: string) {
+    await prisma.caseAnalysis.delete({ where: { id: analysisId } });
+  }
+}
