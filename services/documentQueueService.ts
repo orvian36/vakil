@@ -1,7 +1,6 @@
-import { prisma } from "../lib/db";
+﻿import { prisma } from "../lib/db";
 import * as fs from "fs";
 import { getDownloadUrl } from "../lib/storage/urls";
-import { verifyAccessToken, refreshTokens } from "../middleware";
 import PDFAnalysisService from "./pdfAnalysisService";
 
 interface QueueItem {
@@ -146,30 +145,12 @@ class DocumentProcessingQueue {
     }
 
     try {
-      let currentAccessToken = accessToken;
-      let currentRefreshToken = refreshToken;
-
       const downloadUrl = await getDownloadUrl(fileKey);
-
-      const verification = await verifyAccessToken(currentAccessToken);
-      if (!verification.valid) {
-        if (currentRefreshToken) {
-          const refreshResult = await refreshTokens(currentRefreshToken);
-          if (refreshResult.success && refreshResult.access_token && refreshResult.refresh_token) {
-            currentAccessToken = refreshResult.access_token;
-            currentRefreshToken = refreshResult.refresh_token;
-          } else {
-            throw new Error("Failed to refresh access token.");
-          }
-        } else {
-          throw new Error("Access token invalid and no refresh token available.");
-        }
-      }
 
       const pdfAnalysisService = new PDFAnalysisService();
       const analysisResult = await pdfAnalysisService.analyzePDFWithEntitiesAndDate(
         downloadUrl,
-        currentAccessToken,
+        accessToken,
         fileRecord.type,
       );
 

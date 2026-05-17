@@ -1,9 +1,8 @@
-import { Agent, AgentContext, AgentResult } from '../types';
+﻿import { Agent, AgentContext, AgentResult } from '../types';
 import { queryLLM } from '@/lib/llm';
 import { promises as fsPromises } from 'fs';
 import { join } from 'path';
 import { SocService } from '@/services/socService';
-import { verifyAccessToken, refreshTokens } from '@/middleware';
 import { preProcessMD } from '@/utils/remarkFixVoidTags';
 import { verifyMarkdown } from '@/utils/verify_markdown';
 import { writeDebugOutput } from './debug-utils';
@@ -55,26 +54,6 @@ ${userComment.trim()}
 Please incorporate these requirements into the generated particulars while maintaining the structure and format.`;
       }
 
-      // Verify access token
-      let verification = await verifyAccessToken(context.accessToken);
-
-      if (!verification.valid) {
-        console.log("[GenerateParticularsAgent] Access token invalid, attempting to refresh...");
-        if (context.refreshToken) {
-          const refreshResult = await refreshTokens(context.refreshToken);
-          if (refreshResult.success && refreshResult.access_token && refreshResult.refresh_token) {
-            console.log("[GenerateParticularsAgent] Tokens refreshed successfully.");
-            context.accessToken = refreshResult.access_token;
-            context.refreshToken = refreshResult.refresh_token;
-          } else {
-            console.error("[GenerateParticularsAgent] Token refresh failed.");
-            throw new Error("Failed to refresh access token.");
-          }
-        } else {
-          console.error("[GenerateParticularsAgent] No refresh token available, cannot refresh.");
-          throw new Error("Access token invalid and no refresh token available.");
-        }
-      }
 
       // Call LLM to generate particulars with retry logic
       const maxRetries = 3;

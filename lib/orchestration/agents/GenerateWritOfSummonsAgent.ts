@@ -1,10 +1,9 @@
-import { Agent, AgentContext, AgentResult } from '../types';
+﻿import { Agent, AgentContext, AgentResult } from '../types';
 import { queryLLM } from '@/lib/llm';
 import { promises as fsPromises } from 'fs';
 import { join } from 'path';
 import { SocService } from '@/services/socService';
 import PDFAnalysisService from '@/services/pdfAnalysisService';
-import { verifyAccessToken, refreshTokens } from '@/middleware';
 import { writeDebugOutput } from './debug-utils';
 
 export class GenerateWritOfSummonsAgent implements Agent {
@@ -51,28 +50,6 @@ export class GenerateWritOfSummonsAgent implements Agent {
 ## Writ of Summons Supporting Documents:
 ${writOfSummonsText || 'No supporting documents available.'}`;
 
-      // Verify access token
-      let verification = await verifyAccessToken(context.accessToken);
-
-      if (!verification.valid) {
-        console.log("[GenerateWritOfSummonsAgent] Access token invalid, attempting to refresh...");
-        if (context.refreshToken) {
-          const refreshResult = await refreshTokens(context.refreshToken);
-          if (refreshResult.success && refreshResult.access_token && refreshResult.refresh_token) {
-            console.log("[GenerateWritOfSummonsAgent] Tokens refreshed successfully.");
-            context.accessToken = refreshResult.access_token;
-            context.refreshToken = refreshResult.refresh_token;
-          } else {
-            console.error("[GenerateWritOfSummonsAgent] Token refresh failed.");
-            // Handle error, maybe mark document processing as failed
-            throw new Error("Failed to refresh access token.");
-          }
-        } else {
-          console.error("[GenerateWritOfSummonsAgent] No refresh token available, cannot refresh.");
-          // Handle error
-          throw new Error("Access token invalid and no refresh token available.");
-        }
-      }
 
       // Call LLM to generate writ of summons
       const llmResponse = await queryLLM({
