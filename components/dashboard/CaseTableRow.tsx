@@ -10,8 +10,6 @@ function statusFromCase(c: Case): Status {
       return "complete";
     case "processing":
       return "processing";
-    case "failed":
-      return "failed";
     case "draft":
     default:
       return "draft";
