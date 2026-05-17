@@ -15,7 +15,7 @@ interface WitnessStatementTabProps {
   caseId: string;
   caseData: Case;
   content?: string;
-  chineseContent?: string;
+  bengaliContent?: string;
   isGenerating?: boolean;
 }
 
@@ -23,14 +23,14 @@ export default function WitnessStatementTab({
   caseId, 
   caseData,
   content: propContent = '',
-  chineseContent: propChineseContent = '',
+  bengaliContent: propChineseContent = '',
   isGenerating: propIsGenerating = false,
 }: WitnessStatementTabProps) {
   // Local state management - consistent with other tabs
   const [content, setContent] = useState(propContent);
-  const [chineseContent, setChineseContent] = useState(propChineseContent);
+  const [bengaliContent, setChineseContent] = useState(propChineseContent);
   const [showRegenerateModal, setShowRegenerateModal] = useState(false);
-  const [isChineseMode, setIsChineseMode] = useState(false);
+  const [isBengaliMode, setIsChineseMode] = useState(false);
 
   // Update content when prop changes
   useEffect(() => {
@@ -50,7 +50,7 @@ export default function WitnessStatementTab({
   };
 
   const handleLanguageToggle = () => {
-    setIsChineseMode(!isChineseMode);
+    setIsChineseMode(!isBengaliMode);
   };
 
   const handleRegenerateConfirm = async (userComment: string) => {
@@ -69,8 +69,8 @@ export default function WitnessStatementTab({
 
   const handleDownload = async () => {
     try {
-      const currentContent = isChineseMode ? chineseContent : content;
-      const languageSuffix = isChineseMode ? '-chinese' : '';
+      const currentContent = isBengaliMode ? bengaliContent : content;
+      const languageSuffix = isBengaliMode ? '-bengali' : '';
 
       const plaintiffName = caseData.parties.filter((p) => p.role === 'plaintiff')[0].name;
       
@@ -81,7 +81,7 @@ export default function WitnessStatementTab({
         plaintiffName: plaintiffName.toUpperCase(),
         caseCode: "",
         includeFormattingExamples: false,
-        title: isChineseMode ? 'Witness Statement (Chinese)' : 'Witness Statement',
+        title: isBengaliMode ? 'Witness Statement (Bengali)' : 'Witness Statement',
         court: caseData.court?.toUpperCase()
       });
     } catch (error) {
@@ -113,18 +113,18 @@ export default function WitnessStatementTab({
           <p className="text-sm text-gray-600">Edit the content below and regenerate if needed</p>
         </div>
         <div className="flex gap-2">
-          {chineseContent && (
+          {bengaliContent && (
             <button 
               onClick={handleLanguageToggle}
               disabled={propIsGenerating}
               className={`flex items-center gap-2 px-3 py-1 rounded-lg transition-colors text-sm ${
-                isChineseMode 
+                isBengaliMode 
                   ? 'bg-green-600 text-white hover:bg-green-700' 
                   : 'bg-gray-600 text-white hover:bg-gray-700'
               } disabled:bg-gray-400 disabled:cursor-not-allowed`}
             >
               <Languages className="w-4 h-4" />
-              {isChineseMode ? '中文' : 'English'}
+              {isBengaliMode ? '中文' : 'English'}
             </button>
           )}
           <button 
@@ -140,7 +140,7 @@ export default function WitnessStatementTab({
       
       <div className="p-4" style={{ minHeight: '800px' }}>
         <MdxRenderer 
-          source={isChineseMode ? chineseContent : content}
+          source={isBengaliMode ? bengaliContent : content}
           components={{ Hoverable }}
         />
       </div>
