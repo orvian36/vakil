@@ -1038,7 +1038,7 @@ function createPartyTableRows(plaintiffs: any[], defendants: any[]) {
                     alignment: AlignmentType.CENTER,
                     children: [
                       new TextRun({
-                        text: plaintiff.chineseName!==null ? `(${plaintiff.chineseName})` : ' ',
+                        text: plaintiff.bengaliName!==null ? `(${plaintiff.bengaliName})` : ' ',
                         font: "Noto Sans SC",
                         size: 26
                       })
@@ -1190,7 +1190,7 @@ function createPartyTableRows(plaintiffs: any[], defendants: any[]) {
                     alignment: AlignmentType.CENTER,
                     children: [
                       new TextRun({
-                        text: defendant.chineseName!==null ? `(${defendant.chineseName})` : ' ',
+                        text: defendant.bengaliName!==null ? `(${defendant.bengaliName})` : ' ',
                         font: "Noto Sans SC",
                         size: 26
                       })
@@ -1562,10 +1562,10 @@ function getRoleLabel(party: any, plaintiffs: any[], defendants: any[],index: nu
                                                 size: 22,
                                                 font: "Times New Roman",
                                             }),
-                                            ...(plaintiff.chineseName
+                                            ...(plaintiff.bengaliName
                                                 ? [
                                                     new TextRun({
-                                                        text: ` (${plaintiff.chineseName})`,
+                                                        text: ` (${plaintiff.bengaliName})`,
                                                         size: 22,
                                                         font: "Noto Sans SC",
                                                     })
@@ -1627,7 +1627,7 @@ function getRoleLabel(party: any, plaintiffs: any[], defendants: any[],index: nu
                                         spacing: { after: 180 },
                                         children: [
                                             new TextRun({
-                                                text: `${defendant.name.toUpperCase()} ${defendant.chineseName === null ? ' ' : `(${defendant.chineseName})`}`,
+                                                text: `${defendant.name.toUpperCase()} ${defendant.bengaliName === null ? ' ' : `(${defendant.bengaliName})`}`,
                                                 size: 22,
                                                 font: "Times New Roman",
                                             }),
@@ -1866,7 +1866,7 @@ function getRoleLabel(party: any, plaintiffs: any[], defendants: any[],index: nu
           new Paragraph({
             children: [
               new TextRun({
-                text: `${data.plaintiffName?.toUpperCase()} ${data.caseData.parties[0].chineseName!==null ? `(${data.caseData.parties[0].chineseName})` : ' '}`,
+                text: `${data.plaintiffName?.toUpperCase()} ${data.caseData.parties[0].bengaliName!==null ? `(${data.caseData.parties[0].bengaliName})` : ' '}`,
                 font: "Times New Roman",
                 size: 24,
                 bold: true,

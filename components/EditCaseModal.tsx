@@ -71,19 +71,19 @@ export default function EditCaseModal({ isOpen, onClose, onSubmit, caseData }: E
     if (match) {
       return {
         englishName: match[1].trim(),
-        chineseName: match[2].trim()
+        bengaliName: match[2].trim()
       };
     }
     return {
       englishName: input,
-      chineseName: null
+      bengaliName: null
     };
   };
 
   const addPlaintiff = () => {
     setFormData(prev => ({
       ...prev,
-      parties: [...prev.parties, { name: '', type: 'person', role: 'plaintiff', chineseName: null, id: crypto.randomUUID() }]
+      parties: [...prev.parties, { name: '', type: 'person', role: 'plaintiff', bengaliName: null, id: crypto.randomUUID() }]
     }));
   };
 
@@ -97,10 +97,10 @@ export default function EditCaseModal({ isOpen, onClose, onSubmit, caseData }: E
   };
 
   const updatePlaintiff = (id: string, value: string) => {
-    const { englishName, chineseName } = parseNameInput(value);
+    const { englishName, bengaliName } = parseNameInput(value);
     setFormData(prev => ({
       ...prev,
-      parties: prev.parties.map((p) => p.id === id ? { ...p, name: englishName, chineseName: chineseName } : p)
+      parties: prev.parties.map((p) => p.id === id ? { ...p, name: englishName, bengaliName: bengaliName } : p)
     }));
 
   };
@@ -108,7 +108,7 @@ export default function EditCaseModal({ isOpen, onClose, onSubmit, caseData }: E
   const addDefendant = () => {
     setFormData(prev => ({
       ...prev,
-      parties: [...prev.parties, { name: '', type: 'person', role: 'defendant', chineseName: null, id: crypto.randomUUID() }]
+      parties: [...prev.parties, { name: '', type: 'person', role: 'defendant', bengaliName: null, id: crypto.randomUUID() }]
     }));
   };
 
@@ -123,10 +123,10 @@ export default function EditCaseModal({ isOpen, onClose, onSubmit, caseData }: E
 
   const updateDefendant = (id: string, field: 'name' | 'type', value: string) => {
     if (field === 'name') {
-      const { englishName, chineseName } = parseNameInput(value);
+      const { englishName, bengaliName } = parseNameInput(value);
       setFormData(prev => ({
         ...prev,
-        parties: prev.parties.map((d) => d.id === id ? { ...d, name: englishName, chineseName: chineseName } : d)
+        parties: prev.parties.map((d) => d.id === id ? { ...d, name: englishName, bengaliName: bengaliName } : d)
       }));
     } else {
       setFormData(prev => ({
@@ -180,7 +180,7 @@ export default function EditCaseModal({ isOpen, onClose, onSubmit, caseData }: E
             id: d.id,
             name: d.name,
             type: d.type || 'person',
-            chineseName: d.chineseName,
+            bengaliName: d.bengaliName,
             role: d.role,
           }))
       };
@@ -348,7 +348,7 @@ export default function EditCaseModal({ isOpen, onClose, onSubmit, caseData }: E
                       </label>
                       <input
                         type="text"
-                        value={plaintiff.name + (plaintiff.chineseName ? ` (${plaintiff.chineseName})` : '')}
+                        value={plaintiff.name + (plaintiff.bengaliName ? ` (${plaintiff.bengaliName})` : '')}
                         onChange={(e) => updatePlaintiff(plaintiff.id, e.target.value)}
                         placeholder="Enter plaintiff name (Chinese Name)"
                         className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -394,7 +394,7 @@ export default function EditCaseModal({ isOpen, onClose, onSubmit, caseData }: E
                     </label>
                     <input
                       type="text"
-                      value={defendant.name + (defendant.chineseName ? ` (${defendant.chineseName})` : '')}
+                      value={defendant.name + (defendant.bengaliName ? ` (${defendant.bengaliName})` : '')}
                       onChange={(e) => updateDefendant(defendant.id, 'name', e.target.value)}
                       placeholder="Enter defendant name (Chinese Name)"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
