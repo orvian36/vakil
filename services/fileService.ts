@@ -1,63 +1,55 @@
-import { db } from "@/db";
-import { files } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { prisma } from "@/lib/db";
+
+type Status = "pending" | "processing" | "completed" | "failed";
 
 export class FileService {
-    static async saveFileToDB(
-      fileId: string,
-      caseId: string,
-      fileName: string,
-      fileKey: string,
-      type: string
-    ) {
-      const [file] = await db
-        .insert(files)
-        .values({ id: fileId, caseId, fileName, fileKey, type })
-        .returning();
-      return file;
-    }
-  
-    static async listFilesByCase(caseId: string) {
-      return await db.query.files.findMany({
-        where: eq(files.caseId, caseId),
-        orderBy: (f: typeof files, { desc }: { desc: any }) => [desc(f.createdAt)],
-      });
-    }
-  
-    static async updateFileStatus(
-      fileId: string,
-      processingStatus: "pending" | "processing" | "completed" | "failed",
-      errorMessage?: string
-    ) {
-      const [updated] = await db
-        .update(files)
-        .set({
-          processingStatus,
-          errorMessage,
-          updatedAt: new Date().toISOString(),
-        })
-        .where(eq(files.id, fileId))
-        .returning();
-      return updated;
-    }
-
-    static async getPendingFiles(limit: number, userId?: string) {
-      return await db.query.files.findMany({
-        where: (f: typeof files, { and, eq }: { and: any; eq: any }) =>
-          userId
-            ? and(eq(f.processingStatus, "pending"), eq(f.caseId, userId))
-            : eq(f.processingStatus, "pending"),
-        limit,
-      });
-    }
-  
-    static async deleteFile(fileId: string) {
-      await db.delete(files).where(eq(files.id, fileId));
-    }
+  static async saveFileToDB(
+    fileId: string,
+    caseId: string,
+    fileName: string,
+    fileKey: string,
+    type: string,
+  ) {
+    return prisma.file.create({
+      data: { id: fileId, caseId, fileName, fileKey, type },
+    });
   }
 
+  static async listFilesByCase(caseId: string) {
+    return prisma.file.findMany({
+      where: { caseId },
+      orderBy: { createdAt: "desc" },
+    });
+  }
+
+  static async updateFileStatus(
+    fileId: string,
+    processingStatus: Status,
+    errorMessage?: string,
+  ) {
+    return prisma.file.update({
+      where: { id: fileId },
+      data: { processingStatus, errorMessage },
+    });
+  }
+
+  static async getPendingFiles(limit: number, userId?: string) {
+    // NOTE: legacy signature — the `userId` arg used to filter by caseId.
+    // Left as-is until Phase 2 introduces a real `User` model and we can filter
+    // through `case.userId`.
+    return prisma.file.findMany({
+      where: userId
+        ? { processingStatus: "pending", caseId: userId }
+        : { processingStatus: "pending" },
+      take: limit,
+    });
+  }
+
+  static async deleteFile(fileId: string) {
+    await prisma.file.delete({ where: { id: fileId } });
+  }
+}
+
 export async function getFileById(fileId: string) {
-  return await db.query.files.findFirst({
-    where: eq(files.id, fileId),
-  });
+  return prisma.file.findUnique({ where: { id: fileId } });
 }
