@@ -29,7 +29,13 @@ export function cva<C extends VariantConfig>(
     props?: VariantProps<C> & { className?: string },
   ): string {
     const out: string[] = [base];
-    const merged = { ...config.defaultVariants, ...props };
+    // Filter undefined values from props so they don't override defaultVariants
+    const definedProps = props
+      ? Object.fromEntries(
+          Object.entries(props).filter(([, v]) => v !== undefined),
+        )
+      : {};
+    const merged = { ...config.defaultVariants, ...definedProps };
     for (const key of Object.keys(config.variants) as (keyof C)[]) {
       const selection = (merged as VariantProps<C>)[key];
       if (selection == null) continue;
