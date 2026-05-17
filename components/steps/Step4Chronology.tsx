@@ -472,7 +472,7 @@ export default function Step4Chronology({ caseId, action, generatedContent, onGe
                 <button
                   onClick={() => {
                     setShowInsufficientBalanceModal(false);
-                    window.open('https://platform.makebell.com/tokens/purchase', '_blank');
+                    // Top-up flow is not part of Vakil — left as a no-op.
                   }}
                   className="px-4 py-2 bg-orange-600 text-white text-sm font-medium rounded-lg hover:bg-orange-700 transition-colors"
                 >

@@ -1,4 +1,4 @@
-import { Case } from "@/types/case";
+﻿import { Case } from "@/types/case";
 import { Document, Packer, Paragraph, TextRun, Table, MathSuperScript, LevelFormat,UnderlineType, MathRun, TableCell, TableRow, AlignmentType, WidthType, VerticalAlign, VerticalMerge, HeightRule, BorderStyle, HeadingLevel, NumberFormat, Footer, PageNumber } from 'docx';
 import { Math as Math_2 } from 'docx';
 
@@ -378,7 +378,7 @@ function getOrdinalSuffix(num: number): string {
         indent: { left: 720 },
         children: [
           new TextRun({
-            text: "• Add pages at the beginning or end of documents",
+            text: "â€¢ Add pages at the beginning or end of documents",
             font: "Times New Roman",
             size: 24
           })
@@ -390,7 +390,7 @@ function getOrdinalSuffix(num: number): string {
         indent: { left: 720 },
         children: [
           new TextRun({
-            text: "• Control line spacing (single, 1.5, double, or custom)",
+            text: "â€¢ Control line spacing (single, 1.5, double, or custom)",
             font: "Times New Roman",
             size: 24
           })
@@ -402,7 +402,7 @@ function getOrdinalSuffix(num: number): string {
         indent: { left: 720 },
         children: [
           new TextRun({
-            text: "• Adjust paragraph spacing (before and after)",
+            text: "â€¢ Adjust paragraph spacing (before and after)",
             font: "Times New Roman",
             size: 24
           })
@@ -414,7 +414,7 @@ function getOrdinalSuffix(num: number): string {
         indent: { left: 720 },
         children: [
           new TextRun({
-            text: "• Set custom indentation (left, right, hanging, first line)",
+            text: "â€¢ Set custom indentation (left, right, hanging, first line)",
             font: "Times New Roman",
             size: 24
           })
@@ -426,7 +426,7 @@ function getOrdinalSuffix(num: number): string {
         indent: { left: 720 },
         children: [
           new TextRun({
-            text: "• Apply text formatting (bold, italic, underline, highlight)",
+            text: "â€¢ Apply text formatting (bold, italic, underline, highlight)",
             font: "Times New Roman",
             size: 24
           })
@@ -438,7 +438,7 @@ function getOrdinalSuffix(num: number): string {
         indent: { left: 720 },
         children: [
           new TextRun({
-            text: "• Change font sizes and families",
+            text: "â€¢ Change font sizes and families",
             font: "Times New Roman",
             size: 24
           })
@@ -450,7 +450,7 @@ function getOrdinalSuffix(num: number): string {
         indent: { left: 720 },
         children: [
           new TextRun({
-            text: "• Control text alignment (left, center, right, justified)",
+            text: "â€¢ Control text alignment (left, center, right, justified)",
             font: "Times New Roman",
             size: 24
           })
@@ -462,7 +462,7 @@ function getOrdinalSuffix(num: number): string {
         indent: { left: 720 },
         children: [
           new TextRun({
-            text: "• Create and format tables with borders and shading",
+            text: "â€¢ Create and format tables with borders and shading",
             font: "Times New Roman",
             size: 24
           })
@@ -474,7 +474,7 @@ function getOrdinalSuffix(num: number): string {
         indent: { left: 720 },
         children: [
           new TextRun({
-            text: "• Add page breaks and section breaks",
+            text: "â€¢ Add page breaks and section breaks",
             font: "Times New Roman",
             size: 24
           })
@@ -486,7 +486,7 @@ function getOrdinalSuffix(num: number): string {
         indent: { left: 720 },
         children: [
           new TextRun({
-            text: "• Insert headers, footers, and page numbers",
+            text: "â€¢ Insert headers, footers, and page numbers",
             font: "Times New Roman",
             size: 24
           })
@@ -927,7 +927,7 @@ function getOrdinalSuffix(num: number): string {
     
     const allTextRuns = [
       new TextRun({
-        text: '• ',
+        text: 'â€¢ ',
         font: "Times New Roman",
         size: 24
       }),
@@ -1638,7 +1638,7 @@ function getRoleLabel(party: any, plaintiffs: any[], defendants: any[],index: nu
             spacing: { after: 400 },
             children: [
               new TextRun({
-                text: "PERSONAL INJURY ACTION NO.",
+                text: "Vakil ACTION NO.",
                 
                 font: "Times New Roman",
                 size: 24
@@ -2118,7 +2118,7 @@ function getRoleLabel(party: any, plaintiffs: any[], defendants: any[],index: nu
                     spacing: { after: 400 },
                     children: [
                       new TextRun({
-                        text: "PERSONAL INJURY ACTION NO.",
+                        text: "Vakil ACTION NO.",
                         
                         font: "Times New Roman",
                         size: 24
@@ -2320,7 +2320,7 @@ function getRoleLabel(party: any, plaintiffs: any[], defendants: any[],index: nu
   // Function to extract Witness Statements content between markers
 function extractSOCContent(text: string): string {
     const englishMarker = '# Witness Statement\n';
-    const bengaliMarker = '# সাক্ষীর বিবৃতি\n';
+    const bengaliMarker = '# à¦¸à¦¾à¦•à§à¦·à§€à¦° à¦¬à¦¿à¦¬à§ƒà¦¤à¦¿\n';
 
     // Try English marker first
     let startIndex = text.indexOf(englishMarker);

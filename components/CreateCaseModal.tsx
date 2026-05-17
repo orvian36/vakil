@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { X, Plus, Trash2 } from "lucide-react";
@@ -324,7 +324,7 @@ export default function CreateCaseModal({ isOpen, onClose, onSubmit, initialData
                       type="text"
                       value={plaintiff.name + (plaintiff.bengaliName ? ` (${plaintiff.bengaliName})` : '')}
                       onChange={(e) => updatePlaintiff(plaintiff.id, e.target.value)}
-                      placeholder="Enter plaintiff name (Bengali Name বাংলা)"
+                      placeholder="Enter plaintiff name (Bengali Name à¦¬à¦¾à¦‚à¦²à¦¾)"
                       className="w-full px-3 py-2 border border-gray-300 text-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     />
                   </div>
@@ -372,7 +372,7 @@ export default function CreateCaseModal({ isOpen, onClose, onSubmit, initialData
                       type="text"
                       value={defendant.name + (defendant.bengaliName ? ` (${defendant.bengaliName})` : '')}
                       onChange={(e) => updateDefendant(defendant.id, 'name', e.target.value)}
-                      placeholder="Enter defendant name (Bengali Name বাংলা)"
+                      placeholder="Enter defendant name (Bengali Name à¦¬à¦¾à¦‚à¦²à¦¾)"
                       className="w-full px-3 py-2 border border-gray-300 text-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     />
                   </div>
@@ -444,7 +444,7 @@ export default function CreateCaseModal({ isOpen, onClose, onSubmit, initialData
             <textarea
               value={formData.summary}
               onChange={(e) => handleInputChange('summary', e.target.value)}
-              placeholder="Provide additional details about the personal injury case to help generate a more accurate document..."
+              placeholder="Provide additional details about the Vakil case to help generate a more accurate document..."
               rows={4}
               className="w-full px-3 py-2 border border-gray-300 text-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-vertical"
             />
