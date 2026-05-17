@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 import { X, Plus, Trash2 } from "lucide-react";
@@ -189,13 +189,13 @@ export default function CreateCaseModal({ isOpen, onClose, onSubmit, initialData
       {/* Modal */}
       <div className="relative bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200">
-          <h2 className="text-xl font-semibold text-gray-900">
+        <div className="flex items-center justify-between p-6 border-b border-[var(--color-line)]">
+          <h2 className="text-xl font-semibold text-[var(--color-ink-950)]">
             {isEditMode ? 'Edit Case' : 'Create New Case'}
           </h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 transition-colors"
+            className="text-[var(--color-ink-300)] hover:text-[var(--color-ink-500)] transition-colors"
           >
             <X className="w-6 h-6" />
           </button>
@@ -205,7 +205,7 @@ export default function CreateCaseModal({ isOpen, onClose, onSubmit, initialData
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
           {/* Case Title */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-[var(--color-ink-700)] mb-2">
               Case Title *
             </label>
             <input
@@ -213,25 +213,25 @@ export default function CreateCaseModal({ isOpen, onClose, onSubmit, initialData
               value={formData.title}
               onChange={(e) => handleInputChange('title', e.target.value)}
               placeholder="Enter case title"
-              className={`w-full px-3 py-2 border text-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                errors.title ? 'border-red-500' : 'border-gray-300'
+              className={`w-full px-3 py-2 border text-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-saffron-500)] focus:border-[var(--color-saffron-500)] ${
+                errors.title ? 'border-[var(--color-rose-500)]' : 'border-[var(--color-line-strong)]'
               }`}
             />
             {errors.title && (
-              <p className="mt-1 text-sm text-red-600">{errors.title}</p>
+              <p className="mt-1 text-sm text-[var(--color-rose-500)]">{errors.title}</p>
             )}
           </div>
 
           {/* Case Creator Type */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-3">
+            <label className="block text-sm font-medium text-[var(--color-ink-700)] mb-3">
               Role
             </label>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <label className={`relative p-4 border-2 rounded-lg cursor-pointer transition-colors ${
                 formData.caseType === 'SOC' 
-                  ? 'border-blue-500 bg-blue-50' 
-                  : 'border-gray-200 hover:border-gray-300'
+                  ? 'border-[var(--color-saffron-500)] bg-[var(--color-saffron-500)]/10' 
+                  : 'border-[var(--color-line)] hover:border-[var(--color-line-strong)]'
               }`}>
                 <input
                   type="radio"
@@ -244,16 +244,16 @@ export default function CreateCaseModal({ isOpen, onClose, onSubmit, initialData
                 <div className="flex items-center space-x-3">
                   <div className={`w-4 h-4 rounded-full border-2 ${
                     formData.caseType === 'SOC'
-                      ? 'border-blue-500 bg-blue-500'
-                      : 'border-gray-300'
+                      ? 'border-[var(--color-saffron-500)] bg-[var(--color-saffron-500)]'
+                      : 'border-[var(--color-line-strong)]'
                   }`}>
                     {formData.caseType === 'SOC' && (
                       <div className="w-2 h-2 bg-white rounded-full m-0.5" />
                     )}
                   </div>
                   <div>
-                    <div className="font-medium text-gray-900">Plaintiff</div>
-                    <div className="text-sm text-gray-600">
+                    <div className="font-medium text-[var(--color-ink-950)]">Plaintiff</div>
+                    <div className="text-sm text-[var(--color-ink-500)]">
                       Filing a claim
                     </div>
                   </div>
@@ -262,8 +262,8 @@ export default function CreateCaseModal({ isOpen, onClose, onSubmit, initialData
 
               <label className={`relative p-4 border-2 rounded-lg cursor-pointer transition-colors ${
                 formData.caseType === 'DEFENCE' 
-                  ? 'border-blue-500 bg-blue-50' 
-                  : 'border-gray-200 hover:border-gray-300'
+                  ? 'border-[var(--color-saffron-500)] bg-[var(--color-saffron-500)]/10' 
+                  : 'border-[var(--color-line)] hover:border-[var(--color-line-strong)]'
               }`}>
                 <input
                   type="radio"
@@ -276,16 +276,16 @@ export default function CreateCaseModal({ isOpen, onClose, onSubmit, initialData
                 <div className="flex items-center space-x-3">
                   <div className={`w-4 h-4 rounded-full border-2 ${
                     formData.caseType === 'DEFENCE'
-                      ? 'border-blue-500 bg-blue-500'
-                      : 'border-gray-300'
+                      ? 'border-[var(--color-saffron-500)] bg-[var(--color-saffron-500)]'
+                      : 'border-[var(--color-line-strong)]'
                   }`}>
                     {formData.caseType === 'DEFENCE' && (
                       <div className="w-2 h-2 bg-white rounded-full m-0.5" />
                     )}
                   </div>
                   <div>
-                    <div className="font-medium text-gray-900">Defendant</div>
-                    <div className="text-sm text-gray-600">
+                    <div className="font-medium text-[var(--color-ink-950)]">Defendant</div>
+                    <div className="text-sm text-[var(--color-ink-500)]">
                       Responding to claim
                     </div>
                   </div>
@@ -300,13 +300,13 @@ export default function CreateCaseModal({ isOpen, onClose, onSubmit, initialData
           {/* Plaintiffs */}
           <div>
             <div className="flex items-center justify-between mb-3">
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-[var(--color-ink-700)]">
                 Plaintiffs
               </label>
               <button
                 type="button"
                 onClick={addPlaintiff}
-                className="text-blue-600 hover:text-blue-700 text-sm font-medium flex items-center space-x-1"
+                className="text-[var(--color-saffron-600)] hover:text-[var(--color-saffron-600)] text-sm font-medium flex items-center space-x-1"
               >
                 <Plus className="w-4 h-4" />
                 <span>Add Plaintiff</span>
@@ -317,7 +317,7 @@ export default function CreateCaseModal({ isOpen, onClose, onSubmit, initialData
               {formData.parties.filter(p => p.role === 'plaintiff').map((plaintiff, index) => (
                 <div key={plaintiff.id} className="flex items-center space-x-3">
                   <div className="flex-1">
-                    <label className="block text-sm text-gray-600 mb-1">
+                    <label className="block text-sm text-[var(--color-ink-500)] mb-1">
                       Plaintiff {index + 1}
                     </label>
                     <input
@@ -325,14 +325,14 @@ export default function CreateCaseModal({ isOpen, onClose, onSubmit, initialData
                       value={plaintiff.name + (plaintiff.bengaliName ? ` (${plaintiff.bengaliName})` : '')}
                       onChange={(e) => updatePlaintiff(plaintiff.id, e.target.value)}
                       placeholder="Enter plaintiff name (Bengali Name à¦¬à¦¾à¦‚à¦²à¦¾)"
-                      className="w-full px-3 py-2 border border-gray-300 text-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-3 py-2 border border-[var(--color-line-strong)] text-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-saffron-500)] focus:border-[var(--color-saffron-500)]"
                     />
                   </div>
                   {formData.parties.filter(p => p.role === 'plaintiff').length > 1 && (
                     <button
                       type="button"
                       onClick={() => removePlaintiff(plaintiff.id)}
-                      className="text-red-600 hover:text-red-700 mt-6"
+                      className="text-[var(--color-rose-500)] hover:text-[var(--color-rose-500)] mt-6"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -341,20 +341,20 @@ export default function CreateCaseModal({ isOpen, onClose, onSubmit, initialData
               ))}
             </div>
             {errors.parties && (
-              <p className="mt-1 text-sm text-red-600">{errors.parties}</p>
+              <p className="mt-1 text-sm text-[var(--color-rose-500)]">{errors.parties}</p>
             )}
           </div>
 
           {/* Defendants */}
           <div>
             <div className="flex items-center justify-between mb-3">
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-[var(--color-ink-700)]">
                 Defendants
               </label>
               <button
                 type="button"
                 onClick={addDefendant}
-                className="text-blue-600 hover:text-blue-700 text-sm font-medium flex items-center space-x-1"
+                className="text-[var(--color-saffron-600)] hover:text-[var(--color-saffron-600)] text-sm font-medium flex items-center space-x-1"
               >
                 <Plus className="w-4 h-4" />
                 <span>Add Defendant</span>
@@ -365,7 +365,7 @@ export default function CreateCaseModal({ isOpen, onClose, onSubmit, initialData
               {formData.parties.filter(p => p.role === 'defendant').map((defendant, index) => (
                 <div key={defendant.id} className="flex items-end space-x-3">
                   <div className="flex-1">
-                    <label className="block text-sm text-gray-600 mb-1">
+                    <label className="block text-sm text-[var(--color-ink-500)] mb-1">
                       Defendant {index + 1}
                     </label>
                     <input
@@ -373,14 +373,14 @@ export default function CreateCaseModal({ isOpen, onClose, onSubmit, initialData
                       value={defendant.name + (defendant.bengaliName ? ` (${defendant.bengaliName})` : '')}
                       onChange={(e) => updateDefendant(defendant.id, 'name', e.target.value)}
                       placeholder="Enter defendant name (Bengali Name à¦¬à¦¾à¦‚à¦²à¦¾)"
-                      className="w-full px-3 py-2 border border-gray-300 text-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-3 py-2 border border-[var(--color-line-strong)] text-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-saffron-500)] focus:border-[var(--color-saffron-500)]"
                     />
                   </div>
                   <div className="w-32">
                     <select
                       value={defendant.type}
                       onChange={(e) => updateDefendant(defendant.id, 'type', e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 text-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-3 py-2 border border-[var(--color-line-strong)] text-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-saffron-500)] focus:border-[var(--color-saffron-500)]"
                     >
                       <option value="">Select a type</option>
                       <option value="person">Person</option>
@@ -391,7 +391,7 @@ export default function CreateCaseModal({ isOpen, onClose, onSubmit, initialData
                     <button
                       type="button"
                       onClick={() => removeDefendant(defendant.id)}
-                      className="text-red-600 hover:text-red-700 mb-2"
+                      className="text-[var(--color-rose-500)] hover:text-[var(--color-rose-500)] mb-2"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -400,19 +400,19 @@ export default function CreateCaseModal({ isOpen, onClose, onSubmit, initialData
               ))}
             </div>
             {errors.parties && (
-              <p className="mt-1 text-sm text-red-600">{errors.parties}</p>
+              <p className="mt-1 text-sm text-[var(--color-rose-500)]">{errors.parties}</p>
             )}
           </div>
 
           {/* Court */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-[var(--color-ink-700)] mb-2">
               Court
             </label>
             <select
               value={formData.court || ''}
               onChange={(e) => handleInputChange('court', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 text-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 py-2 border border-[var(--color-line-strong)] text-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-saffron-500)] focus:border-[var(--color-saffron-500)]"
             >  
               <option value="">Select a court</option>
               <option value="District Court">District Court</option>
@@ -424,7 +424,7 @@ export default function CreateCaseModal({ isOpen, onClose, onSubmit, initialData
 
           {/* Case Number */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-[var(--color-ink-700)] mb-2">
               Case Number
             </label>
             <input
@@ -432,13 +432,13 @@ export default function CreateCaseModal({ isOpen, onClose, onSubmit, initialData
               value={formData.caseNumber}
               onChange={(e) => handleInputChange('caseNumber', e.target.value)}
               placeholder="Enter case number"
-              className="w-full px-3 py-2 border border-gray-300 text-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 py-2 border border-[var(--color-line-strong)] text-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-saffron-500)] focus:border-[var(--color-saffron-500)]"
             />
           </div>
 
           {/* Case Summary */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-[var(--color-ink-700)] mb-2">
               Case Summary (Optional)
             </label>
             <textarea
@@ -446,19 +446,19 @@ export default function CreateCaseModal({ isOpen, onClose, onSubmit, initialData
               onChange={(e) => handleInputChange('summary', e.target.value)}
               placeholder="Provide additional details about the Vakil case to help generate a more accurate document..."
               rows={4}
-              className="w-full px-3 py-2 border border-gray-300 text-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-vertical"
+              className="w-full px-3 py-2 border border-[var(--color-line-strong)] text-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-saffron-500)] focus:border-[var(--color-saffron-500)] resize-vertical"
             />
-            <p className="mt-1 text-sm text-gray-500">
+            <p className="mt-1 text-sm text-[var(--color-ink-500)]">
               Include key facts, dates, damages, and any other relevant information about the case.
             </p>
           </div>
 
           {/* Action Buttons */}
-          <div className="flex justify-end space-x-3 pt-6 border-t border-gray-200">
+          <div className="flex justify-end space-x-3 pt-6 border-t border-[var(--color-line)]">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors"
+              className="px-4 py-2 text-[var(--color-ink-700)] bg-[var(--color-cream-100)] hover:bg-[var(--color-cream-200)] rounded-md transition-colors"
             >
               Cancel
             </button>

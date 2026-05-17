@@ -202,11 +202,11 @@ export default function EditCaseModal({ isOpen, onClose, onSubmit, caseData }: E
       {/* Modal */}
       <div className="relative bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200">
-          <h2 className="text-xl font-semibold text-gray-900">Edit Case</h2>
+        <div className="flex items-center justify-between p-6 border-b border-[var(--color-line)]">
+          <h2 className="text-xl font-semibold text-[var(--color-ink-950)]">Edit Case</h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 transition-colors"
+            className="text-[var(--color-ink-300)] hover:text-[var(--color-ink-500)] transition-colors"
           >
             <X className="w-6 h-6" />
           </button>
@@ -216,7 +216,7 @@ export default function EditCaseModal({ isOpen, onClose, onSubmit, caseData }: E
         <form onSubmit={handleSubmit} onKeyDown={(e) => { if (e.key === 'Enter') e.preventDefault(); }} className="p-6 space-y-6">
           {/* Case Title */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-[var(--color-ink-700)] mb-2">
               Case Title *
             </label>
             <input
@@ -224,25 +224,25 @@ export default function EditCaseModal({ isOpen, onClose, onSubmit, caseData }: E
               value={formData.title}
               onChange={(e) => handleInputChange('title', e.target.value)}
               placeholder="Enter case title"
-              className={`w-full px-3 py-2 border rounded-md shadow-sm text-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                errors.title ? 'border-red-300' : 'border-gray-300'
+              className={`w-full px-3 py-2 border rounded-md shadow-sm text-black focus:outline-none focus:ring-2 focus:ring-[var(--color-saffron-500)] focus:border-[var(--color-saffron-500)] ${
+                errors.title ? 'border-[var(--color-rose-500)]/40' : 'border-[var(--color-line-strong)]'
               }`}
             />
             {errors.title && (
-              <p className="mt-1 text-sm text-red-600">{errors.title}</p>
+              <p className="mt-1 text-sm text-[var(--color-rose-500)]">{errors.title}</p>
             )}
           </div>
 
           {/* Document Type */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-3">
+            <label className="block text-sm font-medium text-[var(--color-ink-700)] mb-3">
               Case Type
             </label>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <label className={`relative p-4 border-2 rounded-lg cursor-pointer transition-colors ${
                 formData.caseType === 'SOC' 
-                  ? 'border-blue-500 bg-blue-50' 
-                  : 'border-gray-200 hover:border-gray-300'
+                  ? 'border-[var(--color-saffron-500)] bg-[var(--color-saffron-500)]/10' 
+                  : 'border-[var(--color-line)] hover:border-[var(--color-line-strong)]'
               }`}>
                 <input
                   type="radio"
@@ -255,16 +255,16 @@ export default function EditCaseModal({ isOpen, onClose, onSubmit, caseData }: E
                 <div className="flex items-center space-x-3">
                   <div className={`w-4 h-4 rounded-full border-2 ${
                     formData.caseType === 'SOC'
-                      ? 'border-blue-500 bg-blue-500'
-                      : 'border-gray-300'
+                      ? 'border-[var(--color-saffron-500)] bg-[var(--color-saffron-500)]'
+                      : 'border-[var(--color-line-strong)]'
                   }`}>
                     {formData.caseType === 'SOC' && (
                       <div className="w-2 h-2 bg-white rounded-full m-0.5" />
                     )}
                   </div>
                   <div>
-                    <div className="font-medium text-gray-900">Statement of Claim</div>
-                    <div className="text-sm text-gray-600">
+                    <div className="font-medium text-[var(--color-ink-950)]">Statement of Claim</div>
+                    <div className="text-sm text-[var(--color-ink-500)]">
                       Filing a claim
                     </div>
                   </div>
@@ -273,8 +273,8 @@ export default function EditCaseModal({ isOpen, onClose, onSubmit, caseData }: E
 
               <label className={`relative p-4 border-2 rounded-lg cursor-pointer transition-colors ${
                 formData.caseType === 'DEFENCE' 
-                  ? 'border-blue-500 bg-blue-50' 
-                  : 'border-gray-200 hover:border-gray-300'
+                  ? 'border-[var(--color-saffron-500)] bg-[var(--color-saffron-500)]/10' 
+                  : 'border-[var(--color-line)] hover:border-[var(--color-line-strong)]'
               }`}>
                 <input
                   type="radio"
@@ -287,16 +287,16 @@ export default function EditCaseModal({ isOpen, onClose, onSubmit, caseData }: E
                 <div className="flex items-center space-x-3">
                   <div className={`w-4 h-4 rounded-full border-2 ${
                     formData.caseType === 'DEFENCE'
-                      ? 'border-blue-500 bg-blue-500'
-                      : 'border-gray-300'
+                      ? 'border-[var(--color-saffron-500)] bg-[var(--color-saffron-500)]'
+                      : 'border-[var(--color-line-strong)]'
                   }`}>
                     {formData.caseType === 'DEFENCE' && (
                       <div className="w-2 h-2 bg-white rounded-full m-0.5" />
                     )}
                   </div>
                   <div>
-                    <div className="font-medium text-gray-900">Defence</div>
-                    <div className="text-sm text-gray-600">
+                    <div className="font-medium text-[var(--color-ink-950)]">Defence</div>
+                    <div className="text-sm text-[var(--color-ink-500)]">
                       Responding to claim
                     </div>
                   </div>
@@ -307,13 +307,13 @@ export default function EditCaseModal({ isOpen, onClose, onSubmit, caseData }: E
 
           {/* Case Status */}
           {/* <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-[var(--color-ink-700)] mb-2">
               Case Status
             </label>
             <select
               value={formData.status}
               onChange={(e) => handleInputChange('status', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 py-2 border border-[var(--color-line-strong)] rounded-md shadow-sm text-black focus:outline-none focus:ring-2 focus:ring-[var(--color-saffron-500)] focus:border-[var(--color-saffron-500)]"
             >
               <option value="draft">Draft</option>
               <option value="processing">Processing</option>
@@ -324,13 +324,13 @@ export default function EditCaseModal({ isOpen, onClose, onSubmit, caseData }: E
           {/* Plaintiffs */}
           <div>
             <div className="flex items-center justify-between mb-3">
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-[var(--color-ink-700)]">
                 Plaintiffs
               </label>
               {/* <button
                 type="button"
                 onClick={addPlaintiff}
-                className="flex items-center space-x-1 text-blue-600 hover:text-blue-700 text-sm font-medium"
+                className="flex items-center space-x-1 text-[var(--color-saffron-600)] hover:text-[var(--color-saffron-600)] text-sm font-medium"
               >
                 <Plus className="w-4 h-4" />
                 <span>Add Plaintiff</span>
@@ -343,7 +343,7 @@ export default function EditCaseModal({ isOpen, onClose, onSubmit, caseData }: E
                 .map((plaintiff, index) => (
                   <div key={plaintiff.id || index} className="flex items-center space-x-3">
                     <div className="flex-1">
-                      <label className="block text-sm text-gray-600 mb-1">
+                      <label className="block text-sm text-[var(--color-ink-500)] mb-1">
                         Plaintiff {index + 1}
                       </label>
                       <input
@@ -351,14 +351,14 @@ export default function EditCaseModal({ isOpen, onClose, onSubmit, caseData }: E
                         value={plaintiff.name + (plaintiff.bengaliName ? ` (${plaintiff.bengaliName})` : '')}
                         onChange={(e) => updatePlaintiff(plaintiff.id, e.target.value)}
                         placeholder="Enter plaintiff name (Bengali Name বাংলা)"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-3 py-2 border border-[var(--color-line-strong)] rounded-md shadow-sm text-black focus:outline-none focus:ring-2 focus:ring-[var(--color-saffron-500)] focus:border-[var(--color-saffron-500)]"
                       />
                     </div>
                     {formData.parties.filter((p) => p.role === 'plaintiff').length > 1 && (
                       <button
                         type="button"
                         onClick={() => removePlaintiff(plaintiff.id)}
-                        className="text-red-600 hover:text-red-700 mt-6"
+                        className="text-[var(--color-rose-500)] hover:text-[var(--color-rose-500)] mt-6"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -367,18 +367,18 @@ export default function EditCaseModal({ isOpen, onClose, onSubmit, caseData }: E
                 ))}
             </div>
             {errors.parties && (
-              <p className="mt-1 text-sm text-red-600">{errors.parties}</p>
+              <p className="mt-1 text-sm text-[var(--color-rose-500)]">{errors.parties}</p>
             )}
           </div>
 
           {/* Defendants */}
           <div>
             <div className="flex justify-between items-center mb-3">
-              <h3 className="text-lg font-semibold text-gray-800">Defendants</h3>
+              <h3 className="text-lg font-semibold text-[var(--color-ink-800)]">Defendants</h3>
               <button
                 type="button"
                 onClick={addDefendant}
-                className="flex items-center space-x-1 text-blue-600 hover:text-blue-700 text-sm font-medium"
+                className="flex items-center space-x-1 text-[var(--color-saffron-600)] hover:text-[var(--color-saffron-600)] text-sm font-medium"
               >
                 <Plus className="w-4 h-4" />
                 <span>Add Defendant</span>
@@ -389,7 +389,7 @@ export default function EditCaseModal({ isOpen, onClose, onSubmit, caseData }: E
               {formData.parties.filter((party) => party.role === 'defendant').map((defendant, index) => (
                 <div key={defendant.id} className="flex items-end space-x-3">
                   <div className="flex-1">
-                    <label className="block text-sm text-gray-600 mb-1">
+                    <label className="block text-sm text-[var(--color-ink-500)] mb-1">
                       Defendant {index + 1}
                     </label>
                     <input
@@ -397,14 +397,14 @@ export default function EditCaseModal({ isOpen, onClose, onSubmit, caseData }: E
                       value={defendant.name + (defendant.bengaliName ? ` (${defendant.bengaliName})` : '')}
                       onChange={(e) => updateDefendant(defendant.id, 'name', e.target.value)}
                       placeholder="Enter defendant name (Bengali Name বাংলা)"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-3 py-2 border border-[var(--color-line-strong)] rounded-md shadow-sm text-black focus:outline-none focus:ring-2 focus:ring-[var(--color-saffron-500)] focus:border-[var(--color-saffron-500)]"
                     />
                   </div>
                   <div className="w-32">
                     <select
                       value={defendant.type}
                       onChange={(e) => updateDefendant(defendant.id, 'type', e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-3 py-2 border border-[var(--color-line-strong)] rounded-md shadow-sm text-black focus:outline-none focus:ring-2 focus:ring-[var(--color-saffron-500)] focus:border-[var(--color-saffron-500)]"
                     >
                       <option value="person">Person</option>
                       <option value="company">Company</option>
@@ -414,7 +414,7 @@ export default function EditCaseModal({ isOpen, onClose, onSubmit, caseData }: E
                     <button
                       type="button"
                       onClick={() => removeDefendant(defendant.id)}
-                      className="text-red-600 hover:text-red-700 mb-2"
+                      className="text-[var(--color-rose-500)] hover:text-[var(--color-rose-500)] mb-2"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -423,19 +423,19 @@ export default function EditCaseModal({ isOpen, onClose, onSubmit, caseData }: E
               ))}
             </div>
             {errors.parties && (
-              <p className="mt-1 text-sm text-red-600">{errors.parties}</p>
+              <p className="mt-1 text-sm text-[var(--color-rose-500)]">{errors.parties}</p>
             )}
           </div>
 
           {/* Court */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-[var(--color-ink-700)] mb-2">
               Court
             </label>
             <select
               value={formData.court || ''}
               onChange={(e) => handleInputChange('court', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 text-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 py-2 border border-[var(--color-line-strong)] text-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-saffron-500)] focus:border-[var(--color-saffron-500)]"
             >
               <option value="District Court">District Court</option>
               <option value="High Court (Court of First Instance)">High Court (Court of First Instance)</option>
@@ -446,7 +446,7 @@ export default function EditCaseModal({ isOpen, onClose, onSubmit, caseData }: E
 
           {/* Case Number */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-[var(--color-ink-700)] mb-2">
               Case Number
             </label>
             <input
@@ -454,13 +454,13 @@ export default function EditCaseModal({ isOpen, onClose, onSubmit, caseData }: E
               value={formData.caseNumber || ''}
               onChange={(e) => handleInputChange('caseNumber', e.target.value)}
               placeholder="Enter case number"
-              className="w-full px-3 py-2 border border-gray-300 text-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 py-2 border border-[var(--color-line-strong)] text-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-saffron-500)] focus:border-[var(--color-saffron-500)]"
             />
           </div>
 
           {/* Case Summary */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-[var(--color-ink-700)] mb-2">
               Case Summary
             </label>
             <textarea
@@ -468,22 +468,22 @@ export default function EditCaseModal({ isOpen, onClose, onSubmit, caseData }: E
               onChange={(e) => handleInputChange('summary', e.target.value)}
               placeholder="Enter a brief summary of the case..."
               rows={4}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-y"
+              className="w-full px-3 py-2 border border-[var(--color-line-strong)] rounded-md shadow-sm text-black focus:outline-none focus:ring-2 focus:ring-[var(--color-saffron-500)] focus:border-[var(--color-saffron-500)] resize-y"
             />
           </div>
 
           {/* Action Buttons */}
-          <div className="flex justify-end space-x-3 pt-6 border-t border-gray-200">
+          <div className="flex justify-end space-x-3 pt-6 border-t border-[var(--color-line)]">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              className="px-4 py-2 text-sm font-medium text-[var(--color-ink-700)] bg-white border border-[var(--color-line-strong)] rounded-md hover:bg-[var(--color-cream-50)] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--color-saffron-500)]"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              className="px-4 py-2 text-sm font-medium text-white bg-[var(--color-saffron-500)] border border-transparent rounded-md hover:bg-[var(--color-saffron-600)] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--color-saffron-500)]"
             >
               Update Case
             </button>

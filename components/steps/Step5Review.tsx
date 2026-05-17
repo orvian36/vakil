@@ -298,15 +298,15 @@ export default function Step5Review({
       <div className="max-w-4xl mx-auto">
         <div className="bg-white  rounded-lg p-6">
           <div className="text-center mb-6">
-            <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-blue-600" />
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">Generating Documents</h2>
-            <p className="text-gray-600">AI agents are processing your case data...</p>
+            <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-[var(--color-saffron-600)]" />
+            <h2 className="text-2xl font-bold text-[var(--color-ink-950)] mb-2">Generating Documents</h2>
+            <p className="text-[var(--color-ink-500)]">AI agents are processing your case data...</p>
           </div>
 
           {/* Latest Server Event */}
           {serverEvents.length > 0 && (
             <div className="mt-6">
-              <div className="bg-gray-50 rounded-lg p-4">
+              <div className="bg-[var(--color-cream-50)] rounded-lg p-4">
                 {(() => {
                   const latestEvent = serverEvents[serverEvents.length - 1];
                   return (
@@ -314,11 +314,11 @@ export default function Step5Review({
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-2">
                           <div className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-pulse"></div>
-                          <span className="text-sm text-gray-600 capitalize">
+                          <span className="text-sm text-[var(--color-ink-500)] capitalize">
                             {latestEvent.type.replace(/_/g, ' ')}
                           </span>
                         </div>
-                        <span className="text-xs text-gray-400">
+                        <span className="text-xs text-[var(--color-ink-300)]">
                           {new Date(latestEvent.timestamp).toLocaleTimeString()}
                         </span>
                       </div>
@@ -326,20 +326,20 @@ export default function Step5Review({
                       <div>
                         {/* Message with inline spinner */}
                         <div className="flex items-center gap-2">
-                          <span className="text-gray-800 text-sm">
+                          <span className="text-[var(--color-ink-800)] text-sm">
                             {latestEvent.message}
                           </span>
-                          <Loader2 className="w-4 h-4 text-blue-600 animate-spin flex-shrink-0" />
+                          <Loader2 className="w-4 h-4 text-[var(--color-saffron-600)] animate-spin flex-shrink-0" />
                         </div>
                         
                         {/* Progress bar */}
                         {latestEvent.progress && (
                           <div className="space-y-1 mt-2">
-                            <div className="flex justify-between text-xs text-gray-500">
+                            <div className="flex justify-between text-xs text-[var(--color-ink-500)]">
                               <span>Progress</span>
                               {/* <span>{latestEvent.progress.current}/{latestEvent.progress.total}</span> */}
                             </div>
-                            <div className="w-full bg-gray-200 rounded-full h-1 overflow-hidden">
+                            <div className="w-full bg-[var(--color-cream-200)] rounded-full h-1 overflow-hidden">
                               <div 
                                 className="bg-gray-600 h-1 rounded-full transition-all duration-500 ease-out"
                                 style={{ 
@@ -359,10 +359,10 @@ export default function Step5Review({
           )}
 
           {error && (
-            <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+            <div className="mt-4 p-4 bg-[var(--color-rose-500)]/10 border border-[var(--color-rose-500)]/30 rounded-lg">
               <div className="flex items-center">
-                <XCircle className="w-5 h-5 text-red-600 mr-2" />
-                <span className="text-red-800">{error}</span>
+                <XCircle className="w-5 h-5 text-[var(--color-rose-500)] mr-2" />
+                <span className="text-[var(--color-rose-500)]">{error}</span>
               </div>
             </div>
           )}
@@ -378,16 +378,16 @@ export default function Step5Review({
         <div className="fixed inset-0 backdrop-blur-sm bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4 shadow-xl">
             <div className="flex items-center mb-4">
-              <AlertTriangle className="w-6 h-6 text-red-600 mr-3" />
-              <h3 className="text-lg font-semibold text-gray-900">Generation Failed</h3>
+              <AlertTriangle className="w-6 h-6 text-[var(--color-rose-500)] mr-3" />
+              <h3 className="text-lg font-semibold text-[var(--color-ink-950)]">Generation Failed</h3>
             </div>
             
             <div className="mb-6">
-              <p className="text-gray-600 mb-3">
+              <p className="text-[var(--color-ink-500)] mb-3">
                 There was an error while generating your documents:
               </p>
-              <div className="bg-red-50 border border-red-200 rounded-lg p-3">
-                <p className="text-red-800 text-sm font-mono break-words">
+              <div className="bg-[var(--color-rose-500)]/10 border border-[var(--color-rose-500)]/30 rounded-lg p-3">
+                <p className="text-[var(--color-rose-500)] text-sm font-mono break-words">
                   {error}
                 </p>
               </div>
@@ -396,13 +396,13 @@ export default function Step5Review({
             <div className="flex space-x-3 justify-end">
               <button
                 onClick={handleCloseErrorModal}
-                className="px-4 py-2 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+                className="px-4 py-2 text-[var(--color-ink-500)] bg-[var(--color-cream-100)] rounded-lg hover:bg-[var(--color-cream-200)] transition-colors"
               >
                 Close
               </button>
               <button
                 onClick={handleRetryGeneration}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="px-4 py-2 bg-[var(--color-saffron-500)] text-white rounded-lg hover:bg-[var(--color-saffron-600)] transition-colors"
               >
                 Retry Generation
               </button>
@@ -418,17 +418,17 @@ export default function Step5Review({
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
-                  <svg className="h-6 w-6 text-orange-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg className="h-6 w-6 text-[var(--color-saffron-600)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
                   </svg>
                 </div>
-                <h3 className="ml-3 text-lg font-medium text-gray-900">
+                <h3 className="ml-3 text-lg font-medium text-[var(--color-ink-950)]">
                   Insufficient Balance
                 </h3>
               </div>
               <button
                 onClick={() => setShowInsufficientBalanceModal(false)}
-                className="text-gray-400 hover:text-gray-600 transition-colors"
+                className="text-[var(--color-ink-300)] hover:text-[var(--color-ink-500)] transition-colors"
               >
                 <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -436,15 +436,15 @@ export default function Step5Review({
               </button>
             </div>
             <div className="mb-6">
-              <p className="text-sm text-gray-600 mb-4">
+              <p className="text-sm text-[var(--color-ink-500)] mb-4">
                 You don't have enough tokens to generate documents. Please top up your account to continue.
               </p>
-              <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
+              <div className="bg-[var(--color-saffron-500)]/10 border border-[var(--color-saffron-500)]/30 rounded-lg p-4">
                 <div className="flex items-center">
-                  <svg className="h-5 w-5 text-orange-600 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg className="h-5 w-5 text-[var(--color-saffron-600)] mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
-                  <p className="text-sm text-orange-800">
+                  <p className="text-sm text-[var(--color-saffron-600)]">
                     <strong>Need more tokens?</strong> Visit your account settings to purchase additional tokens.
                   </p>
                 </div>
@@ -453,7 +453,7 @@ export default function Step5Review({
             <div className="flex justify-end space-x-3">
               <button
                 onClick={() => setShowInsufficientBalanceModal(false)}
-                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                className="px-4 py-2 text-sm font-medium text-[var(--color-ink-700)] bg-white border border-[var(--color-line-strong)] rounded-lg hover:bg-[var(--color-cream-50)] transition-colors"
               >
                 Cancel
               </button>
@@ -462,7 +462,7 @@ export default function Step5Review({
                   setShowInsufficientBalanceModal(false);
                   // Top-up flow is not part of Vakil — left as a no-op.
                 }}
-                className="px-4 py-2 bg-orange-600 text-white text-sm font-medium rounded-lg hover:bg-orange-700 transition-colors"
+                className="px-4 py-2 bg-[var(--color-saffron-500)] text-white text-sm font-medium rounded-lg hover:bg-[var(--color-saffron-600)] transition-colors"
               >
                 Top Up Account
               </button>
@@ -475,8 +475,8 @@ export default function Step5Review({
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Document Review</h1>
-          <p className="text-gray-600 mt-1">Review and edit AI-generated documents</p>
+          <h1 className="text-2xl font-bold text-[var(--color-ink-950)]">Document Review</h1>
+          <p className="text-[var(--color-ink-500)] mt-1">Review and edit AI-generated documents</p>
         </div>
         <button
           onClick={() => {
@@ -484,7 +484,7 @@ export default function Step5Review({
             generateContent();
           }}
           disabled={isGenerating}
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-blue-400 disabled:cursor-not-allowed"
+          className="px-4 py-2 bg-[var(--color-saffron-500)] text-white rounded-lg hover:bg-[var(--color-saffron-600)] disabled:bg-[var(--color-saffron-400)] disabled:cursor-not-allowed"
         >
           {isGenerating ? 'Generating...' : 'Regenerate All'}
         </button>
@@ -492,7 +492,7 @@ export default function Step5Review({
 
       {/* Tabs */}
       <div className="mb-6">
-        <div className="border-b border-gray-200">
+        <div className="border-b border-[var(--color-line)]">
           <nav className="-mb-px flex space-x-8">
             {config.tabs.map((tab) => {
               const IconComponent = iconMap[tab.icon as keyof typeof iconMap];
@@ -502,8 +502,8 @@ export default function Step5Review({
                   onClick={() => handleTabChange(tab.id)}
                   className={`py-2 px-1 border-b-2 font-medium text-sm ${
                     activeTab === tab.id
-                      ? 'border-blue-500 text-blue-600'
-                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                      ? 'border-[var(--color-saffron-500)] text-[var(--color-saffron-600)]'
+                      : 'border-transparent text-[var(--color-ink-500)] hover:text-[var(--color-ink-700)] hover:border-[var(--color-line-strong)]'
                   }`}
                 >
                   <div className="flex items-center gap-2">

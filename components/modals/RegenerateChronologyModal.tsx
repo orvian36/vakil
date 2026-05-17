@@ -35,16 +35,16 @@ export default function RegenerateChronologyModal({
     <div className="fixed inset-0 backdrop-blur-sm bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] flex flex-col">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200">
+        <div className="flex items-center justify-between p-6 border-b border-[var(--color-line)]">
           <div className="flex items-center space-x-3">
-            <div className="p-2 bg-blue-100 rounded-lg">
-              <RefreshCw className="w-6 h-6 text-blue-600" />
+            <div className="p-2 bg-[var(--color-saffron-500)]/15 rounded-lg">
+              <RefreshCw className="w-6 h-6 text-[var(--color-saffron-600)]" />
             </div>
             <div>
-              <h2 className="text-xl font-semibold text-gray-900">
+              <h2 className="text-xl font-semibold text-[var(--color-ink-950)]">
                 Regenerate Chronology of Events
               </h2>
-              <p className="text-sm text-gray-600 mt-1">
+              <p className="text-sm text-[var(--color-ink-500)] mt-1">
                 Provide any modifications or additional requirements for the chronology details
               </p>
             </div>
@@ -52,9 +52,9 @@ export default function RegenerateChronologyModal({
           <button
             onClick={handleClose}
             disabled={isGenerating}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors disabled:opacity-50"
+            className="p-2 hover:bg-[var(--color-cream-100)] rounded-lg transition-colors disabled:opacity-50"
           >
-            <X className="w-5 h-5 text-gray-500" />
+            <X className="w-5 h-5 text-[var(--color-ink-500)]" />
           </button>
         </div>
 
@@ -63,7 +63,7 @@ export default function RegenerateChronologyModal({
           <div className="p-6 flex-1 overflow-y-auto">
             <div className="space-y-4">
             <div>
-              <label htmlFor="modifications" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="modifications" className="block text-sm font-medium text-[var(--color-ink-700)] mb-2">
                 What would you like to change or add to the chronology?
               </label>
               <textarea
@@ -71,10 +71,10 @@ export default function RegenerateChronologyModal({
                 value={modifications}
                 onChange={(e) => setModifications(e.target.value)}
                 placeholder="e.g., Add more details about the incident sequence, Include specific witness information, Focus more on medical timeline, Add more details about the defendant's negligence, Include specific dates and times, etc."
-                className="text-black w-full h-32 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
+                className="text-black w-full h-32 px-3 py-2 border border-[var(--color-line-strong)] rounded-lg focus:ring-2 focus:ring-[var(--color-saffron-500)] focus:border-[var(--color-saffron-500)] resize-none"
                 disabled={isGenerating}
               />
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-[var(--color-ink-500)] mt-1">
                 Leave empty to regenerate with the same prompt, or add specific modifications.
               </p>
             </div>
@@ -84,19 +84,19 @@ export default function RegenerateChronologyModal({
           </div>
 
           {/* Actions */}
-          <div className="flex items-center justify-end space-x-3 p-6 pt-4 border-t border-gray-200 bg-white">
+          <div className="flex items-center justify-end space-x-3 p-6 pt-4 border-t border-[var(--color-line)] bg-white">
             <button
               type="button"
               onClick={handleClose}
               disabled={isGenerating}
-              className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+              className="px-4 py-2 text-sm font-medium text-[var(--color-ink-700)] bg-white border border-[var(--color-line-strong)] rounded-lg hover:bg-[var(--color-cream-50)] focus:outline-none focus:ring-2 focus:ring-[var(--color-saffron-500)] disabled:opacity-50"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={isGenerating}
-              className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 flex items-center space-x-2"
+              className="px-4 py-2 text-sm font-medium text-white bg-[var(--color-saffron-500)] rounded-lg hover:bg-[var(--color-saffron-600)] focus:outline-none focus:ring-2 focus:ring-[var(--color-saffron-500)] disabled:opacity-50 flex items-center space-x-2"
             >
               {isGenerating ? (
                 <>

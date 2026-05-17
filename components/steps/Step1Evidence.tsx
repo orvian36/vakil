@@ -403,8 +403,8 @@ export default function Step1Evidence({ caseData, onPendingUploadsChange }: { ca
       <div className="mb-6">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-semibold text-gray-900 mb-2">Evidence checklist. Upload Your Evidence</h2>
-            <p className="text-gray-600">Select the types of supporting documents you have and upload them (Max 100MB/file)</p>
+            <h2 className="text-xl font-semibold text-[var(--color-ink-950)] mb-2">Evidence checklist. Upload Your Evidence</h2>
+            <p className="text-[var(--color-ink-500)]">Select the types of supporting documents you have and upload them (Max 100MB/file)</p>
           </div>
           <button
             onClick={() => setIsDrawerOpen(true)}
@@ -417,37 +417,37 @@ export default function Step1Evidence({ caseData, onPendingUploadsChange }: { ca
       </div>
 
       {/* Evidence Checklist Table */}
-      <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+      <div className="bg-white border border-[var(--color-line)] rounded-lg overflow-hidden">
+        <table className="min-w-full divide-y divide-[var(--color-line)]">
+          <thead className="bg-[var(--color-cream-50)]">
             <tr>
-               <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider">
+               <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--color-ink-700)] uppercase tracking-wider">
                  Type of Supporting Document
                </th>
-               <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider w-[48rem]">
+               <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--color-ink-700)] uppercase tracking-wider w-[48rem]">
                  Upload
                </th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="bg-white divide-y divide-[var(--color-line)]">
             {isLoadingEvidenceTypes ? (
               <tr>
                 <td colSpan={2} className="px-6 py-8 text-center">
                   <div className="flex items-center justify-center space-x-2">
-                    <div className="w-5 h-5 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-                    <span className="text-gray-600">Loading evidence types...</span>
+                    <div className="w-5 h-5 border-2 border-[var(--color-saffron-500)] border-t-transparent rounded-full animate-spin"></div>
+                    <span className="text-[var(--color-ink-500)]">Loading evidence types...</span>
                   </div>
                 </td>
               </tr>
             ) : editableItems.length === 0 ? (
               <tr>
-                <td colSpan={2} className="px-6 py-8 text-center text-gray-500">
+                <td colSpan={2} className="px-6 py-8 text-center text-[var(--color-ink-500)]">
                   No evidence types found. Click "Add Custom Evidence Type" to add one.
                 </td>
               </tr>
             ) : (
               editableItems.map((item, index) => (
-              <tr key={item.key} className="hover:bg-gray-50">
+              <tr key={item.key} className="hover:bg-[var(--color-cream-50)]">
                 <td className="px-6 py-4">
                   <div>
                     {editingItem === item.key ? (
@@ -456,26 +456,26 @@ export default function Step1Evidence({ caseData, onPendingUploadsChange }: { ca
                           type="text"
                           value={item.title}
                           onChange={(e) => updateItemTitle(item.key, e.target.value)}
-                          className="text-black w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          className="text-black w-full px-3 py-2 text-sm border border-[var(--color-line-strong)] rounded-md focus:ring-2 focus:ring-[var(--color-saffron-500)] focus:border-[var(--color-saffron-500)]"
                           placeholder="Enter document type"
                         />
                         <textarea
                           value={item.description || ''}
                           onChange={(e) => updateItemDescription(item.key, e.target.value)}
-                          className="text-black w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          className="text-black w-full px-3 py-2 text-sm border border-[var(--color-line-strong)] rounded-md focus:ring-2 focus:ring-[var(--color-saffron-500)] focus:border-[var(--color-saffron-500)]"
                           rows={2}
                           placeholder="Enter description"
                         />
                         <div className="flex items-center gap-2">
                           <button
                             onClick={() => saveEditing(item.key)}
-                            className="px-3 py-1.5 text-sm bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+                            className="px-3 py-1.5 text-sm bg-[var(--color-emerald-500)] text-white rounded-md hover:bg-[var(--color-emerald-500)] transition-colors"
                           >
                             Save
                           </button>
                           <button
                             onClick={() => cancelEditing(item.key)}
-                            className="px-3 py-1.5 text-sm bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors"
+                            className="px-3 py-1.5 text-sm bg-[var(--color-cream-50)]0 text-white rounded-md hover:bg-gray-600 transition-colors"
                           >
                             Cancel
                           </button>
@@ -484,18 +484,18 @@ export default function Step1Evidence({ caseData, onPendingUploadsChange }: { ca
                     ) : (
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
-                          <div className="text-sm font-semibold text-gray-900 mb-1">
+                          <div className="text-sm font-semibold text-[var(--color-ink-950)] mb-1">
                             {item.title || 'Untitled'}
                             {!item.isDefault && (
-                              <span className="ml-2 text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded">Custom</span>
+                              <span className="ml-2 text-xs text-[var(--color-ink-500)] bg-[var(--color-cream-100)] px-2 py-0.5 rounded">Custom</span>
                             )}
                           </div>
-                          <div className="text-sm text-gray-600 leading-relaxed">{item.description || 'No description'}</div>
+                          <div className="text-sm text-[var(--color-ink-500)] leading-relaxed">{item.description || 'No description'}</div>
                         </div>
                         {!item.isDefault && (
                           <button
                             onClick={() => setEditingItem(item.key)}
-                            className="ml-2 text-blue-600 hover:text-blue-800 text-xs underline"
+                            className="ml-2 text-[var(--color-saffron-600)] hover:text-[var(--color-ink-800)] text-xs underline"
                             title="Edit custom evidence type"
                           >
                             Edit
@@ -523,14 +523,14 @@ export default function Step1Evidence({ caseData, onPendingUploadsChange }: { ca
                         htmlFor={`file-upload-${item.key}`}
                         className={`block w-full px-3 py-2 text-sm rounded-lg border-2 border-dashed transition-all duration-200 ${
                           !evidenceData[item.key as keyof typeof evidenceData]?.uploading && editingItem !== item.key
-                            ? 'border-blue-300 bg-blue-50 text-blue-700 hover:border-blue-400 hover:bg-blue-100 cursor-pointer'
-                            : 'border-gray-300 bg-gray-50 text-gray-400 cursor-not-allowed'
+                            ? 'border-[var(--color-saffron-500)]/40 bg-[var(--color-saffron-500)]/10 text-[var(--color-saffron-600)] hover:border-[var(--color-saffron-400)] hover:bg-[var(--color-saffron-500)]/15 cursor-pointer'
+                            : 'border-[var(--color-line-strong)] bg-[var(--color-cream-50)] text-[var(--color-ink-300)] cursor-not-allowed'
                         }`}
                       >
                         <div className="flex items-center justify-center space-x-2">
                           {evidenceData[item.key as keyof typeof evidenceData]?.uploading ? (
                             <>
-                              <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                              <div className="w-4 h-4 border-2 border-[var(--color-saffron-500)] border-t-transparent rounded-full animate-spin"></div>
                               <span className="font-medium">Uploading...</span>
                             </>
                           ) : (
@@ -549,28 +549,28 @@ export default function Step1Evidence({ caseData, onPendingUploadsChange }: { ca
                       <div className="space-y-1.5">
                         {/* Success Message - Shows temporarily after upload */}
                         {evidenceData[item.key as keyof typeof evidenceData]?.showSuccess && (
-                          <div className="text-sm text-green-600 text-center font-medium animate-pulse">
+                          <div className="text-sm text-[var(--color-emerald-500)] text-center font-medium animate-pulse">
                             ✓ {evidenceData[item.key as keyof typeof evidenceData]?.uploadedFiles.length} file(s) uploaded successfully
                           </div>
                         )}
                         {/* Uploaded Files List */}
                         <div className="space-y-1.5">
                           {evidenceData[item.key as keyof typeof evidenceData]?.uploadedFiles.map((file: any, index: number) => (
-                            <div key={index} className="flex items-center justify-between text-sm text-gray-700 bg-gray-50 px-2 py-1.5 rounded-md border">
+                            <div key={index} className="flex items-center justify-between text-sm text-[var(--color-ink-700)] bg-[var(--color-cream-50)] px-2 py-1.5 rounded-md border">
                               <span className="truncate flex-1" title={file.fileName}>
                                 📄 {file.fileName.length > 96 ? file.fileName.substring(0, 96) + '...' : file.fileName}
                               </span>
                               <div className="flex items-center space-x-1 ml-2">
                                 {/* <button
                                   onClick={() => handleDownloadFile(file.filePath, file.originalName)}
-                                  className="text-blue-500 hover:text-blue-700 p-1 rounded hover:bg-blue-50 transition-colors"
+                                  className="text-[var(--color-saffron-500)] hover:text-[var(--color-saffron-600)] p-1 rounded hover:bg-[var(--color-saffron-500)]/10 transition-colors"
                                   title="Download file"
                                 >
                                   <Download className="w-4 h-4" />
                                 </button> */}
                                 <button
                                   onClick={() => handleDeleteFile(file.id, item.key)}
-                                  className="text-red-500 hover:text-red-700 p-1 rounded hover:bg-red-50 transition-colors"
+                                  className="text-[var(--color-rose-500)] hover:text-[var(--color-rose-500)] p-1 rounded hover:bg-[var(--color-rose-500)]/10 transition-colors"
                                   title="Delete file"
                                 >
                                   <Trash2 className="w-4 h-4" />
@@ -589,10 +589,10 @@ export default function Step1Evidence({ caseData, onPendingUploadsChange }: { ca
         </table>
         
         {/* Add Row Button */}
-        <div className="bg-gray-50 px-6 py-3 border-t border-gray-200">
+        <div className="bg-[var(--color-cream-50)] px-6 py-3 border-t border-[var(--color-line)]">
           <button
             onClick={addNewRow}
-            className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-blue-700 bg-blue-50 border border-blue-200 rounded-md hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+            className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-[var(--color-saffron-600)] bg-[var(--color-saffron-500)]/10 border border-[var(--color-saffron-500)]/30 rounded-md hover:bg-[var(--color-saffron-500)]/15 focus:outline-none focus:ring-2 focus:ring-[var(--color-saffron-500)] transition-colors"
           >
             <Plus className="w-4 h-4" />
             Add Custom Evidence Type
@@ -602,12 +602,12 @@ export default function Step1Evidence({ caseData, onPendingUploadsChange }: { ca
 
       {/* Upload Summary */}
       {totalUploadedFiles > 0 && (
-        <div className="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
+        <div className="mt-4 p-3 bg-[var(--color-saffron-500)]/10 rounded-lg border border-[var(--color-saffron-500)]/30">
           <div className="flex items-center justify-between">
-            <h4 className="font-semibold text-blue-900 text-sm">Upload Summary</h4>
+            <h4 className="font-semibold text-[var(--color-ink-950)] text-sm">Upload Summary</h4>
             <div className="text-sm">
-              <span className="text-blue-700 font-medium">Total Files:</span>
-              <span className="ml-2 text-blue-800 font-semibold">
+              <span className="text-[var(--color-saffron-600)] font-medium">Total Files:</span>
+              <span className="ml-2 text-[var(--color-ink-800)] font-semibold">
                 {totalUploadedFiles}
               </span>
             </div>
@@ -627,32 +627,32 @@ export default function Step1Evidence({ caseData, onPendingUploadsChange }: { ca
       {showFileSizeModal && (
         <div className="fixed inset-0 backdrop-blur-sm bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
-            <div className="flex items-center justify-between p-6 border-b border-gray-200">
+            <div className="flex items-center justify-between p-6 border-b border-[var(--color-line)]">
               <div className="flex items-center space-x-3">
                 <div className="flex-shrink-0">
-                  <AlertTriangle className="w-6 h-6 text-red-500" />
+                  <AlertTriangle className="w-6 h-6 text-[var(--color-rose-500)]" />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900">
+                <h3 className="text-lg font-semibold text-[var(--color-ink-950)]">
                   File Size Limit Exceeded
                 </h3>
               </div>
               <button
                 onClick={() => setShowFileSizeModal(false)}
-                className="text-gray-400 hover:text-gray-600 transition-colors"
+                className="text-[var(--color-ink-300)] hover:text-[var(--color-ink-500)] transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
             
             <div className="p-6">
-              <p className="text-gray-700 mb-4">
+              <p className="text-[var(--color-ink-700)] mb-4">
                 The following files exceed the 100MB limit and cannot be uploaded:
               </p>
               
-              <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
+              <div className="bg-[var(--color-rose-500)]/10 border border-[var(--color-rose-500)]/30 rounded-lg p-4 mb-4">
                 <ul className="space-y-2">
                   {oversizedFiles.map((fileName, index) => (
-                    <li key={index} className="text-sm text-red-700 flex items-start">
+                    <li key={index} className="text-sm text-[var(--color-rose-500)] flex items-start">
                       <span className="mr-2">•</span>
                       <span className="break-all">{fileName}</span>
                     </li>
@@ -660,14 +660,14 @@ export default function Step1Evidence({ caseData, onPendingUploadsChange }: { ca
                 </ul>
               </div>
               
-              <p className="text-sm text-gray-600 mb-6">
+              <p className="text-sm text-[var(--color-ink-500)] mb-6">
                 Please select smaller files or split your files before uploading.
               </p>
               
               <div className="flex justify-end">
                 <button
                   onClick={() => setShowFileSizeModal(false)}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="px-4 py-2 bg-[var(--color-saffron-500)] text-white rounded-lg hover:bg-[var(--color-saffron-600)] transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--color-saffron-500)]"
                 >
                   OK
                 </button>
@@ -684,17 +684,17 @@ export default function Step1Evidence({ caseData, onPendingUploadsChange }: { ca
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
-                  <svg className="h-6 w-6 text-orange-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg className="h-6 w-6 text-[var(--color-saffron-600)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
                   </svg>
                 </div>
-                <h3 className="ml-3 text-lg font-medium text-gray-900">
+                <h3 className="ml-3 text-lg font-medium text-[var(--color-ink-950)]">
                   Insufficient Balance
                 </h3>
               </div>
               <button
                 onClick={() => setShowInsufficientBalanceModal(false)}
-                className="text-gray-400 hover:text-gray-600 transition-colors"
+                className="text-[var(--color-ink-300)] hover:text-[var(--color-ink-500)] transition-colors"
               >
                 <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -702,15 +702,15 @@ export default function Step1Evidence({ caseData, onPendingUploadsChange }: { ca
               </button>
             </div>
             <div className="mb-6">
-              <p className="text-sm text-gray-600 mb-4">
+              <p className="text-sm text-[var(--color-ink-500)] mb-4">
                 You don't have enough tokens to upload files. Please top up your account to continue.
               </p>
-              <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
+              <div className="bg-[var(--color-saffron-500)]/10 border border-[var(--color-saffron-500)]/30 rounded-lg p-4">
                 <div className="flex items-center">
-                  <svg className="h-5 w-5 text-orange-600 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg className="h-5 w-5 text-[var(--color-saffron-600)] mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
-                  <p className="text-sm text-orange-800">
+                  <p className="text-sm text-[var(--color-saffron-600)]">
                     <strong>Need more tokens?</strong> Visit your account settings to purchase additional tokens.
                   </p>
                 </div>
@@ -719,7 +719,7 @@ export default function Step1Evidence({ caseData, onPendingUploadsChange }: { ca
             <div className="flex justify-end space-x-3">
               <button
                 onClick={() => setShowInsufficientBalanceModal(false)}
-                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                className="px-4 py-2 text-sm font-medium text-[var(--color-ink-700)] bg-white border border-[var(--color-line-strong)] rounded-lg hover:bg-[var(--color-cream-50)] transition-colors"
               >
                 Cancel
               </button>
@@ -728,7 +728,7 @@ export default function Step1Evidence({ caseData, onPendingUploadsChange }: { ca
                   setShowInsufficientBalanceModal(false);
                   // Top-up flow is not part of Vakil — left as a no-op.
                 }}
-                className="px-4 py-2 bg-orange-600 text-white text-sm font-medium rounded-lg hover:bg-orange-700 transition-colors"
+                className="px-4 py-2 bg-[var(--color-saffron-500)] text-white text-sm font-medium rounded-lg hover:bg-[var(--color-saffron-600)] transition-colors"
               >
                 Top Up Account
               </button>
