@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { verifyAccessToken } from "@/lib/auth/tokens";
+import { verifyAccessToken } from "@/lib/auth/jwt";
 import { ACCESS_COOKIE } from "@/lib/auth/cookies";
 
 const PUBLIC_PATHS = [
@@ -11,7 +11,7 @@ const PUBLIC_PATHS = [
   "/api/auth/logout",
 ];
 
-export function middleware(req: NextRequest) {
+export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   if (PUBLIC_PATHS.includes(pathname)) return NextResponse.next();
@@ -24,7 +24,7 @@ export function middleware(req: NextRequest) {
   }
 
   const token = req.cookies.get(ACCESS_COOKIE)?.value;
-  if (!token || !verifyAccessToken(token)) {
+  if (!token || !(await verifyAccessToken(token))) {
     if (pathname.startsWith("/api/")) {
       return NextResponse.json({ error: "unauthorized" }, { status: 401 });
     }

@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
     select: { id: true, email: true, name: true, createdAt: true },
   });
 
-  const access = signAccessToken(user.id);
+  const access = await signAccessToken(user.id);
   const refresh = await mintRefreshToken(user.id);
 
   const res = NextResponse.json({ user });

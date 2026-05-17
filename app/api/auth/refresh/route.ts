@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
     return res;
   }
 
-  const access = signAccessToken(rotated.userId);
+  const access = await signAccessToken(rotated.userId);
   const res = NextResponse.json({ ok: true });
   res.cookies.set(ACCESS_COOKIE, access, cookieOptions(ACCESS_MAX_AGE));
   res.cookies.set(REFRESH_COOKIE, rotated.token, cookieOptions(REFRESH_MAX_AGE));

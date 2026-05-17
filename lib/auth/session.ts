@@ -7,7 +7,7 @@ export async function getCurrentUser() {
   const jar = await cookies();
   const token = jar.get(ACCESS_COOKIE)?.value;
   if (!token) return null;
-  const payload = verifyAccessToken(token);
+  const payload = await verifyAccessToken(token);
   if (!payload) return null;
   return prisma.user.findUnique({
     where: { id: payload.userId },

@@ -19,20 +19,20 @@ async function makeUser() {
 }
 
 describe("access tokens", () => {
-  it("sign and verify round-trip", () => {
-    const t = signAccessToken("user-123");
-    expect(verifyAccessToken(t)).toEqual({ userId: "user-123" });
+  it("sign and verify round-trip", async () => {
+    const t = await signAccessToken("user-123");
+    expect(await verifyAccessToken(t)).toEqual({ userId: "user-123" });
   });
 
-  it("verifyAccessToken returns null on tampered token", () => {
-    const t = signAccessToken("user-123");
-    expect(verifyAccessToken(t + "x")).toBeNull();
+  it("verifyAccessToken returns null on tampered token", async () => {
+    const t = await signAccessToken("user-123");
+    expect(await verifyAccessToken(t + "x")).toBeNull();
   });
 
-  it("verifyAccessToken returns null on a token signed with a different secret", () => {
-    const t = signAccessToken("user-123");
+  it("verifyAccessToken returns null on a token signed with a different secret", async () => {
+    const t = await signAccessToken("user-123");
     process.env.JWT_ACCESS_SECRET = "different-secret";
-    expect(verifyAccessToken(t)).toBeNull();
+    expect(await verifyAccessToken(t)).toBeNull();
     process.env.JWT_ACCESS_SECRET = "test-secret-please-ignore";
   });
 });

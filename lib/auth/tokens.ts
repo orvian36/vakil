@@ -1,29 +1,9 @@
-import jwt from "jsonwebtoken";
 import crypto from "node:crypto";
 import { prisma } from "@/lib/db";
 
-const ACCESS_TTL_SECONDS = 60 * 15; // 15 minutes
+export { signAccessToken, verifyAccessToken } from "./jwt";
+
 const REFRESH_TTL_SECONDS = 60 * 60 * 24 * 7; // 7 days
-
-function secret(): string {
-  const s = process.env.JWT_ACCESS_SECRET;
-  if (!s) throw new Error("JWT_ACCESS_SECRET is not set");
-  return s;
-}
-
-export function signAccessToken(userId: string): string {
-  return jwt.sign({ sub: userId }, secret(), { expiresIn: ACCESS_TTL_SECONDS });
-}
-
-export function verifyAccessToken(token: string): { userId: string } | null {
-  try {
-    const decoded = jwt.verify(token, secret()) as jwt.JwtPayload;
-    if (typeof decoded.sub !== "string") return null;
-    return { userId: decoded.sub };
-  } catch {
-    return null;
-  }
-}
 
 function hashToken(raw: string): string {
   return crypto.createHash("sha256").update(raw).digest("hex");
