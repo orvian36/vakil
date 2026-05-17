@@ -79,8 +79,7 @@ export default function CreateCaseModal({ isOpen, onClose, onSubmit, initialData
       ...prev,
       parties: prev.parties.map((p) => p.id === id ? { ...p, name: englishName, bengaliName: bengaliName } : p)
     }));
-    // Note: Plaintiffs are currently stored as string[], so Chinese name cannot be stored directly here.
-    // If Chinese name is needed for plaintiffs, the plaintiffs array type would need to change.
+    // Note: Plaintiffs are currently stored as string[], so Bengali name cannot be stored directly here.
   };
 
   const addDefendant = () => {
@@ -325,7 +324,7 @@ export default function CreateCaseModal({ isOpen, onClose, onSubmit, initialData
                       type="text"
                       value={plaintiff.name + (plaintiff.bengaliName ? ` (${plaintiff.bengaliName})` : '')}
                       onChange={(e) => updatePlaintiff(plaintiff.id, e.target.value)}
-                      placeholder="Enter plaintiff name (Chinese Name)"
+                      placeholder="Enter plaintiff name (Bengali Name বাংলা)"
                       className="w-full px-3 py-2 border border-gray-300 text-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     />
                   </div>
@@ -373,7 +372,7 @@ export default function CreateCaseModal({ isOpen, onClose, onSubmit, initialData
                       type="text"
                       value={defendant.name + (defendant.bengaliName ? ` (${defendant.bengaliName})` : '')}
                       onChange={(e) => updateDefendant(defendant.id, 'name', e.target.value)}
-                      placeholder="Enter defendant name (Chinese Name)"
+                      placeholder="Enter defendant name (Bengali Name বাংলা)"
                       className="w-full px-3 py-2 border border-gray-300 text-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     />
                   </div>

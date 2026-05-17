@@ -2320,18 +2320,16 @@ function getRoleLabel(party: any, plaintiffs: any[], defendants: any[],index: nu
   // Function to extract Witness Statements content between markers
 function extractSOCContent(text: string): string {
     const englishMarker = '# Witness Statement\n';
-    const chineseMarker = '# 證人陳述書\n'; 
+    const bengaliMarker = '# সাক্ষীর বিবৃতি\n';
 
-    //const datedMarker = '\nDated';
-  
     // Try English marker first
     let startIndex = text.indexOf(englishMarker);
     let markerLength = englishMarker.length;
-    
-    // If English marker not found, try Chinese marker
+
+    // If English marker not found, try Bengali marker
     if (startIndex === -1) {
-      startIndex = text.indexOf(chineseMarker);
-      markerLength = chineseMarker.length;
+      startIndex = text.indexOf(bengaliMarker);
+      markerLength = bengaliMarker.length;
     }
     
     if (startIndex === -1) return ''; // Neither marker found

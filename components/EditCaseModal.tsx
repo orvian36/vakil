@@ -350,7 +350,7 @@ export default function EditCaseModal({ isOpen, onClose, onSubmit, caseData }: E
                         type="text"
                         value={plaintiff.name + (plaintiff.bengaliName ? ` (${plaintiff.bengaliName})` : '')}
                         onChange={(e) => updatePlaintiff(plaintiff.id, e.target.value)}
-                        placeholder="Enter plaintiff name (Chinese Name)"
+                        placeholder="Enter plaintiff name (Bengali Name বাংলা)"
                         className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       />
                     </div>
@@ -396,7 +396,7 @@ export default function EditCaseModal({ isOpen, onClose, onSubmit, caseData }: E
                       type="text"
                       value={defendant.name + (defendant.bengaliName ? ` (${defendant.bengaliName})` : '')}
                       onChange={(e) => updateDefendant(defendant.id, 'name', e.target.value)}
-                      placeholder="Enter defendant name (Chinese Name)"
+                      placeholder="Enter defendant name (Bengali Name বাংলা)"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     />
                   </div>
