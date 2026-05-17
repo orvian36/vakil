@@ -8,7 +8,7 @@ export default defineConfig({
     include: ["tests/**/*.test.ts"],
     setupFiles: ["tests/helpers/testDb.ts"],
     pool: "forks",
-    poolOptions: { forks: { singleFork: true } },
+    forks: { singleFork: true },
   },
   resolve: {
     alias: {
