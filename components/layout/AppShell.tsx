@@ -4,7 +4,7 @@ import { ReactNode } from "react";
 import { usePathname } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { useAuthContext } from "@/contexts/AuthProvider";
+import { useOptionalAuthContext } from "@/contexts/AuthProvider";
 
 const AUTH_ROUTES = ["/login", "/register"];
 
@@ -19,12 +19,7 @@ export function AppShell({ children, hideChrome }: AppShellProps) {
   const effectiveHide = hideChrome ?? autoHide;
 
   // Tolerate missing AuthProvider (e.g., during tests) — render unauthenticated chrome
-  let auth: ReturnType<typeof useAuthContext> | null = null;
-  try {
-    auth = useAuthContext();
-  } catch {
-    auth = null;
-  }
+  const auth = useOptionalAuthContext();
 
   return (
     <div className="min-h-screen flex flex-col">
