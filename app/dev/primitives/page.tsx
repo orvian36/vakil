@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { notFound } from "next/navigation";
 import { Search, Trash2, Sparkles } from "lucide-react";
 import {
   Button,
@@ -85,6 +86,7 @@ function ToastDemo() {
 }
 
 export default function PrimitivesDemo() {
+  if (process.env.NODE_ENV === "production") notFound();
   const [confirmOpen, setConfirmOpen] = React.useState(false);
   const [switchOn, setSwitchOn] = React.useState(false);
   const [check, setCheck] = React.useState<boolean | "indeterminate">(false);
@@ -96,7 +98,7 @@ export default function PrimitivesDemo() {
         <div className="max-w-5xl mx-auto px-6 py-10 space-y-12">
           <SectionHeader
             title="Editorial Court · Primitives"
-            meta="Phase A demo · /_dev/primitives"
+            meta="Phase A demo · /dev/primitives"
             actions={<KeyboardHint keys={["⌘", "K"]} />}
           />
 

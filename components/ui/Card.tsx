@@ -34,5 +34,3 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(function Card(
 ) {
   return <div ref={ref} className={cn(card({ variant }), className)} {...rest} />;
 });
-
-Card.displayName = "Card";

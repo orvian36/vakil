@@ -32,6 +32,9 @@ export const durations = {
   cine: 0.7,
 } as const;
 
+// framer-motion's Transition['ease'] expects a tuple but the literal
+// `as const` arrays we export are narrower than what TS lets us pass
+// without coercion. Re-check this cast on the next framer-motion upgrade.
 /** Fade-up entrance used by page roots and modals. */
 export const fadeUp: Variants = {
   hidden: { opacity: 0, y: 12 },
