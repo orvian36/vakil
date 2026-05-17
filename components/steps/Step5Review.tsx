@@ -24,7 +24,7 @@ interface Step5ReviewProps {
 interface GeneratedContent {
   writOfSummons?: string;
   witnessStatement?: string;
-  witnessStatementChinese?: string;
+  witnessStatementBengali?: string;
   statementOfClaim?: string;
   statementOfDamages?: string;
   preActionLetter?: string;
@@ -242,7 +242,7 @@ export default function Step5Review({
           const newContent: GeneratedContent = {
             writOfSummons: data.result.writ_of_summons || '',
             witnessStatement: data.result.witness_statement || '',
-            witnessStatementChinese: data.result.witness_statement_chinese || '',
+            witnessStatementBengali: data.result.witness_statement_bengali || data.result.witnessStatementBengali || '',
             statementOfClaim: data.result.statement_of_claim || '',
             statementOfDamages: data.result.statement_of_damages || '',
             preActionLetter: data.result.pre_action_letter || ''
@@ -460,7 +460,7 @@ export default function Step5Review({
               <button
                 onClick={() => {
                   setShowInsufficientBalanceModal(false);
-                  window.open('https://platform.makebell.com/tokens/purchase', '_blank');
+                  // Top-up flow is not part of Vakil — left as a no-op.
                 }}
                 className="px-4 py-2 bg-orange-600 text-white text-sm font-medium rounded-lg hover:bg-orange-700 transition-colors"
               >
@@ -523,7 +523,7 @@ export default function Step5Review({
         
         // Map tab IDs to the correct content keys
         let contentKey: keyof GeneratedContent;
-        let chineseContentKey: keyof GeneratedContent | null = null;
+        let bengaliContentKey: keyof GeneratedContent | null = null;
         
         switch (tab.id) {
           case 'writ-of-summons':
@@ -531,7 +531,7 @@ export default function Step5Review({
             break;
           case 'witness-statement':
             contentKey = 'witnessStatement';
-            chineseContentKey = 'witnessStatementChinese';
+            bengaliContentKey = 'witnessStatementBengali';
             break;
           case 'statement-of-claim':
             contentKey = 'statementOfClaim';
@@ -547,7 +547,7 @@ export default function Step5Review({
         }
         
         const content = generatedContent[contentKey] || '';
-        const chineseContent = chineseContentKey ? generatedContent[chineseContentKey] || '' : '';
+        const bengaliContent = bengaliContentKey ? generatedContent[bengaliContentKey] || '' : '';
         
         return (
           <div key={tab.id} className={activeTab === tab.id ? 'block' : 'hidden'}>
@@ -555,7 +555,7 @@ export default function Step5Review({
               caseId={caseId} 
               caseData={caseData}
               content={content}
-              chineseContent={chineseContent}
+              bengaliContent={bengaliContent}
               isGenerating={isGenerating}
             />
           </div>

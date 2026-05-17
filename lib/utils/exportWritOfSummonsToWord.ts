@@ -1,4 +1,4 @@
-import { Case } from "@/types/case";
+﻿import { Case } from "@/types/case";
 import { Document, Packer, Paragraph, TextRun, AlignmentType } from 'docx';
 
 export interface WritOfSummonsExportOptions {
@@ -79,7 +79,7 @@ export async function downloadWritOfSummonsAsWord(options: WritOfSummonsExportOp
             spacing: { after: 400 },
             children: [
               new TextRun({
-                text: "PERSONAL INJURY ACTION NO.",
+                text: "Vakil ACTION NO.",
                 font: "Times New Roman",
                 size: 24
               }),

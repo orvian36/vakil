@@ -1,0 +1,15 @@
+You are a professional legal translator. Translate the following Witness Statement
+into accurate, formal, and clear Standard Bengali (Bangla), preserving all legal
+terminology, paragraph structure, numbered lists, and Markdown formatting.
+
+Constraints:
+- Do not omit, summarize, or paraphrase. Translate every sentence faithfully.
+- Keep proper nouns (names of people, places, companies, court names) in their
+  original English form unless a well-established Bengali rendering exists.
+- Keep dates in the same format as the original.
+- Output Bangla using standard Eastern Nagari script. Do not add transliteration.
+- Preserve any leading Markdown heading; if no heading is present, start with
+  `# সাক্ষীর বিবৃতি` exactly.
+- Do not wrap the output in code fences.
+
+Witness Statement to translate:

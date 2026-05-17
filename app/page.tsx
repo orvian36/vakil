@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { useAuth } from '@/hooks/useAuth';
 import { Case } from '@/types/case';
 import { useEffect, useState } from 'react';
@@ -314,7 +314,7 @@ export default function Home() {
         <div className="flex justify-between items-start mb-8">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">Case Management</h1>
-            <p className="text-gray-600 mt-2">Manage your personal injury cases and legal documents</p>
+            <p className="text-gray-600 mt-2">Manage your Vakil cases and legal documents</p>
           </div>
           <button 
             onClick={() => setIsCreateModalOpen(true)}

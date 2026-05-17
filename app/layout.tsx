@@ -15,8 +15,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: process.env.NEXT_PUBLIC_APP_NAME || "Makebell App",
-  description: "A makebell app for AI-powered personal injury cases",
+  title: "Vakil — AI legal drafter",
+  description:
+    "An AI paralegal that drafts while you strategize. Turn case evidence into court-ready first drafts.",
 };
 
 export default function RootLayout({
@@ -26,9 +27,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <AuthProvider>
           {children}
           <Footer />

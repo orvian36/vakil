@@ -1,4 +1,4 @@
-import { GoogleGenAI } from '@google/genai';
+﻿import { GoogleGenAI } from '@google/genai';
 import fs from 'fs';
 import path from 'path';
 
@@ -81,7 +81,7 @@ class PDFAnalysisService {
       // Deduct tokens from user balance if auth token is provided
       if (authToken && result.usageMetadata) {
         const totalTokens = result.usageMetadata.totalTokenCount || 0;
-        await this.deductTokens(authToken, totalTokens, 'personal-injury');
+        await this.deductTokens(authToken, totalTokens, 'vakil');
       }
       
       return {
@@ -164,7 +164,7 @@ class PDFAnalysisService {
       // Deduct tokens from user balance if auth token is provided
       if (authToken && result.usageMetadata) {
         const totalTokens = result.usageMetadata.totalTokenCount || 0;
-        await this.deductTokens(authToken, totalTokens, 'personal-injury');
+        await this.deductTokens(authToken, totalTokens, 'vakil');
       }
       
       return {
@@ -398,7 +398,7 @@ Return ONLY the corrected JSON`;
           prompt: fixPrompt,
           model: "gemini-3-flash-preview",
           max_tokens: 6000,
-          appName: "personal-injury",
+          appName: "vakil",
           task: "fix-json-format",
           accessToken: accessToken || ""
         });
@@ -453,7 +453,7 @@ Corrected JSON:`;
             prompt: secondFixPrompt,
             model: "gemini-3-flash-preview",
             max_tokens: 6000,
-            appName: "personal-injury",
+            appName: "vakil",
             task: "fix-json-format-retry-2",
             accessToken: accessToken || ""
           });

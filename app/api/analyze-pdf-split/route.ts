@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+﻿import { NextRequest, NextResponse } from 'next/server';
 import { GoogleGenAI } from '@google/genai';
 import { queryLLM } from '@/lib/llm';
 
@@ -232,7 +232,7 @@ export async function POST(request: NextRequest) {
     // Deduct tokens if auth token provided
     if (authToken && result.usageMetadata) {
       const totalTokens = result.usageMetadata.totalTokenCount || 0;
-      await deductTokens(authToken, totalTokens, 'personal-injury');
+      await deductTokens(authToken, totalTokens, 'vakil');
     }
     
     return NextResponse.json({
@@ -261,7 +261,7 @@ export async function POST(request: NextRequest) {
  * Create the intelligent splitting prompt for Gemini
  */
 function createIntelligentSplitPrompt(): string {
-  return `You are an AI assistant specializing in intelligent document analysis for personal injury legal cases. Your task is to analyze a PDF document and suggest how it should be split into separate documents based on content analysis.
+  return `You are an AI assistant specializing in intelligent document analysis for Vakil legal cases. Your task is to analyze a PDF document and suggest how it should be split into separate documents based on content analysis.
 
 ## Evidence Categories Available:
 - medical_records: Medical Records & Reports
@@ -394,7 +394,7 @@ Return ONLY the corrected JSON`;
         prompt: fixPrompt,
         model: "gemini-2.5-flash",
         max_tokens: 4000,
-        appName: "personal-injury",
+        appName: "vakil",
         task: "fix-split-json-format",
         accessToken: accessToken || ""
       });

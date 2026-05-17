@@ -2,6 +2,10 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## What this is
+
+**Vakil** — an AI paralegal that takes case evidence (PDFs) and drafts the five court-ready first drafts a small-firm or solo lawyer typically needs: Writ of Summons, Statement of Claim, Statement of Damages, Pre-Action Letter, and Witness Statement (with a Bangla translation of the witness statement).
+
 ## Commands
 
 ```bash
@@ -9,99 +13,114 @@ npm run dev                # Next dev with Turbopack
 npm run build              # Production build
 npm run start              # Run built app
 
-npm run db:generate        # drizzle-kit: emit SQL from db/schema.ts -> db/migrations
-npm run db:migrate         # Apply all migrations via tsx db/migrate.ts
-npm run db:migrate:0004    # One-off runner for migration 0004 (add Writ of Summons evidence type)
-npm run db:migrate:0005    # One-off runner for migration 0005 (add Writ of Summons column)
-npm run db:studio          # Drizzle Studio
-npm run db:seed            # tsx db/seed.ts (uses hard-coded USER_ID — edit before running)
+npm run prisma:generate    # Regenerate Prisma client from schema
+npm run prisma:migrate     # Apply migrations (dev: prisma migrate dev)
+npm run prisma:studio      # Visual DB inspector at http://localhost:5555
+npm run prisma:seed        # Seed demo user + case (see Phase 6)
+
+npm test                   # Vitest run, all tests
+npm run test:watch         # Vitest in watch mode
+npm run test:cov           # Vitest with coverage
 ```
 
-There is no test runner, linter, or formatter wired into `package.json`. Don't claim a test/lint suite was run.
+## Environment (see `.env.example`)
 
-## Environment
-
-`envexample` lists the required env vars. Critical:
-- `DATABASE_URL` — Postgres (Drizzle uses `postgres-js`; `db/index.ts` toggles SSL based on `NODE_ENV` / `DATABASE_SSL`).
-- `NEXT_PUBLIC_BASE_URL` — used by `middleware.js` for auth redirects.
-- `NEXT_PUBLIC_APP_NAME` — sent to the external auth service as `app_name`.
-- `MISTRAL_API_KEY` — Mistral OCR.
-- `DO_SPACES_*` — DigitalOcean Spaces (S3-compatible) used as object store; files are uploaded with `ACL: public-read`.
-
-Auth tokens, the LLM endpoint, and OCR all depend on external services owned by `platform.makebell.com` — local dev still requires those credentials to be valid.
+| Var | Required | Notes |
+|---|---|---|
+| `DATABASE_URL` | yes | `file:./dev.db` for local SQLite |
+| `JWT_ACCESS_SECRET` | yes | 32+ random bytes; signs the 15-min access JWT |
+| `GEMINI_API_KEY` | yes | Google AI Studio key |
+| `LLM_MODEL` | no | Override default Gemini model |
+| `MISTRAL_API_KEY` | yes for live OCR | Demo seed bypasses it |
+| `DO_SPACES_*` | yes for uploads | DigitalOcean Spaces credentials |
+| `LANGCHAIN_TRACING_V2` / `LANGCHAIN_API_KEY` | no | Enable LangSmith tracing for graph runs |
 
 ## Architecture
 
-This is a Next.js 15 App Router app (React 19, TypeScript strict, Tailwind v4) that drafts Hong Kong personal-injury litigation documents (Writ of Summons, Statement of Claim, Statement of Damages, Pre-Action Letter, Witness Statement) from uploaded evidence.
-
 Path alias: `@/*` → repo root.
 
-### Auth boundary — `middleware.js`
+### Auth boundary — `middleware.ts` + `lib/auth/`
 
-`middleware.js` runs on `/`, `/test`, `/wizard/*`, `/api/*`, and everything except Next static assets. On every request it:
-1. If `access_token`/`refresh_token` arrive as query params (from the platform auth redirect), it sets them as httpOnly cookies and redirects to a clean URL.
-2. Reads `access_token` from cookies (or `Authorization: Bearer …`); verifies it via `POST https://platform.makebell.com/api/auth/verify`.
-3. On invalid token, attempts refresh via `POST .../api/auth/refresh` and rewrites cookies.
-4. On failure, redirects to `https://platform.makebell.com/auth/login?redirect_url=…&app_name=…`.
-5. Valid users get `x-user-context: <JSON>` injected onto the request headers.
+`middleware.ts` runs on Edge runtime and gates `/`, `/case/*`, and most `/api/*` routes. It reads the `access_token` cookie and verifies the JWT (jose). Unauthenticated requests get a 401 on API routes or a redirect to `/login?next=...` on pages.
 
-The exported helpers `verifyAccessToken` / `refreshTokens` are also imported directly by orchestration agents to refresh in-flight tokens (see `lib/orchestration/agents/GenerateChronologyAgent.ts`). API routes typically `await cookies()` to grab `access_token`/`refresh_token` and pass them downstream to the LLM client.
+`lib/auth/` is the JWT auth library:
+- `password.ts` — bcryptjs hash/verify.
+- `jwt.ts` — `signAccessToken` / `verifyAccessToken` via **jose** (Edge-compatible; jsonwebtoken is not).
+- `tokens.ts` — re-exports the jwt helpers + adds Node-side refresh-token operations (`mintRefreshToken`, `rotateRefreshToken`, `revokeAllRefreshTokensForUser`).
+- `cookies.ts` — cookie names + `cookieOptions(maxAge)` (httpOnly, sameSite=lax, secure in prod, 15-min/7-day TTLs).
+- `session.ts` — `getCurrentUser()` and `requireCurrentUser()` helpers for App Router route handlers.
 
-### Database — Drizzle + Postgres
+Refresh tokens are stored hashed (SHA-256) in the `RefreshToken` table. Rotation is transactional — the incoming token is marked `revokedAt` and a fresh one is inserted in the same `$transaction`. Reuse of a revoked token returns 401 (a real attack signal).
 
-- Schema: `db/schema.ts` (all tables in one file).
-  - `cases` (`caseType` is `'SOC' | 'DEFENCE'`) → `case_parties` (role `plaintiff|defendant`), `files`, `case_analyses`, `case_evidence_types`.
-  - `case_analyses` has a unique `(case_id, analysis_type)` constraint — one analysis per case per type.
-  - `soc_analyses` is one-to-one with a `case_analyses` row of type `soc`, and holds all generated document text (`particularsMarkdown`, `chronologyMarkdown`, `writOfSummons`, `statementOfClaim`, `statementOfDamages`, `preActionLetter`, `witnessStatement`, `witnessStatementChinese`, plus the raw `allFileOcr`). When adding a new generated document, extend this table — the rest of the pipeline expects a single row per case.
-- Connection: `db/index.ts` caches the `postgres` client and Drizzle instance on `globalThis` to survive Next dev HMR. Pool defaults to `max: 20`, prepared statements **on** (session pooler) — flip `usingTransactionPooler` if migrating to a 6543-port pooler.
-- Migrations: numbered SQL files in `db/migrations/`. Two of them (`0004`, `0005`) have dedicated `tsx` runner scripts referenced in `package.json`; the standard `db:migrate` applies the whole folder via drizzle-kit's migrator.
+Auth endpoints: `POST /api/auth/{register,login,refresh,logout}` and `GET /api/auth/me`.
 
-### The case wizard — `app/case/[case_id]/page.tsx`
+### Database — Prisma + SQLite
 
-Five sequential steps in `components/steps/`:
-1. **Evidence** — upload files (DigitalOcean Spaces via `lib/storage/`).
-2. **Process** — OCR each file with Mistral (`lib/ocr/`), then enrich with entity/date/summary extraction from `lib/prompts/entityAndDate*.txt` + `lib/prompts/generate_summary.txt`. Status lives in `files.processing_status`.
-3. **Particulars** — LLM-generated, stored as `soc_analyses.particularsMarkdown`.
-4. **Chronology** — LLM-generated, stored as `soc_analyses.chronologyMarkdown`.
-5. **Review** — opens the tabbed document generator.
+`prisma/schema.prisma` defines every table: `User`, `RefreshToken`, `Case`, `CaseParty`, `File`, `CaseAnalysis`, `SocAnalysis`, `CaseEvidenceType`. Two design notes:
+- SQLite has no `jsonb`, so `entities`, `particularsJson`, `chronologyJson` are `String` (JSON-encoded). Callers `JSON.stringify` on the way in and `JSON.parse` on the way out — services keep the boundary explicit and do **not** parse.
+- One `SocAnalysis` row per case via `CaseAnalysis.@@unique([caseId, analysisType])`. All five generated documents live as columns on that row.
 
-Step-to-step navigation is gated by `hasPendingUploads`, `hasProcessingFiles`, `isEditingParticulars`, `isEditingChronology`, `isGenerating`, and `isStepLoading` — preserve those guards when adding new steps or async work.
+`lib/db.ts` exports a cached `PrismaClient` (HMR-safe pattern). `services/*.ts` are thin Prisma wrappers, one class per table.
 
-### The document generator — config-driven tabs
+### LLM client — Gemini direct
 
-`config/tabs.json` defines each generated document as `{ id, label, icon, apiEndpoint, generateEndpoint, exportFunction, promptFile }`. Components in `components/tabs/` read this config to know which API to call to fetch saved content (`apiEndpoint`), which to call to regenerate it (`generateEndpoint`, or the shared `/api/generate/regenerate`), which prompt file backs it, and which Word exporter in `lib/utils/` to use. **Adding a new document type means:** add a row to `config/tabs.json`, add the prompt text under `lib/prompts/`, add the SQL column on `soc_analyses` + migration, add the `app/api/generate/<name>` and `app/api/soc_analysis/<name>` routes, add the `exportXxxToWord` util, add a tab component, and register a generation agent (see next section).
+`lib/llm/index.ts` — `queryLLM({ prompt, model?, maxTokens?, task? })` calls Google Gemini via `@google/genai`. No external proxy. Default model: `gemini-2.5-flash` (overridable via `LLM_MODEL`). Legacy keys (`accessToken`, `appName`, `provider`, `max_tokens`) are accepted-but-ignored for backwards compatibility with code that pre-dates the rewrite — drop them when you next touch a call site.
 
-### Agent orchestration — `lib/orchestration/`
+LangGraph nodes prefer `lib/graph/llm.ts` which returns a `ChatGoogleGenerativeAI` instance for streaming + tracing.
 
-The end-to-end document generation flow is driven by `AgentOrchestrator` (`agent-orchestrator.ts`), which:
-- Loads an ordered list of agent configs from `lib/orchestration/agent-config.json` (each config: `agent-name`, `msg`, `input variable`, `output variable`).
-- Runs each registered `Agent` sequentially, passing a mutable `AgentContext` (a plain key-value bag — `caseId`, `accessToken`, `refreshToken`, plus whatever previous agents wrote).
-- Validates that each agent's declared `input variable`s are present in the context before running, and stores `result.data` under the declared `output variable`.
+### Orchestration — LangGraph
 
-Agents live in `lib/orchestration/agents/` (one class per file) and are re-exported from `agents/index.ts`. There are two shapes:
-- **Fetch* agents** load existing rows (chronology, particulars, supporting files) into context.
-- **Generate* / Translate* agents** read a prompt template from `lib/prompts/`, append context data, call `queryLLM`, run markdown verification (`utils/verify_markdown.ts` + `utils/remarkFixVoidTags.ts`), refresh the access token in-place if invalid, retry up to 3 times, then persist via `SocService.upsertSocAnalysis`.
+`lib/graph/` replaces the old hand-rolled `AgentOrchestrator`:
 
-The HTTP entry point is `POST /api/orchestration` (`app/api/orchestration/route.ts`) — it returns a Server-Sent Events stream and emits `workflow_start`, `agent_started`, `agent_complete`, `agent_error`, `workflow_complete` events. **The list of agent instances registered in this route is hand-maintained** — when adding an agent class, register it here in addition to `agent-config.json`.
+```
+lib/graph/
+  state.ts          DocumentsState + SingleDocState (typed Annotation roots)
+  llm.ts            makeLLM({ task }) → ChatGoogleGenerativeAI
+  util.ts           loadPrompt(filename), stripCodeFence(text)
+  debug.ts          writeDebugOutput(nodeName, payload) → lib/graph/debug/*.json
+  sse.ts            Maps streamEvents → existing SSE shape (no client changes)
+  nodes/            One file per node (plain async function)
+  graphs/
+    documents.ts    Multi-doc DAG (parallel fan-out)
+    particulars.ts  Single-doc graph with retry-on-invalid-markdown
+    chronology.ts   Single-doc graph with retry-on-invalid-markdown
+```
 
-Every generation agent calls `writeDebugOutput` (`agents/debug-utils.ts`), which writes timestamped JSON dumps to `lib/orchestration/agents/debug/`. That directory is for inspection only — safe to delete.
+Documents DAG topology: 3 fetch nodes fan out from `START`, all run in parallel. Then 5 generators fan out in parallel once their inputs are ready (Writ depends on the fetched files; Witness/SoC/SoD/Pre-Action depend on chronology+particulars). Translation runs after Witness. All 6 outputs land on `SocAnalysis` and the graph reaches `END`.
 
-### LLM and OCR clients
+Particulars and Chronology graphs use `addConditionalEdges` for declarative retry: `generate → verify → (save | retry up to 3x | end)`.
 
-- `lib/llm/index.ts` — single `queryLLM({ prompt, accessToken, … })` that POSTs to `https://platform.makebell.com/api/llm/query`. Defaults: `provider: "qwen"`, `model: "google/gemini-3-flash-preview"`, `max_tokens: 59000`, `app_name: "personal-injury"`. Most call sites override provider to `"deepinfra"` and set a task-specific `task` string for tracking.
-- `lib/ocr/index.ts` — Mistral OCR. Pages are joined with `==== PAGE N ====` delimiters; downstream prompts depend on that format, so don't change the delimiter casually.
+Streaming: `documentsGraph.streamEvents(state, { version: "v2" })` yields per-node events. `lib/graph/sse.ts` maps them to the legacy SSE shape (`workflow_start`, `agent_started`, `agent_complete`, `agent_error`, `workflow_complete`) so the frontend's event handler didn't need changes during the migration.
 
-### Service layer — `services/`
+### Document tabs — config-driven
 
-Static-method classes (`SocService`, `CaseService`, `FileService`, etc.) wrap Drizzle queries. API routes and orchestration agents both call these services rather than touching `db` directly — keep that pattern when adding endpoints.
+`config/tabs.json` lists each generated document with `id`, `label`, `apiEndpoint` (fetch saved content), `generateEndpoint`, `exportFunction`, `promptFile`. `components/tabs/<Name>Tab.tsx` reads this config. The Witness Statement tab has an English ⇄ বাংলা toggle, swapping between `witnessStatement` and `witnessStatementBengali`.
 
-### Frontend auth wiring
+### Wizard — `app/case/[case_id]/page.tsx`
 
-`contexts/AuthProvider.tsx` wraps the tree, renders the `Navbar`, and exposes `useAuthContext()` (which is `useAuth` from `hooks/useAuth.ts` plus a logout wrapper). The hook uses `useReducer` over a discriminated `AuthAction` union — extend the union when adding new auth states rather than adding ad-hoc booleans.
+Five steps in `components/steps/`: Evidence → Process → Particulars → Chronology → Review. State gates between steps via `hasPendingUploads`, `hasProcessingFiles`, `isEditingParticulars`, `isEditingChronology`, `isGenerating`, `isStepLoading`. Don't remove these guards without replacement.
 
-## Conventions worth knowing
+### Bengali translation
 
-- Markdown coming back from the LLM is post-processed by `utils/remarkFixVoidTags.ts` and validated by `utils/verify_markdown.ts`; bypassing these can let malformed MDX reach the editor (`MdxEditor.tsx`).
-- Prompt files are plain `.txt` loaded with `fs.readFileSync(join(process.cwd(), 'lib/prompts', …))` at request time — they ship as part of the Next build but aren't bundled, so paths must stay relative to `process.cwd()`.
-- `next.config.ts` sets `reactStrictMode: false` and enables `.md`/`.mdx`/`.mjs` as page extensions. Webpack `extensionAlias` lets `.js` imports resolve to `.ts` — useful when copying snippets.
-- Tailwind v4 via `@tailwindcss/postcss`; styles live in `app/globals.css`. There is no `tailwind.config` content array in the v3 sense — class detection is handled by v4.
+`lib/prompts/translate_to_bengali.txt` is the translation prompt. `lib/graph/nodes/translateWitnessStatement.ts` loads it and writes Bangla into `socAnalyses.witnessStatementBengali`. Party records carry a `bengaliName` field (was `chineseName` pre-rebrand). Output starts with `# সাক্ষীর বিবৃতি` if no English heading is present — `lib/utils/exportWitnessStatementToWord.ts` uses that marker to extract the body when exporting to DOCX.
+
+## Conventions
+
+- **Tests:** Vitest runs file-by-file sequentially (`fileParallelism: false` in `vitest.config.ts`) because SQLite + concurrent test files race the `beforeEach` truncate. Each test file's `beforeEach` empties every table.
+- **Prompt files** in `lib/prompts/*.txt` are loaded via `fs.readFile(path.join(process.cwd(), 'lib/prompts', name))` at request time. They ship with the Next build but aren't bundled — paths must stay relative to `process.cwd()`.
+- **No shadows on cards** (visual rule from Phase 5). 1px hairline borders on cream surfaces instead.
+- **Markdown post-processing:** LLM output goes through `utils/remarkFixVoidTags.ts` (`preProcessMD`) and `utils/verify_markdown.ts` before saving. Bypassing these lets malformed MDX reach the editor.
+- **Conventional Commits.** Branch per phase / per feature; no force-pushes to `main`.
+
+## Where to add things
+
+- **A new generated document type:** add a column on `SocAnalysis` in `prisma/schema.prisma` + a migration; add a prompt file to `lib/prompts/`; add a node in `lib/graph/nodes/`; wire edges in `lib/graph/graphs/documents.ts`; add an entry to `config/tabs.json`; add `components/tabs/<Name>Tab.tsx`; add an exporter under `lib/utils/`; add the GET route under `app/api/soc_analysis/` to fetch saved content.
+- **A new auth-protected API route:** add its path prefix to the `matcher` in `middleware.ts`; call `await getCurrentUser()` at the top of the handler.
+- **A new LangGraph node:** plain async function `(state) => Partial<state>` in `lib/graph/nodes/`; import + `.addNode(...).addEdge(...)` in the relevant `lib/graph/graphs/*.ts`.
+- **A new service method:** thin Prisma wrapper in `services/<X>Service.ts`; unit test in `tests/services/<x>Service.test.ts`.
+
+## Out-of-scope (deferred)
+
+- Live Vercel deployment (SQLite + Vercel serverless aren't compatible; would need libSQL/Turso).
+- Email verification, password reset, OAuth — single-user demo posture.
+- Bilingual UI (English-only chrome; Bengali appears only as translated content).
