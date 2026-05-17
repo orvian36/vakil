@@ -1,6 +1,5 @@
-import { Agent, AgentContext, AgentResult } from '../types';
+﻿import { Agent, AgentContext, AgentResult } from '../types';
 import { queryLLM } from '@/lib/llm';
-import { verifyAccessToken, refreshTokens } from '@/middleware';
 import { SocService } from '@/services/socService';
 import { writeDebugOutput } from './debug-utils';
 
@@ -34,28 +33,8 @@ export class TranslateWitnessStatementAgent implements Agent {
 
 ${witnessStatement}
 
-**Critical Formatting: make sure the chinese translation markdown starts with '# 證人陳述書\\n' exactly**`;
+**Critical Formatting: make sure the chinese translation markdown starts with '# è­‰äººé™³è¿°æ›¸\\n' exactly**`;
 
-      // Verify access token
-      let verification = await verifyAccessToken(context.accessToken);
-
-      if (!verification.valid) {
-        console.log("[TranslateWitnessStatementAgent] Access token invalid, attempting to refresh...");
-        if (context.refreshToken) {
-          const refreshResult = await refreshTokens(context.refreshToken);
-          if (refreshResult.success && refreshResult.access_token && refreshResult.refresh_token) {
-            console.log("[TranslateWitnessStatementAgent] Tokens refreshed successfully.");
-            context.accessToken = refreshResult.access_token;
-            context.refreshToken = refreshResult.refresh_token;
-          } else {
-            console.error("[TranslateWitnessStatementAgent] Token refresh failed.");
-            throw new Error("Failed to refresh access token.");
-          }
-        } else {
-          console.error("[TranslateWitnessStatementAgent] No refresh token available, cannot refresh.");
-          throw new Error("Access token invalid and no refresh token available.");
-        }
-      }
 
       // Call LLM to translate witness statement
       const llmResponse = await queryLLM({

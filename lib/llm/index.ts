@@ -1,74 +1,59 @@
+import { GoogleGenAI } from "@google/genai";
+
 export interface LlmQueryOptions {
-    prompt: string;
-    provider?: string;   // default: gemini
-    model?: string;      // default: gemini-3-flash-preview
-    max_tokens?: number;  // default: 10000
-    appName?: string;    // required for tracking
-    task?: string;       // optional, context about the task
-    accessToken: string; // required
+  prompt: string;
+  model?: string;
+  maxTokens?: number;
+  task?: string;
+  // Legacy keys kept as optional for backwards compatibility with un-migrated callers.
+  // Ignored by this implementation.
+  accessToken?: string;
+  appName?: string;
+  provider?: string;
+  max_tokens?: number;
+}
+
+export interface LlmResponse {
+  success: boolean;
+  content?: string;
+  error?: string;
+  thinking?: string;
+}
+
+let client: GoogleGenAI | null = null;
+function getClient(): GoogleGenAI {
+  if (client) return client;
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) throw new Error("GEMINI_API_KEY is not set");
+  client = new GoogleGenAI({ apiKey });
+  return client;
+}
+
+export async function queryLLM(opts: LlmQueryOptions): Promise<LlmResponse> {
+  const {
+    prompt,
+    model = process.env.LLM_MODEL ?? "gemini-2.5-flash",
+    maxTokens,
+    max_tokens,
+    task = "generic",
+  } = opts;
+  const limit = maxTokens ?? max_tokens ?? 60000;
+
+  if (!prompt?.trim()) return { success: false, error: "prompt is required" };
+
+  try {
+    const res = await getClient().models.generateContent({
+      model,
+      contents: prompt,
+      config: { maxOutputTokens: limit },
+    });
+    const text = res.text ?? "";
+    return { success: true, content: text };
+  } catch (err) {
+    console.error(`[llm:${task}]`, err);
+    return {
+      success: false,
+      error: err instanceof Error ? err.message : "unknown llm error",
+    };
   }
-  export interface LlmResponse {
-    success: boolean;
-    content?: string;   // the actual LLM output
-    error?: string;     // error message if failed
-    thinking?: string;   // the actual LLM output
-  }
-  
-  
-  const LLM_ENDPOINT = "https://platform.makebell.com/api/llm/query";
-  
-  export async function queryLLM(options: LlmQueryOptions): Promise<LlmResponse> {
-    const {
-      prompt,
-      provider = "qwen",
-      model = "google/gemini-3-flash-preview",
-      max_tokens = 59000,
-      appName = "personal-injury",
-      task = "document-analysis",
-      accessToken,
-    } = options;
-  
-    if (!prompt?.trim()) {
-      return { success: false, error: "Prompt is required" };
-    }
-  
-    if (!accessToken) {
-      return { success: false, error: "Access token is required" };
-    }
-  
-    try {
-      const response = await fetch(LLM_ENDPOINT, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify({
-          prompt,
-          provider,
-          model,
-          max_tokens: max_tokens,
-          app_name: appName,
-          task,
-        }),
-      });
-  
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error("❌ [LLMService] API Error:", errorText);
-        return {
-          success: false,
-          error: `LLM request failed with status ${response.status}`,
-        };
-      }
-      const data = await response.json();
-      return { success: true, content: data.content ?? "" , thinking: data.thinking ?? "" };
-    } catch (err) {
-      console.error("❌ [LLMService] Network/Parsing Error:", err);
-      return {
-        success: false,
-        error: err instanceof Error ? err.message : "Unknown error",
-      };
-    }
-  }
-  
+}

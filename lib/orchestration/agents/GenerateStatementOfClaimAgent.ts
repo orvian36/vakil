@@ -1,10 +1,9 @@
-import { Agent, AgentContext, AgentResult } from '../types';
+﻿import { Agent, AgentContext, AgentResult } from '../types';
 import { queryLLM } from '@/lib/llm';
 import { promises as fsPromises } from 'fs';
 import { join } from 'path';
 import { SocService } from '@/services/socService';
 import PDFAnalysisService from '@/services/pdfAnalysisService';
-import { verifyAccessToken, refreshTokens } from '@/middleware';
 import { writeDebugOutput } from './debug-utils';
 export class GenerateStatementOfClaimAgent implements Agent {
   name = 'generate-statement-of-claim';
@@ -45,28 +44,6 @@ ${particulars}
 ## Chronology:
 ${chronology}`;
 
-      // Verify access token
-      let verification = await verifyAccessToken(context.accessToken);
-
-      if (!verification.valid) {
-        console.log("[GenerateStatementOfClaimAgent] Access token invalid, attempting to refresh...");
-        if (context.refreshToken) {
-          const refreshResult = await refreshTokens(context.refreshToken);
-          if (refreshResult.success && refreshResult.access_token && refreshResult.refresh_token) {
-            console.log("[GenerateStatementOfClaimAgent] Tokens refreshed successfully.");
-            context.accessToken = refreshResult.access_token;
-            context.refreshToken = refreshResult.refresh_token;
-          } else {
-            console.error("[GenerateStatementOfClaimAgent] Token refresh failed.");
-            // Handle error, maybe mark document processing as failed
-            throw new Error("Failed to refresh access token.");
-          }
-        } else {
-          console.error("[GenerateStatementOfClaimAgent] No refresh token available, cannot refresh.");
-          // Handle error
-          throw new Error("Access token invalid and no refresh token available.");
-        }
-      }
 
       // Call LLM to generate statement of claim
       const llmResponse = await queryLLM({

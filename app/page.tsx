@@ -61,24 +61,10 @@ export default function Home() {
       }
       
       console.log('Fetching cases from:', `/api/cases/user/${userId}?${params}`);
-      
-      // Get accessToken from cookies and include it in the Authorization header
-      const cookies = document.cookie
-        .split(';')
-        .map(cookie => cookie.trim())
-        .reduce((acc: Record<string, string>, cookie) => {
-          const [key, value] = cookie.split('=');
-          acc[key] = value;
-          return acc;
-        }, {});
-      const accessToken = cookies['accessToken'];
 
       const response = await fetch(`/api/cases/user/${userId}?${params}`, {
         method: 'GET',
-        headers: {
-          ...(accessToken ? { 'Authorization': `Bearer ${accessToken}` } : {}),
-        },
-        credentials: 'include', // send cookies with the request
+        credentials: 'include',
       });
       
       if (!response.ok) {
