@@ -1,50 +1,73 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --color-ink-950: #0F1B2D;
+  --color-ink-800: #1A2A44;
+  --color-ink-700: #2A3F5F;
+  --color-ink-500: #4F627E;
+  --color-ink-300: #8A9AB1;
+
+  --color-cream-50: #FAF7F2;
+  --color-cream-100: #F3EDE2;
+  --color-cream-200: #E8DEC9;
+
+  --color-saffron-400: #ECA459;
+  --color-saffron-500: #E08E2B;
+  --color-saffron-600: #B8731F;
+
+  --color-emerald-500: #2F8F6F;
+  --color-rose-500:    #C44A4A;
+
+  --color-line: rgba(15, 27, 45, 0.08);
+  --color-line-strong: rgba(15, 27, 45, 0.18);
+
+  --font-display: "Fraunces", ui-serif, Georgia, serif;
+  --font-body:    "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+  --radius-card:   12px;
+  --radius-button: 8px;
+  --radius-chip:   999px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #ffffff;
-    --foreground: #ededed;
-  }
+:root {
+  color-scheme: light;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-cream-50);
+  color: var(--color-ink-800);
+  font-family: var(--font-body);
+  font-feature-settings: "ss01", "ss02";
 }
 
-/* Hide Quick Insights panel */
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  color: var(--color-ink-950);
+  letter-spacing: -0.01em;
+}
+
+/* Saffron focus ring helper for inputs/buttons */
+.focus-saffron:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(224, 142, 43, 0.35);
+  border-color: var(--color-saffron-500);
+}
+
+::placeholder {
+  color: var(--color-ink-300);
+  opacity: 1;
+}
+
+/* Pre-rebrand legacy: hide third-party "insights" panels if any tooling injects them */
 [class*="quick-insights"],
 [class*="QuickInsights"],
 [id*="quick-insights"],
 [id*="QuickInsights"],
 .insights-panel,
 .financial-insights,
-.confidence-score-panel {
-  display: none !important;
-  visibility: hidden !important;
-  opacity: 0 !important;
-}
-
-/* Hide any popup overlays that might contain insights */
+.confidence-score-panel,
 [class*="insights-overlay"],
 [class*="insights-popup"],
-[class*="financial-overlay"] {
-  display: none !important;
-}
-
-/* Placeholder color for all inputs */
-::placeholder {
-  color: #6b7280; /* A dark gray color */
-  opacity: 1; /* Ensure full opacity */
-}
-
-/* Remove any elements with "Confidence Score" text */
 [aria-label*="Confidence Score"],
 [title*="Confidence Score"],
 [data-testid*="insights"] {
