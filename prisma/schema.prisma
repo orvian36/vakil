@@ -1,0 +1,129 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Case {
+  id          String   @id @default(cuid())
+  userId      String
+  title       String
+  summary     String?
+  caseType    String // "SOC" | "DEFENCE"
+  court       String?
+  caseNumber  String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  parties        CaseParty[]
+  files          File[]
+  analyses       CaseAnalysis[]
+  evidenceTypes  CaseEvidenceType[]
+
+  @@index([userId])
+  @@index([createdAt])
+  @@map("cases")
+}
+
+model CaseParty {
+  id          String   @id @default(cuid())
+  caseId      String
+  name        String
+  bengaliName String?
+  role        String // "plaintiff" | "defendant"
+  type        String   @default("person") // "person" | "company"
+  createdAt   DateTime @default(now())
+
+  case Case @relation(fields: [caseId], references: [id], onDelete: Cascade)
+
+  @@index([caseId])
+  @@index([role])
+  @@index([type])
+  @@map("case_parties")
+}
+
+model File {
+  id                String   @id @default(cuid())
+  caseId            String
+  type              String
+  fileName          String
+  fileKey           String
+  processingStatus  String   @default("pending") // "pending" | "processing" | "completed" | "failed"
+  ocrData           String?
+  errorMessage      String?
+  summary           String?
+  entities          String? // JSON-encoded
+  documentDate      DateTime?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  case Case @relation(fields: [caseId], references: [id], onDelete: Cascade)
+
+  @@index([caseId])
+  @@index([processingStatus])
+  @@index([documentDate])
+  @@map("files")
+}
+
+model CaseAnalysis {
+  id              String   @id @default(cuid())
+  caseId          String
+  analysisType    String // "soc" | "defence"
+  analysisStatus  String   @default("pending")
+  resultPath      String?
+  errorMessage    String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  case        Case         @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  socDetails  SocAnalysis?
+
+  @@unique([caseId, analysisType])
+  @@index([caseId])
+  @@index([analysisType])
+  @@map("case_analyses")
+}
+
+model SocAnalysis {
+  id                        String   @id @default(cuid())
+  caseAnalysisId            String   @unique
+  allFileOcr                String?
+  particularsJson           String? // JSON-encoded
+  chronologyJson            String? // JSON-encoded
+  writOfSummons             String?
+  statementOfClaim          String?
+  statementOfDamages        String?
+  preActionLetter           String?
+  witnessStatement          String?
+  witnessStatementBengali   String?
+  particularsMarkdown       String?
+  chronologyMarkdown        String?
+  createdAt                 DateTime @default(now())
+  updatedAt                 DateTime @updatedAt
+
+  analysis CaseAnalysis @relation(fields: [caseAnalysisId], references: [id], onDelete: Cascade)
+
+  @@index([caseAnalysisId])
+  @@map("soc_analyses")
+}
+
+model CaseEvidenceType {
+  id            String   @id @default(cuid())
+  caseId        String
+  key           String
+  title         String
+  description   String?
+  isDefault     Boolean  @default(true)
+  displayOrder  Int
+  createdAt     DateTime @default(now())
+
+  case Case @relation(fields: [caseId], references: [id], onDelete: Cascade)
+
+  @@index([caseId])
+  @@index([key])
+  @@index([displayOrder])
+  @@map("case_evidence_types")
+}
