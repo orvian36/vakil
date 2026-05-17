@@ -77,25 +77,25 @@ export default function StatementOfDamagesTab({
     return (
       <div className="flex items-center justify-center h-96">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading particulars and chronology data to generate {tabConfig.title}...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--color-saffron-500)] mx-auto mb-4"></div>
+          <p className="text-[var(--color-ink-500)]">Loading particulars and chronology data to generate {tabConfig.title}...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
-      <div className="px-4 py-3 bg-gray-50 border-b border-gray-200 flex justify-between items-center">
+    <div className="bg-white border border-[var(--color-line)] rounded-lg overflow-hidden">
+      <div className="px-4 py-3 bg-[var(--color-cream-50)] border-b border-[var(--color-line)] flex justify-between items-center">
         <div>
-          <h3 className="text-lg font-semibold text-gray-900">{tabConfig.title}</h3>
-          <p className="text-sm text-gray-600">Edit the content below and regenerate if needed</p>
+          <h3 className="text-lg font-semibold text-[var(--color-ink-950)]">{tabConfig.title}</h3>
+          <p className="text-sm text-[var(--color-ink-500)]">Edit the content below and regenerate if needed</p>
         </div>
         <div className="flex gap-2">
           <button 
             onClick={handleDownload}
             disabled={propIsGenerating}
-            className="flex items-center gap-2 px-3 py-1 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-blue-400 disabled:cursor-not-allowed transition-colors text-sm"
+            className="flex items-center gap-2 px-3 py-1 bg-[var(--color-saffron-500)] text-white rounded-lg hover:bg-[var(--color-saffron-600)] disabled:bg-[var(--color-saffron-400)] disabled:cursor-not-allowed transition-colors text-sm"
           >
             <Download className="w-4 h-4" />
             Download

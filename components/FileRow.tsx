@@ -50,30 +50,30 @@ export default function FileRow({ file, caseData, onRegenerate, onOcrStateReset,
       case 'completed':
         return { 
           text: 'Completed', 
-          color: 'text-green-600', 
-          bgColor: 'bg-green-50', 
+          color: 'text-[var(--color-emerald-500)]', 
+          bgColor: 'bg-[var(--color-emerald-500)]/10', 
           icon: CheckCircle 
         };
       case 'processing':
         return { 
           text: 'Processing', 
-          color: 'text-blue-600', 
-          bgColor: 'bg-blue-50', 
+          color: 'text-[var(--color-saffron-600)]', 
+          bgColor: 'bg-[var(--color-saffron-500)]/10', 
           icon: Loader2,
           spinning: true
         };
       case 'failed':
         return { 
           text: 'Failed', 
-          color: 'text-red-600', 
-          bgColor: 'bg-red-50', 
+          color: 'text-[var(--color-rose-500)]', 
+          bgColor: 'bg-[var(--color-rose-500)]/10', 
           icon: AlertCircle 
         };
       default:
         return { 
           text: 'Pending', 
-          color: 'text-yellow-600', 
-          bgColor: 'bg-yellow-50', 
+          color: 'text-[var(--color-saffron-600)]', 
+          bgColor: 'bg-[var(--color-saffron-500)]/10', 
           icon: Clock 
         };
     }
@@ -186,18 +186,18 @@ export default function FileRow({ file, caseData, onRegenerate, onOcrStateReset,
 
   return (
     <tr 
-      className="hover:bg-gray-50 cursor-pointer"
+      className="hover:bg-[var(--color-cream-50)] cursor-pointer"
       onClick={handleRowClick}
     >
-      <td className="px-6 py-4 text-sm font-medium text-gray-900 max-w-xs">
+      <td className="px-6 py-4 text-sm font-medium text-[var(--color-ink-950)] max-w-xs">
         <div className="break-words" title={file.fileName}>
           {file.fileName}
         </div>
       </td>
-      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+      <td className="px-6 py-4 whitespace-nowrap text-sm text-[var(--color-ink-500)]">
         {getDocumentType(file.type)}
       </td>
-      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+      <td className="px-6 py-4 whitespace-nowrap text-sm text-[var(--color-ink-500)]">
         <div>
           {getDisplayDate()}
         </div>
@@ -208,7 +208,7 @@ export default function FileRow({ file, caseData, onRegenerate, onOcrStateReset,
           {statusInfo.text}
         </div>
         {analysisStatus === 'failed' && errorMessage && (
-          <div className="mt-1 text-xs text-red-600 max-w-xs truncate" title={errorMessage}>
+          <div className="mt-1 text-xs text-[var(--color-rose-500)] max-w-xs truncate" title={errorMessage}>
             Try again
           </div>
         )}
@@ -219,8 +219,8 @@ export default function FileRow({ file, caseData, onRegenerate, onOcrStateReset,
           disabled={isRegenerating || analysisStatus === 'processing'}
           className={`p-1 rounded-full transition-colors ${
             isRegenerating || analysisStatus === 'processing'
-              ? 'text-gray-400 cursor-not-allowed' 
-              : 'text-blue-600 hover:text-blue-800 hover:bg-blue-50'
+              ? 'text-[var(--color-ink-300)] cursor-not-allowed' 
+              : 'text-[var(--color-saffron-600)] hover:text-[var(--color-ink-800)] hover:bg-[var(--color-saffron-500)]/10'
           }`}
           title={analysisStatus === 'processing' ? 'File is currently being processed' : 'Process with OCR'}
         >

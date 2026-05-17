@@ -16,7 +16,7 @@ const Editor = dynamic(
   () => import('@toast-ui/react-editor').then((mod) => mod.Editor),
   { 
     ssr: false,
-    loading: () => <div className="flex items-center justify-center h-full"><div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div></div>
+    loading: () => <div className="flex items-center justify-center h-full"><div className="w-6 h-6 border-2 border-[var(--color-saffron-500)] border-t-transparent rounded-full animate-spin"></div></div>
   }
 );
 
@@ -24,7 +24,7 @@ const Viewer = dynamic(
   () => import('@toast-ui/react-editor').then((mod) => mod.Viewer),
   { 
     ssr: false,
-    loading: () => <div className="flex items-center justify-center h-full"><div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div></div>
+    loading: () => <div className="flex items-center justify-center h-full"><div className="w-6 h-6 border-2 border-[var(--color-saffron-500)] border-t-transparent rounded-full animate-spin"></div></div>
   }
 );
 
@@ -266,11 +266,11 @@ export default function Step3Particulars({
     return (
       <div className="flex items-center justify-center h-96">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-[var(--color-saffron-500)] mx-auto mb-4"></div>
+          <h1 className="text-2xl font-bold text-[var(--color-ink-950)] mb-2">
             {isLoadingFromDatabase ? 'Loading Particulars' : 'Generating Particulars'}
           </h1>
-          <p className="text-gray-600">
+          <p className="text-[var(--color-ink-500)]">
             {isLoadingFromDatabase 
               ? 'Loading saved particulars from database...' 
               : 'AI is analyzing your case and generating claim particulars...'
@@ -312,8 +312,8 @@ export default function Step3Particulars({
       <div className="mb-6">
         <div className="flex justify-between items-center">
           <div>
-            <h2 className="text-xl font-semibold text-gray-900 mb-2">Particulars of Claim Items and Amount</h2>
-            <p className="text-gray-600">AI-generated particulars based on your case documents. Edit as needed.</p>
+            <h2 className="text-xl font-semibold text-[var(--color-ink-950)] mb-2">Particulars of Claim Items and Amount</h2>
+            <p className="text-[var(--color-ink-500)]">AI-generated particulars based on your case documents. Edit as needed.</p>
           </div>
           <div className="flex gap-2">
               {isEditing ? (
@@ -321,14 +321,14 @@ export default function Step3Particulars({
                   <button
                     onClick={handleCancel}
                     disabled={isSaving}
-                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 transition-colors"
+                    className="px-4 py-2 text-sm font-medium text-[var(--color-ink-700)] bg-white border border-[var(--color-line-strong)] rounded-lg hover:bg-[var(--color-cream-50)] disabled:opacity-50 transition-colors"
                   >
                     Cancel
                   </button>
                   <button
                     onClick={handleSave}
                     disabled={isSaving}
-                    className="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors flex items-center space-x-2"
+                    className="px-4 py-2 text-sm font-medium text-white bg-[var(--color-saffron-500)] border border-transparent rounded-lg hover:bg-[var(--color-saffron-600)] disabled:opacity-50 transition-colors flex items-center space-x-2"
                   >
                     {isSaving && (
                       <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -340,7 +340,7 @@ export default function Step3Particulars({
                 <>
                   <button
                     onClick={handleEdit}
-                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors flex items-center space-x-2"
+                    className="px-4 py-2 text-sm font-medium text-[var(--color-ink-700)] bg-white border border-[var(--color-line-strong)] rounded-lg hover:bg-[var(--color-cream-50)] transition-colors flex items-center space-x-2"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -350,7 +350,7 @@ export default function Step3Particulars({
             <button
               onClick={handleRegenerateClick}
               disabled={isGeneratingParticulars}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-blue-400 disabled:cursor-not-allowed transition-colors text-sm"
+              className="flex items-center gap-2 px-4 py-2 bg-[var(--color-saffron-500)] text-white rounded-lg hover:bg-[var(--color-saffron-600)] disabled:bg-[var(--color-saffron-400)] disabled:cursor-not-allowed transition-colors text-sm"
             >
               <RefreshCw className={`w-4 h-4 ${isGeneratingParticulars ? 'animate-spin' : ''}`} />
               {isGeneratingParticulars ? 'Regenerating...' : 'Regenerate'}
@@ -362,7 +362,7 @@ export default function Step3Particulars({
       </div>
 
         {/* Markdown Editor/Viewer */}
-      <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
+      <div className="bg-white border border-[var(--color-line)] rounded-lg overflow-hidden">
           {isEditing ? (
             <MdxEditorComponent
             initialMarkdown={particularsContent}
@@ -377,8 +377,8 @@ export default function Step3Particulars({
                   components={{ Citation }}
                 />
               ) : (
-                <div className="flex flex-col items-center justify-center h-32 text-gray-500">
-                  <svg className="w-12 h-12 mb-3 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="flex flex-col items-center justify-center h-32 text-[var(--color-ink-500)]">
+                  <svg className="w-12 h-12 mb-3 text-[var(--color-ink-300)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                   </svg>
                   <p className="text-sm">No particulars available. Click "Regenerate" to generate particulars from your case documents.</p>
@@ -403,17 +403,17 @@ export default function Step3Particulars({
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
-                  <svg className="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg className="h-6 w-6 text-[var(--color-rose-500)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
                   </svg>
                 </div>
-                <h3 className="ml-3 text-lg font-medium text-gray-900">
+                <h3 className="ml-3 text-lg font-medium text-[var(--color-ink-950)]">
                   Error
                 </h3>
               </div>
               <button
                 onClick={handleCloseError}
-                className="text-gray-400 hover:text-gray-600 transition-colors"
+                className="text-[var(--color-ink-300)] hover:text-[var(--color-ink-500)] transition-colors"
               >
                 <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -421,12 +421,12 @@ export default function Step3Particulars({
               </button>
             </div>
             <div className="mb-4">
-              <p className="text-sm text-gray-600">{errorMessage}</p>
+              <p className="text-sm text-[var(--color-ink-500)]">{errorMessage}</p>
             </div>
             <div className="flex justify-end">
               <button
                 onClick={() => handleRegenerateConfirm('')}
-                className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
+                className="px-4 py-2 bg-[var(--color-saffron-500)] text-white text-sm font-medium rounded-lg hover:bg-[var(--color-saffron-600)] transition-colors"
               >
                 Regenerate
               </button>
@@ -442,17 +442,17 @@ export default function Step3Particulars({
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
-                  <svg className="h-6 w-6 text-orange-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg className="h-6 w-6 text-[var(--color-saffron-600)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
                   </svg>
                 </div>
-                <h3 className="ml-3 text-lg font-medium text-gray-900">
+                <h3 className="ml-3 text-lg font-medium text-[var(--color-ink-950)]">
                   Insufficient Balance
                 </h3>
               </div>
               <button
                 onClick={() => setShowInsufficientBalanceModal(false)}
-                className="text-gray-400 hover:text-gray-600 transition-colors"
+                className="text-[var(--color-ink-300)] hover:text-[var(--color-ink-500)] transition-colors"
               >
                 <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -460,15 +460,15 @@ export default function Step3Particulars({
               </button>
             </div>
             <div className="mb-6">
-              <p className="text-sm text-gray-600 mb-4">
+              <p className="text-sm text-[var(--color-ink-500)] mb-4">
                 You don't have enough tokens to generate particulars. Please top up your account to continue.
               </p>
-              <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
+              <div className="bg-[var(--color-saffron-500)]/10 border border-[var(--color-saffron-500)]/30 rounded-lg p-4">
                 <div className="flex items-center">
-                  <svg className="h-5 w-5 text-orange-600 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg className="h-5 w-5 text-[var(--color-saffron-600)] mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
-                  <p className="text-sm text-orange-800">
+                  <p className="text-sm text-[var(--color-saffron-600)]">
                     <strong>Need more tokens?</strong> Visit your account settings to purchase additional tokens.
                   </p>
                 </div>
@@ -477,7 +477,7 @@ export default function Step3Particulars({
             <div className="flex justify-end space-x-3">
               <button
                 onClick={() => setShowInsufficientBalanceModal(false)}
-                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                className="px-4 py-2 text-sm font-medium text-[var(--color-ink-700)] bg-white border border-[var(--color-line-strong)] rounded-lg hover:bg-[var(--color-cream-50)] transition-colors"
               >
                 Cancel
               </button>
@@ -486,7 +486,7 @@ export default function Step3Particulars({
                   setShowInsufficientBalanceModal(false);
                   // Top-up flow is not part of Vakil — left as a no-op.
                 }}
-                className="px-4 py-2 bg-orange-600 text-white text-sm font-medium rounded-lg hover:bg-orange-700 transition-colors"
+                className="px-4 py-2 bg-[var(--color-saffron-500)] text-white text-sm font-medium rounded-lg hover:bg-[var(--color-saffron-600)] transition-colors"
               >
                 Top Up Account
               </button>

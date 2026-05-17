@@ -261,7 +261,7 @@ export default function Step2Process({ caseId, action, generatedContent, onGener
   if (loading) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-gray-600">Loading case details...</div>
+        <div className="text-[var(--color-ink-500)]">Loading case details...</div>
       </div>
     );
   }
@@ -269,7 +269,7 @@ export default function Step2Process({ caseId, action, generatedContent, onGener
   if (totalFiles === 0) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="text-gray-600">No documents uploaded yet</div>
+        <div className="text-[var(--color-ink-500)]">No documents uploaded yet</div>
       </div>
     );
   }
@@ -281,23 +281,23 @@ export default function Step2Process({ caseId, action, generatedContent, onGener
     <div className="space-y-6">
       {/* Failed Files Toast */}
       {showFailedFilesToast && (
-        <div className="fixed top-4 right-4 z-50 bg-red-50 border border-red-200 rounded-lg shadow-lg p-4 max-w-sm">
+        <div className="fixed top-4 right-4 z-50 bg-[var(--color-rose-500)]/10 border border-[var(--color-rose-500)]/30 rounded-lg shadow-lg p-4 max-w-sm">
           <div className="flex items-start">
             <div className="flex-shrink-0">
-              <AlertTriangle className="h-5 w-5 text-red-400" />
+              <AlertTriangle className="h-5 w-5 text-[var(--color-rose-500)]/80" />
             </div>
             <div className="ml-3 flex-1">
-              <h3 className="text-sm font-medium text-red-800">
+              <h3 className="text-sm font-medium text-[var(--color-rose-500)]">
                 Some files failed to process
               </h3>
-              <p className="mt-1 text-sm text-red-700">
+              <p className="mt-1 text-sm text-[var(--color-rose-500)]">
               You may re-process these files, or you can proceed without processing them. If you wish to remove them, please return to the previous step.
               </p>
             </div>
             <div className="ml-4 flex-shrink-0">
               <button
                 onClick={() => setShowFailedFilesToast(false)}
-                className="inline-flex text-red-400 hover:text-red-600 focus:outline-none"
+                className="inline-flex text-[var(--color-rose-500)]/80 hover:text-[var(--color-rose-500)] focus:outline-none"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -310,13 +310,13 @@ export default function Step2Process({ caseId, action, generatedContent, onGener
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex-1 max-w-md">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[var(--color-ink-300)] w-4 h-4" />
             <input
               type="text"
               placeholder="Search documents..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 text-black border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full pl-10 pr-4 py-2 text-black border border-[var(--color-line-strong)] rounded-lg focus:ring-2 focus:ring-[var(--color-saffron-500)] focus:border-transparent"
             />
           </div>
         </div>
@@ -325,7 +325,7 @@ export default function Step2Process({ caseId, action, generatedContent, onGener
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-lg text-black bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="px-4 py-2 border border-[var(--color-line-strong)] rounded-lg text-black bg-white focus:ring-2 focus:ring-[var(--color-saffron-500)] focus:border-transparent"
           >
             <option value="all">All Status ({totalFiles})</option>
             <option value="completed">Completed ({statusCounts.completed || 0})</option>
@@ -337,19 +337,19 @@ export default function Step2Process({ caseId, action, generatedContent, onGener
       </div>
 
       {/* Document Count */}
-      <div className="text-sm text-gray-600">
+      <div className="text-sm text-[var(--color-ink-500)]">
         Showing {filteredCount} of {totalFiles} documents
           </div>
         
  
         
-      <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
+      <div className="bg-white border border-[var(--color-line)] rounded-lg overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gray-50 border-b border-gray-200">
+            <thead className="bg-[var(--color-cream-50)] border-b border-[var(--color-line)]">
               <tr>
                 <th 
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                  className="px-6 py-3 text-left text-xs font-medium text-[var(--color-ink-500)] uppercase tracking-wider cursor-pointer hover:bg-[var(--color-cream-100)]"
                   onClick={() => handleSort('fileName')}
                 >
                   <div className="flex items-center gap-2">
@@ -358,7 +358,7 @@ export default function Step2Process({ caseId, action, generatedContent, onGener
                   </div>
                 </th>
                 <th 
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                  className="px-6 py-3 text-left text-xs font-medium text-[var(--color-ink-500)] uppercase tracking-wider cursor-pointer hover:bg-[var(--color-cream-100)]"
                   onClick={() => handleSort('evidence_type')}
                 >
                   <div className="flex items-center gap-2">
@@ -367,7 +367,7 @@ export default function Step2Process({ caseId, action, generatedContent, onGener
                   </div>
                 </th>
                 <th 
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                  className="px-6 py-3 text-left text-xs font-medium text-[var(--color-ink-500)] uppercase tracking-wider cursor-pointer hover:bg-[var(--color-cream-100)]"
                   onClick={() => handleSort('documentDate')}
                 >
                   <div className="flex items-center gap-2">
@@ -376,7 +376,7 @@ export default function Step2Process({ caseId, action, generatedContent, onGener
                   </div>
                 </th>
                 <th 
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                  className="px-6 py-3 text-left text-xs font-medium text-[var(--color-ink-500)] uppercase tracking-wider cursor-pointer hover:bg-[var(--color-cream-100)]"
                   onClick={() => handleSort('analysis_status')}
                 >
                   <div className="flex items-center gap-2">
@@ -384,15 +384,15 @@ export default function Step2Process({ caseId, action, generatedContent, onGener
                     {getSortIcon('analysis_status')}
           </div>
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-[var(--color-ink-500)] uppercase tracking-wider">
                   ACTIONS
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="bg-white divide-y divide-[var(--color-line)]">
               {sortedFiles.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="px-6 py-12 text-center text-gray-500">
+                  <td colSpan={5} className="px-6 py-12 text-center text-[var(--color-ink-500)]">
                     {searchTerm || statusFilter !== 'all' 
                       ? 'No documents match your filters' 
                       : 'No documents uploaded yet'
