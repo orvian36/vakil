@@ -1,72 +1,64 @@
-import { Agent, AgentContext, AgentResult } from '../types';
-import { db } from '@/db';
-import { files } from '@/db/schema';
-import { eq, and } from 'drizzle-orm';
-import { writeDebugOutput } from './debug-utils';
+import { Agent, AgentContext, AgentResult } from "../types";
+import { prisma } from "@/lib/db";
+import { writeDebugOutput } from "./debug-utils";
 
 export class FetchWritOfSummonsFilesAgent implements Agent {
-  name = 'fetch-writ-of-summons-files';
+  name = "fetch-writ-of-summons-files";
 
   async execute(context: AgentContext): Promise<AgentResult> {
     try {
-      // Get caseId from context
       const caseId = context.caseId;
-      
+
       if (!caseId) {
-        return {
-          success: false,
-          error: 'Case ID is required to fetch writ of summons files'
-        };
+        return { success: false, error: "Case ID is required to fetch writ of summons files" };
       }
 
-      console.log(`[FetchWritOfSummonsFilesAgent] Fetching writ of summons files for case: ${caseId}`);
+      console.log(`[FetchWritOfSummonsFilesAgent] Fetching for case: ${caseId}`);
 
-      // Fetch all files for the case with type 'writ_of_summons_supporting'
-      const writOfSummonsFiles = await db.query.files.findMany({
-        where: and(
-          eq(files.caseId, caseId),
-          eq(files.type, 'writ_of_summons_supporting')
-        ),
-        columns: {
+      const writOfSummonsFiles = await prisma.file.findMany({
+        where: { caseId, type: "writ_of_summons_supporting" },
+        select: {
           summary: true,
           fileName: true,
           processingStatus: true,
           type: true,
-          id: true
-        }
+          id: true,
+        },
       });
 
-      // Combine all summaries from completed files
       const combinedText = writOfSummonsFiles
-        .filter((file: typeof writOfSummonsFiles[0]) => file.processingStatus === 'completed' && file.summary)
-        .map((file: typeof writOfSummonsFiles[0]) => `=== File ID: ${file.id} === File Name: ${file.fileName} === File Type: ${file.type} === \n File Summary: ${file.summary}`)
-        .join('\n\n');
+        .filter((f) => f.processingStatus === "completed" && f.summary)
+        .map(
+          (f) =>
+            `=== File ID: ${f.id} === File Name: ${f.fileName} === File Type: ${f.type} === \n File Summary: ${f.summary}`,
+        )
+        .join("\n\n");
 
       const fileData = {
-        combinedText: combinedText,
+        combinedText,
         totalFiles: writOfSummonsFiles.length,
-        completedFiles: writOfSummonsFiles.filter((f: typeof writOfSummonsFiles[0]) => f.processingStatus === 'completed').length,
-        files: writOfSummonsFiles
+        completedFiles: writOfSummonsFiles.filter((f) => f.processingStatus === "completed").length,
+        files: writOfSummonsFiles,
       };
 
-      console.log(`[FetchWritOfSummonsFilesAgent] Successfully fetched writ of summons files for case: ${caseId} - ${fileData.completedFiles}/${fileData.totalFiles} files completed`);
+      console.log(
+        `[FetchWritOfSummonsFilesAgent] Fetched ${fileData.completedFiles}/${fileData.totalFiles} files for case: ${caseId}`,
+      );
 
-      // Write debug output
       await writeDebugOutput(this.name, fileData, { caseId });
-
-      return {
-        success: true,
-        data: fileData
-      };
-
+      return { success: true, data: fileData };
     } catch (error) {
-      console.error('[FetchWritOfSummonsFilesAgent] Error fetching writ of summons files:', error);
-      await writeDebugOutput(this.name, { error: error instanceof Error ? error.message : 'Unknown error' }, { caseId: context.caseId });
+      console.error("[FetchWritOfSummonsFilesAgent] Error:", error);
+      await writeDebugOutput(
+        this.name,
+        { error: error instanceof Error ? error.message : "Unknown error" },
+        { caseId: context.caseId },
+      );
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Unknown error occurred while fetching writ of summons files'
+        error:
+          error instanceof Error ? error.message : "Unknown error fetching writ of summons files",
       };
     }
   }
 }
-
