@@ -31,7 +31,7 @@ export function cva<C extends VariantConfig>(
     const out: string[] = [base];
     const merged = { ...config.defaultVariants, ...props };
     for (const key of Object.keys(config.variants) as (keyof C)[]) {
-      const selection = merged[key];
+      const selection = (merged as VariantProps<C>)[key];
       if (selection == null) continue;
       const value = config.variants[key][selection as string];
       if (value == null) continue;
