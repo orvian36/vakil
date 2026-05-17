@@ -1,13 +1,32 @@
 import { defineConfig } from "vitest/config";
+import react from "@vitejs/plugin-react";
 import path from "node:path";
 
 export default defineConfig({
+  plugins: [react()],
   test: {
-    environment: "node",
-    globals: true,
-    include: ["tests/**/*.test.ts"],
-    setupFiles: ["tests/helpers/testDb.ts"],
-    fileParallelism: false,
+    projects: [
+      {
+        extends: true,
+        test: {
+          name: "node",
+          environment: "node",
+          include: ["tests/**/*.test.ts"],
+          exclude: ["tests/components/**"],
+          setupFiles: ["tests/helpers/testDb.ts"],
+          fileParallelism: false,
+        },
+      },
+      {
+        extends: true,
+        test: {
+          name: "dom",
+          environment: "happy-dom",
+          include: ["tests/components/**/*.test.tsx"],
+          setupFiles: ["tests/helpers/setupDom.ts"],
+        },
+      },
+    ],
   },
   resolve: {
     alias: {

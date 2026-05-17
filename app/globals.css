@@ -1,61 +1,95 @@
 @import "tailwindcss";
 
 @theme {
-  --color-ink-950: #0F1B2D;
-  --color-ink-800: #1A2A44;
-  --color-ink-700: #2A3F5F;
+  /* INK — page chrome */
+  --color-ink-950: #0A1322;
+  --color-ink-900: #0F1B2D;
+  --color-ink-800: #122036;
+  --color-ink-700: #1A2B45;
+  --color-ink-600: #243556;
   --color-ink-500: #4F627E;
-  --color-ink-300: #8A9AB1;
+  --color-ink-400: #7B8DA8;
+  --color-ink-300: #B8C3D6;
+  --color-ink-100: #E8DEC9;
 
-  --color-cream-50: #FAF7F2;
+  /* GOLD — accent */
+  --color-gold-300: #F4C988;
+  --color-gold-500: #F0B040;
+  --color-gold-700: #B07A1F;
+
+  /* CREAM — document surfaces only */
+  --color-cream-50:  #FAF7F2;
   --color-cream-100: #F3EDE2;
   --color-cream-200: #E8DEC9;
+  --color-paper-ink: #0F1B2D;
 
-  --color-saffron-400: #ECA459;
-  --color-saffron-500: #E08E2B;
-  --color-saffron-600: #B8731F;
-
+  /* STATE */
   --color-emerald-500: #2F8F6F;
   --color-rose-500:    #C44A4A;
+  --color-amber-500:   #E0A92B;
 
-  --color-line: rgba(15, 27, 45, 0.08);
-  --color-line-strong: rgba(15, 27, 45, 0.18);
+  /* LINES */
+  --color-line-soft:   rgba(232, 222, 201, 0.08);
+  --color-line-strong: rgba(232, 222, 201, 0.18);
+  --color-line-gold:   rgba(240, 176, 64, 0.40);
+  --color-line-paper:  rgba(15, 27, 45, 0.08);
 
+  /* FONTS */
   --font-display: "Fraunces", ui-serif, Georgia, serif;
   --font-body:    "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono:    "JetBrains Mono", ui-monospace, monospace;
 
-  --radius-card:   12px;
-  --radius-button: 8px;
-  --radius-chip:   999px;
+  /* RADII */
+  --radius-pill: 9999px;
+  --radius-md:   10px;
+  --radius-lg:   14px;
+  --radius-xl:   20px;
+  --radius-2xl:  28px;
+
+  /* MOTION */
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-stage:     cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast:  120ms;
+  --duration-base:  200ms;
+  --duration-slow:  420ms;
+  --duration-cine:  700ms;
 }
 
 :root {
-  color-scheme: light;
+  color-scheme: dark;
 }
 
 body {
-  background: var(--color-cream-50);
-  color: var(--color-ink-800);
+  background: var(--color-ink-950);
+  color: var(--color-ink-300);
   font-family: var(--font-body);
   font-feature-settings: "ss01", "ss02";
 }
 
 h1, h2, h3, h4 {
   font-family: var(--font-display);
-  color: var(--color-ink-950);
+  color: var(--color-ink-100);
   letter-spacing: -0.01em;
 }
 
-/* Saffron focus ring helper for inputs/buttons */
-.focus-saffron:focus-visible {
+/* Gold focus ring helper for inputs/buttons */
+.focus-gold:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 2px rgba(224, 142, 43, 0.35);
-  border-color: var(--color-saffron-500);
+  box-shadow: 0 0 0 2px rgba(240, 176, 64, 0.40);
+  border-color: var(--color-gold-500);
 }
 
 ::placeholder {
-  color: var(--color-ink-300);
+  color: var(--color-ink-400);
   opacity: 1;
+}
+
+/* Cream-paper utility: applied to document surfaces */
+.cream-paper {
+  background: var(--color-cream-50);
+  color: var(--color-paper-ink);
+  border: 1px solid var(--color-line-paper);
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.35);
 }
 
 /* Pre-rebrand legacy: hide third-party "insights" panels if any tooling injects them */
@@ -72,4 +106,14 @@ h1, h2, h3, h4 {
 [title*="Confidence Score"],
 [data-testid*="insights"] {
   display: none !important;
+}
+
+/* prefers-reduced-motion: opacity-only fallbacks */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

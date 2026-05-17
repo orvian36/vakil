@@ -108,7 +108,11 @@ Five steps in `components/steps/`: Evidence → Process → Particulars → Chro
 
 - **Tests:** Vitest runs file-by-file sequentially (`fileParallelism: false` in `vitest.config.ts`) because SQLite + concurrent test files race the `beforeEach` truncate. Each test file's `beforeEach` empties every table.
 - **Prompt files** in `lib/prompts/*.txt` are loaded via `fs.readFile(path.join(process.cwd(), 'lib/prompts', name))` at request time. They ship with the Next build but aren't bundled — paths must stay relative to `process.cwd()`.
-- **No shadows on cards** (visual rule from Phase 5). 1px hairline borders on cream surfaces instead.
+- **UI primitives:** Every chrome component (buttons, inputs, dialogs, etc.) must use the primitives in `components/ui/`. Do not write bespoke inline styles for these — extend the primitive or compose existing ones.
+- **Design tokens:** Colors, fonts, radii, durations live as CSS variables defined under `@theme` in `app/globals.css`. Reference them via Tailwind utility classes (`bg-ink-800`, `text-gold-500`, `rounded-[var(--radius-md)]`). Never hard-code hex values or raw Tailwind palette colors (`bg-blue-600`, `text-gray-500`) — they break theme consistency.
+- **Surface rule:** App chrome is dark (ink scale). Cream surfaces are reserved for legal-document content (`MdxEditor` / `MdxRenderer` / preview / export). Use `Card variant="cream-paper"` when in doubt.
+- **No shadows on chrome.** The only shadow in the app belongs to cream-paper documents — it's the signature elevation. Chrome surfaces (ink-800/ink-900) use hairline borders only.
+- **Motion:** Use the presets in `lib/motion.ts` (`springSoft`, `springStage`, `springPaper`, `fadeUp`, `stageReveal`, `staggerChildren`) and the duration tokens in `globals.css`. Always respect `prefers-reduced-motion`.
 - **Markdown post-processing:** LLM output goes through `utils/remarkFixVoidTags.ts` (`preProcessMD`) and `utils/verify_markdown.ts` before saving. Bypassing these lets malformed MDX reach the editor.
 - **Conventional Commits.** Branch per phase / per feature; no force-pushes to `main`.
 
