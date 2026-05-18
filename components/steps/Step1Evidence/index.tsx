@@ -386,6 +386,7 @@ export default function Step1Evidence({
                   type={t}
                   files={state.uploadedFiles}
                   uploading={state.uploading}
+                  showSuccess={state.showSuccess}
                   expanded={expandedKey === t.key}
                   onToggle={() => setExpandedKey(expandedKey === t.key ? null : t.key)}
                   onUpload={(files) => handleFileUploadFromDrop(t.key, files)}

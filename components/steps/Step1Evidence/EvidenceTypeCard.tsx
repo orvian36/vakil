@@ -12,6 +12,7 @@ interface Props {
   files: CaseFile[];
   uploading: boolean;
   expanded: boolean;
+  showSuccess?: boolean;
   onToggle: () => void;
   onUpload: (files: File[]) => void;
   onDelete: (fileId: string) => Promise<void>;
@@ -22,6 +23,7 @@ export function EvidenceTypeCard({
   files,
   uploading,
   expanded,
+  showSuccess,
   onToggle,
   onUpload,
   onDelete,
@@ -46,6 +48,11 @@ export function EvidenceTypeCard({
             <span className="ml-1.5 text-xs text-ink-400">
               {count === 0 ? "no files" : `${count} file${count === 1 ? "" : "s"}`}
             </span>
+            {showSuccess && (
+              <span className="ml-2 inline-flex items-center gap-1 text-xs text-gold-500 font-medium">
+                ✓ Uploaded
+              </span>
+            )}
           </div>
         </div>
         {expanded ? (
