@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/db";
+import { SocService } from "@/services/socService";
 
 export async function GET(request: NextRequest) {
   try {
@@ -10,9 +10,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Case ID is required" }, { status: 400 });
     }
 
-    const socAnalysis = await prisma.socAnalysis.findUnique({
-      where: { caseAnalysisId: caseId },
-    });
+    const socAnalysis = await SocService.getByCaseId(caseId);
 
     if (!socAnalysis) {
       return NextResponse.json(

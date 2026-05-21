@@ -141,13 +141,13 @@ export function ReviewLayout({ caseId, caseData }: ReviewLayoutProps) {
         case "complete":
           if (data.result) {
             const newContent: GeneratedContent = {
-              writOfSummons: data.result.writ_of_summons || "",
-              witnessStatement: data.result.witness_statement || "",
+              writOfSummons: data.result.writ_of_summons || data.result.writOfSummons || "",
+              witnessStatement: data.result.witness_statement || data.result.witnessStatement || "",
               witnessStatementBengali:
                 data.result.witness_statement_bengali || data.result.witnessStatementBengali || "",
-              statementOfClaim: data.result.statement_of_claim || "",
-              statementOfDamages: data.result.statement_of_damages || "",
-              preActionLetter: data.result.pre_action_letter || "",
+              statementOfClaim: data.result.statement_of_claim || data.result.statementOfClaim || "",
+              statementOfDamages: data.result.statement_of_damages || data.result.statementOfDamages || "",
+              preActionLetter: data.result.pre_action_letter || data.result.preActionLetter || "",
             };
             setGeneratedContent(newContent);
             localStorage.setItem(
@@ -215,20 +215,52 @@ export function ReviewLayout({ caseId, caseData }: ReviewLayoutProps) {
 
   // Load cached content on mount; only generate if no cache.
   useEffect(() => {
+    let mounted = true;
     hasInitiatedGeneration.current = false;
-    const cached = localStorage.getItem(`orchestration_content_${caseId}`);
-    if (cached) {
+
+    const checkExistingContent = async () => {
       try {
-        setGeneratedContent(JSON.parse(cached));
-        return;
-      } catch (err) {
-        console.error("Error parsing cached content:", err);
+        const res = await fetch(`/api/soc_analysis/all?caseId=${caseId}`);
+        if (res.ok) {
+          const json = await res.json();
+          if (json.success && json.data) {
+            const data = json.data;
+            const hasAnyContent = Object.values(data).some(v => Boolean(v));
+            if (hasAnyContent && mounted) {
+              setGeneratedContent(data);
+              localStorage.setItem(`orchestration_content_${caseId}`, JSON.stringify(data));
+              return;
+            }
+          }
+        }
+      } catch (e) {
+        console.error("Failed to fetch existing analysis", e);
       }
-    }
-    if (!hasInitiatedGeneration.current && !isGenerating) {
-      hasInitiatedGeneration.current = true;
-      generateContent();
-    }
+
+      if (!mounted) return;
+
+      const cached = localStorage.getItem(`orchestration_content_${caseId}`);
+      if (cached) {
+        try {
+          const parsed = JSON.parse(cached);
+          const hasAnyContent = Object.values(parsed).some(v => Boolean(v));
+          if (hasAnyContent) {
+            setGeneratedContent(parsed);
+            return;
+          }
+        } catch (err) {
+          console.error("Error parsing cached content:", err);
+        }
+      }
+
+      if (!hasInitiatedGeneration.current && !isGenerating) {
+        hasInitiatedGeneration.current = true;
+        generateContent();
+      }
+    };
+
+    checkExistingContent();
+    return () => { mounted = false; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [caseId]);
 
