@@ -64,7 +64,7 @@ Auth endpoints: `POST /api/auth/{register,login,refresh,logout}` and `GET /api/a
 
 ### LLM client — Gemini direct
 
-`lib/llm/index.ts` — `queryLLM({ prompt, model?, maxTokens?, task? })` calls Google Gemini via `@google/genai`. No external proxy. Default model: `gemini-2.5-flash` (overridable via `LLM_MODEL`). Legacy keys (`accessToken`, `appName`, `provider`, `max_tokens`) are accepted-but-ignored for backwards compatibility with code that pre-dates the rewrite — drop them when you next touch a call site.
+`lib/llm/index.ts` — `queryLLM({ prompt, model?, maxTokens?, task? })` calls Google Gemini via `@google/genai`. No external proxy. Default model: `gemini-2.5-pro` (overridable via `LLM_MODEL`). Legacy keys (`accessToken`, `appName`, `provider`, `max_tokens`) are accepted-but-ignored for backwards compatibility with code that pre-dates the rewrite — drop them when you next touch a call site.
 
 LangGraph nodes prefer `lib/graph/llm.ts` which returns a `ChatGoogleGenerativeAI` instance for streaming + tracing.
 

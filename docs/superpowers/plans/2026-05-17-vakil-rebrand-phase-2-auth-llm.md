@@ -1157,7 +1157,7 @@ mcp__plugin_context7_context7__resolve-library-id  "google genai"
 mcp__plugin_context7_context7__query-docs  <library-id>  "available gemini flash model names 2026"
 ```
 
-Otherwise default to `gemini-2.5-flash`. The spec accepts either of: `gemini-2.5-flash`, `gemini-3-flash-preview` (whichever is current at implementation time).
+Otherwise default to `gemini-2.5-pro`. The spec accepts either of: `gemini-2.5-pro`, `gemini-3-flash-preview` (whichever is current at implementation time).
 
 - [ ] **Step 2: Rewrite the file**
 
@@ -1188,7 +1188,7 @@ function getClient(): GoogleGenAI {
 }
 
 export async function queryLLM(opts: LlmQueryOptions): Promise<LlmResponse> {
-  const { prompt, model = process.env.LLM_MODEL ?? "gemini-2.5-flash", maxTokens = 60000, task = "generic" } = opts;
+  const { prompt, model = process.env.LLM_MODEL ?? "gemini-2.5-pro", maxTokens = 60000, task = "generic" } = opts;
   if (!prompt?.trim()) return { success: false, error: "prompt is required" };
 
   try {

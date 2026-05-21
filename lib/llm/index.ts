@@ -32,7 +32,7 @@ function getClient(): GoogleGenAI {
 export async function queryLLM(opts: LlmQueryOptions): Promise<LlmResponse> {
   const {
     prompt,
-    model = process.env.LLM_MODEL ?? "gemini-2.5-flash",
+    model = process.env.LLM_MODEL ?? "gemini-2.5-pro",
     maxTokens,
     max_tokens,
     task = "generic",
