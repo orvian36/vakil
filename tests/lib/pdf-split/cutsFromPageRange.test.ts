@@ -53,10 +53,10 @@ describe("applyPageRangeEdit", () => {
   });
 
   it("rejects collision with prior segment", () => {
-    // Editing 'b' from=4→3 would collide with 'a' which already ends at 3
+    // Editing 'b' from=4→1 would collide with 'a' which already starts at 1
     const segments: Segment[] = [seg("a", 1, 3), seg("b", 4, 7)];
     const cuts = new Set<number>([3]);
-    const result = applyPageRangeEdit(segments, cuts, "b", 3, 7, totalPages);
+    const result = applyPageRangeEdit(segments, cuts, "b", 1, 7, totalPages);
     expect(result.error).toMatch(/overlap|prior|previous/i);
   });
 
@@ -65,7 +65,7 @@ describe("applyPageRangeEdit", () => {
       seg("a", 1, 3, { name: "Cover", category: "k1" }),
       seg("b", 4, 7, { name: "Body",  category: "k2" }),
     ];
-    const cuts = new Set<number>([3]);
+    const cuts = new Set<number>([3, 7]);
     const result = applyPageRangeEdit(segments, cuts, "a", 1, 5, totalPages);
     expect(result.error).toBeUndefined();
     expect(result.segments[0].name).toBe("Cover");
