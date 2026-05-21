@@ -7,14 +7,14 @@ import dynamic from "next/dynamic";
 // Loading component
 const LoadingSpinner = () => (
   <div className="flex items-center justify-center h-full min-h-[200px]">
-    <div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+    <div className="w-6 h-6 border-2 border-gold-500 border-t-transparent rounded-full animate-spin"></div>
   </div>
 );
 
 // Renderer-specific styles (Toast UI theme)
 const rendererStyles = {
   container: {
-    color: '#222',
+    color: 'var(--color-paper-ink)',
     lineHeight: '160%',
     maxWidth: 'none',
   },
@@ -24,9 +24,13 @@ const rendererStyles = {
 interface MdxRendererProps {
   source: string;
   components?: Record<string, React.ComponentType<any>>;
+  /** "paper" (default) targets cream document surfaces; "ink" targets dark chrome. */
+  variant?: "paper" | "ink";
 }
 
-const MdxRenderer = ({ source, components = {} }: MdxRendererProps) => {
+const MdxRenderer = ({ source, components = {}, variant = "paper" }: MdxRendererProps) => {
+  const linkColor = variant === "paper" ? "var(--color-gold-700)" : "var(--color-gold-500)";
+  const linkHover = variant === "paper" ? "var(--color-gold-500)" : "var(--color-gold-300)";
 
   return (
     <article className="prose max-w-none" style={rendererStyles.container}>
@@ -291,11 +295,11 @@ const MdxRenderer = ({ source, components = {} }: MdxRendererProps) => {
 
           .prose a {
             text-decoration: underline;
-            color: #4b96e6;
+            color: ${linkColor};
           }
 
           .prose a:hover {
-            color: #1f70de;
+            color: ${linkHover};
           }
 
           .prose .task-list-item {
