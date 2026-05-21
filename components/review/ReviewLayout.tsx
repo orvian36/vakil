@@ -166,7 +166,7 @@ export function ReviewLayout({ caseId, caseData }: ReviewLayoutProps) {
     [caseId],
   );
 
-  const generateContent = useCallback(async () => {
+  const generateContent = useCallback(async (userComment?: string) => {
     setIsGenerating(true);
     setError(null);
     setAgentStatuses([]);
@@ -177,7 +177,7 @@ export function ReviewLayout({ caseId, caseData }: ReviewLayoutProps) {
       const response = await fetch("/api/orchestration", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ caseId }),
+        body: JSON.stringify({ caseId, userComment }),
       });
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
@@ -278,7 +278,7 @@ export function ReviewLayout({ caseId, caseData }: ReviewLayoutProps) {
   const handleRegenerateConfirm = async (_userComment: string) => {
     setRegenerateOpen(false);
     hasInitiatedGeneration.current = false;
-    await generateContent();
+    await generateContent(_userComment);
   };
 
   const handleCopy = async () => {
