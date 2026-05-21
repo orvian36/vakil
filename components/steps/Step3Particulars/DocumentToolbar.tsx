@@ -27,7 +27,7 @@ export function DocumentToolbar({
 
   return (
     <div className="sticky top-0 z-10 -mx-6 mb-6 border-b border-line-soft bg-ink-900/95 px-6 py-3 backdrop-blur">
-      <div className="mx-auto flex max-w-3xl items-center justify-between gap-3">
+      <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           <Button
             variant="ghost"
