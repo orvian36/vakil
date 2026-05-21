@@ -1,6 +1,7 @@
 "use client";
 
 import { ReactNode } from "react";
+import { MotionConfig } from "framer-motion";
 import { usePathname } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -22,17 +23,19 @@ export function AppShell({ children, hideChrome }: AppShellProps) {
   const auth = useOptionalAuthContext();
 
   return (
-    <div className="min-h-screen flex flex-col">
-      {!effectiveHide && (
-        <Navbar
-          user={auth?.user}
-          isLoading={auth?.isLoading ?? false}
-          isAuthenticated={auth?.isAuthenticated ?? false}
-          onLogout={auth?.logout}
-        />
-      )}
-      <main className="flex-1">{children}</main>
-      {!effectiveHide && <Footer />}
-    </div>
+    <MotionConfig reducedMotion="user">
+      <div className="min-h-screen flex flex-col">
+        {!effectiveHide && (
+          <Navbar
+            user={auth?.user}
+            isLoading={auth?.isLoading ?? false}
+            isAuthenticated={auth?.isAuthenticated ?? false}
+            onLogout={auth?.logout}
+          />
+        )}
+        <main className="flex-1">{children}</main>
+        {!effectiveHide && <Footer />}
+      </div>
+    </MotionConfig>
   );
 }
