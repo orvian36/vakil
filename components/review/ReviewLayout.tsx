@@ -70,6 +70,30 @@ function cleanContentForDocx(content: string): string {
     .replace(/<\/Hoverable>/gi, "");
 }
 
+function ensureString(val: any): string {
+  if (typeof val === "string") {
+    let clean = val.trim();
+    if (clean.startsWith("```")) {
+      clean = clean.replace(/^```(?:markdown|json|md)?\n?/, "").replace(/\n```$/, "");
+    }
+    try {
+      const parsed = JSON.parse(clean);
+      if (parsed && typeof parsed === "object" && "content" in parsed) {
+        return String(parsed.content);
+      }
+    } catch {
+      // ignore
+    }
+    return val;
+  }
+  if (val == null) return "";
+  try {
+    return JSON.stringify(val, null, 2);
+  } catch {
+    return "";
+  }
+}
+
 export function ReviewLayout({ caseId, caseData }: ReviewLayoutProps) {
   const [activeId, setActiveId] = useState<DocumentId>(DOCUMENT_ORDER[0]);
   const [generatedContent, setGeneratedContent] = useState<GeneratedContent>({});
@@ -439,21 +463,21 @@ export function ReviewLayout({ caseId, caseData }: ReviewLayoutProps) {
     };
     switch (activeId) {
       case "writ-of-summons":
-        return <WritOfSummonsTab {...props} content={generatedContent.writOfSummons || ""} />;
+        return <WritOfSummonsTab {...props} content={ensureString(generatedContent.writOfSummons)} />;
       case "statement-of-claim":
-        return <StatementOfClaimTab {...props} content={generatedContent.statementOfClaim || ""} />;
+        return <StatementOfClaimTab {...props} content={ensureString(generatedContent.statementOfClaim)} />;
       case "statement-of-damages":
         return (
-          <StatementOfDamagesTab {...props} content={generatedContent.statementOfDamages || ""} />
+          <StatementOfDamagesTab {...props} content={ensureString(generatedContent.statementOfDamages)} />
         );
       case "pre-action-letter":
-        return <PreActionLetterTab {...props} content={generatedContent.preActionLetter || ""} />;
+        return <PreActionLetterTab {...props} content={ensureString(generatedContent.preActionLetter)} />;
       case "witness-statement":
         return (
           <WitnessStatementTab
             {...props}
-            content={generatedContent.witnessStatement || ""}
-            bengaliContent={generatedContent.witnessStatementBengali || ""}
+            content={ensureString(generatedContent.witnessStatement)}
+            bengaliContent={ensureString(generatedContent.witnessStatementBengali)}
             bengaliMode={bengaliMode}
           />
         );

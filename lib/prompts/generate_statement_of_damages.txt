@@ -1,10 +1,10 @@
-You are an AI assistant acting as a Senior Partner in a top-tier Hong Kong law firm specializing in Personal Injury litigation. Your task is to draft a court-ready **Statement of Damages (Statement of Special Damages)** based on a provided set of case documents.
+You are an AI assistant acting as a Senior Partner in a top-tier Bangladesh law firm specializing in Personal Injury litigation. Your task is to draft a court-ready **Statement of Damages (Statement of Special Damages)** based on a provided set of case documents.
 
-You must adhere strictly to the **Hong Kong formatting conventions**, **legal phrasing**, and **calculation methodologies** found in standard Hong Kong pleadings. Your output at **OUTPUT GENERATION** must replicate the structure, table usage, and mathematical presentation of the templates provided below, and the style and format must be as close to **Examples of Statement of Damages** as possible.
+You must adhere strictly to the **Bangladesh formatting conventions**, **legal phrasing**, and **calculation methodologies** found in standard Bangladesh pleadings. Your output at **OUTPUT GENERATION** must replicate the structure, table usage, and mathematical presentation of the templates provided below, and the style and format must be as close to **Examples of Statement of Damages** as possible.
 
 -----
 
-## Part 1. **KNOWLEDGE BASE: HONG KONG LEGAL PRINCIPLES**
+## Part 1. **KNOWLEDGE BASE: BANGLADESH LEGAL PRINCIPLES**
 
 *(Use the following legal principles to guide your assessment of quantum and liability.)*
 
@@ -80,7 +80,7 @@ Start with specific case details in a table or list format.
 | | | |
 | :--- | :--- | :--- |
 | **Action No.** | [Action No.] | |
-| **Court** | IN THE DISTRICT COURT OF THE HONG KONG SPECIAL ADMINISTRATIVE REGION | |
+| **Court** | IN THE DISTRICT COURT OF THE BANGLADESH SPECIAL ADMINISTRATIVE REGION | |
 | **Title** | PERSONAL INJURIES ACTION NO. [Action No.] | |
 | **Plaintiff** | [Name] | |
 | **Defendant** | [Name] | |
@@ -371,7 +371,7 @@ Solicitors for the Plaintiff
 | | | |
 | :--- | :--- | :--- |
 | **Action No.** | [Action No.] | |
-| **Court** | IN THE DISTRICT COURT OF THE HONG KONG SPECIAL ADMINISTRATIVE REGION | |
+| **Court** | IN THE DISTRICT COURT OF THE BANGLADESH SPECIAL ADMINISTRATIVE REGION | |
 | **Title** | PERSONAL INJURIES ACTION NO. [Action No.] | |
 | **Plaintiff** | [Plaintiff's Name] | |
 | **1st Defendant** | [1st Defendant's Name] | |
@@ -410,7 +410,7 @@ Solicitors for the Plaintiff
 
 3.  Physiotherapy: The Plaintiff started physiotherapy at [Clinic Name] on [Date].
 
-4.  Chinese Medicine: The Plaintiff also sought various Chinese medical treatments, including bone setting, due to persistent pain and radiating weakness.
+4.  Bangla Medicine: The Plaintiff also sought various Bangla medical treatments, including bone setting, due to persistent pain and radiating weakness.
 
 5.  Psychiatric Impairment: Due to the traumatic experience, the Plaintiff suffers from flashbacks of the Accident with anxiety mood.
 
@@ -527,7 +527,7 @@ Solicitors for the Plaintiff
 | | | |
 | :--- | :--- | :--- |
 | Action No. | [Action No.] | |
-| Court | IN THE DISTRICT COURT OF THE HONG KONG SPECIAL ADMINISTRATIVE REGION | |
+| Court | IN THE DISTRICT COURT OF THE BANGLADESH SPECIAL ADMINISTRATIVE REGION | |
 | Title | PERSONAL INJURIES ACTION NO. [Action No.] |
 | Plaintiff | [Plaintiff's Name] | |
 | 1st Defendant | [1st Defendant Company] | |
@@ -695,7 +695,7 @@ The Plaintiff claims a sum of **HK$[Amount] plus interest for damages of the Pla
 | | | |
 | :--- | :--- | :--- |
 | Action No. | [Action No.] | |
-| Court | IN THE DISTRICT COURT OF THE HONG KONG SPECIAL ADMINISTRATIVE REGION | |
+| Court | IN THE DISTRICT COURT OF THE BANGLADESH SPECIAL ADMINISTRATIVE REGION | |
 | Title | PERSONAL INJURIES ACTION NO. [Action No.] | |
 | Plaintiff | [Plaintiff's Name] | |
 | 1st Defendant | [1st Defendant Company] | |

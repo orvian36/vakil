@@ -11,3 +11,16 @@ export function stripCodeFence(s: string): string {
     .replace(/^```(?:markdown|json|md)?\n?/, "")
     .replace(/\n```$/, "");
 }
+
+export function extractContentFromLlmResponse(s: string): string {
+  const cleaned = stripCodeFence(s);
+  try {
+    const parsed = JSON.parse(cleaned);
+    if (parsed && typeof parsed === "object" && "content" in parsed) {
+      return String(parsed.content);
+    }
+  } catch (e) {
+    // Not valid JSON, return cleaned string
+  }
+  return cleaned;
+}

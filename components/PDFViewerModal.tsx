@@ -60,6 +60,11 @@ export default function PDFViewerModal({ isOpen, onClose, files, startIndex, onS
         link.rel = 'stylesheet';
         link.href = 'https://cdn.jsdelivr.net/npm/@toast-ui/editor@3.2.2/dist/toastui-editor.min.css';
         document.head.appendChild(link);
+        
+        const darkThemeLink = document.createElement('link');
+        darkThemeLink.rel = 'stylesheet';
+        darkThemeLink.href = 'https://cdn.jsdelivr.net/npm/@toast-ui/editor@3.2.2/dist/theme/toastui-editor-dark.min.css';
+        document.head.appendChild(darkThemeLink);
       }
     };
     loadToastUICSS();
@@ -300,7 +305,31 @@ export default function PDFViewerModal({ isOpen, onClose, files, startIndex, onS
 
   return (
     <>    
-      <style jsx>{`
+      <style jsx global>{`
+        .pdf-viewer-editor-wrapper .toastui-editor-contents {
+          color: var(--color-ink-300) !important;
+          font-family: var(--font-body) !important;
+          font-size: 15px !important;
+          line-height: 1.6 !important;
+        }
+        .pdf-viewer-editor-wrapper .toastui-editor-contents p,
+        .pdf-viewer-editor-wrapper .toastui-editor-contents li {
+          color: var(--color-ink-300) !important;
+        }
+        .pdf-viewer-editor-wrapper .toastui-editor-contents h1,
+        .pdf-viewer-editor-wrapper .toastui-editor-contents h2,
+        .pdf-viewer-editor-wrapper .toastui-editor-contents h3,
+        .pdf-viewer-editor-wrapper .toastui-editor-contents h4,
+        .pdf-viewer-editor-wrapper .toastui-editor-contents h5,
+        .pdf-viewer-editor-wrapper .toastui-editor-contents h6,
+        .pdf-viewer-editor-wrapper .toastui-editor-contents strong,
+        .pdf-viewer-editor-wrapper .toastui-editor-contents b {
+          color: var(--color-ink-100) !important;
+        }
+        .pdf-viewer-editor-wrapper .toastui-editor-contents a {
+          color: var(--color-gold-500) !important;
+        }
+        
         .toast-ui-editor .toastui-editor-contents {
           scrollbar-width: none;
           -ms-overflow-style: none;
@@ -526,7 +555,7 @@ export default function PDFViewerModal({ isOpen, onClose, files, startIndex, onS
                   </div>
                 </div>
               ) : isEditing ? (
-                <div className="absolute inset-0">
+                <div className="absolute inset-0 pdf-viewer-editor-wrapper">
                     <Editor
                       ref={editorRef}
                       initialValue={editableSummary}
@@ -534,6 +563,7 @@ export default function PDFViewerModal({ isOpen, onClose, files, startIndex, onS
                       initialEditType="wysiwyg"
                       hideModeSwitch={true}
                       useCommandShortcut={true}
+                      theme="dark"
                       toolbarItems={[
                         ['heading', 'bold', 'italic'],
                         ['hr', 'quote'],
@@ -549,10 +579,10 @@ export default function PDFViewerModal({ isOpen, onClose, files, startIndex, onS
                     />
                   </div>
                 ) : (
-                  <div className="absolute inset-0 overflow-auto">
+                  <div className="absolute inset-0 overflow-auto pdf-viewer-editor-wrapper">
                     <div className="p-6">
                       {editableSummary ? (
-                        <Viewer key={`viewer-${currentFile?.id}-${regenerationKey}`} initialValue={editableSummary} />
+                        <Viewer key={`viewer-${currentFile?.id}-${regenerationKey}`} initialValue={editableSummary} theme="dark" />
                       ) : (
                       <div className="flex flex-col items-center justify-center h-32 text-ink-400">
                         <svg className="w-12 h-12 mb-3 text-ink-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
