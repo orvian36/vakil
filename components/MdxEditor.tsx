@@ -27,9 +27,9 @@ import { preProcessMD } from '@/utils/remarkFixVoidTags';
 function CustomCitationEditor(props: any) {
   const mdastNode = props?.mdastNode;
   const children = mdastNode?.children?.[0]?.value || mdastNode?.children?.[0]?.children?.[0]?.value || 'Citation';
-  
+
   return (
-    <span className="bg-blue-100 px-1 rounded">
+    <span className="bg-gold-500/15 text-gold-700 px-1 rounded">
       {children}
     </span>
   );
@@ -38,9 +38,9 @@ function CustomCitationEditor(props: any) {
 function CustomHoverableTextEditor(props: any) {
   const mdastNode = props?.mdastNode;
   const children = mdastNode?.children?.[0]?.value || mdastNode?.children?.[0]?.text || 'No content';
-  
+
   return (
-    <span className="bg-green-100 px-1 rounded">
+    <span className="bg-emerald-500/15 text-emerald-500 px-1 rounded">
       {children}
     </span>
   );
@@ -73,13 +73,16 @@ interface MdxEditorProps {
   onChange?: (markdown: string) => void;
   className?: string;
   placeholder?: string;
+  /** "paper" (default) targets cream document surfaces; "ink" targets dark chrome. */
+  variant?: "paper" | "ink";
 }
 
-export default function MdxEditorComponent({ 
-  initialMarkdown = '', 
-  onChange, 
+export default function MdxEditorComponent({
+  initialMarkdown = '',
+  onChange,
   className = '',
-  placeholder = 'Start writing...'
+  placeholder = 'Start writing...',
+  variant = 'paper',
 }: MdxEditorProps) {
   const [markdown, setMarkdown] = useState(initialMarkdown);
   const [processedMarkdown, setProcessedMarkdown] = useState(initialMarkdown);
@@ -111,10 +114,16 @@ export default function MdxEditorComponent({
     setHasError(true);
   };
 
+  const wrapperClass = variant === 'paper'
+    ? `border border-line-paper rounded-lg overflow-hidden bg-cream-50 ${className}`
+    : `border border-line-strong rounded-lg overflow-hidden bg-ink-800 ${className}`;
+  const stateBgClass = variant === 'paper' ? 'bg-cream-100' : 'bg-ink-800';
+  const stateTextClass = variant === 'paper' ? 'text-paper-ink/70' : 'text-ink-400';
+
   if (!isClient) {
     return (
-      <div className={`border border-gray-300 rounded-lg overflow-hidden h-96 flex items-center justify-center bg-gray-50 ${className}`}>
-        <div className="text-gray-500">Loading Editor...</div>
+      <div className={`border border-line-paper rounded-lg overflow-hidden h-96 flex items-center justify-center ${stateBgClass} ${className}`}>
+        <div className={stateTextClass}>Loading Editor...</div>
       </div>
     );
   }
@@ -122,18 +131,18 @@ export default function MdxEditorComponent({
   // Error fallback component
   if (hasError) {
     return (
-      <div className={`border border-gray-300 rounded-lg overflow-hidden h-96 flex items-center justify-center bg-gray-50 ${className}`}>
+      <div className={`border border-line-paper rounded-lg overflow-hidden h-96 flex items-center justify-center ${stateBgClass} ${className}`}>
         <div className="text-center p-6 max-w-md">
           <div className="mb-4">
-            <svg className="w-16 h-16 text-red-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-16 h-16 text-rose-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
             </svg>
           </div>
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">Editor Failed to Load</h3>
-          <p className="text-gray-600">
+          <h3 className={`text-lg font-semibold mb-2 ${variant === 'paper' ? 'text-paper-ink' : 'text-ink-100'}`}>Editor Failed to Load</h3>
+          <p className={stateTextClass}>
             Unable to render content.<br/>
             Invalid syntax or corrupted AI data.<br/>
-            <span className="text-gray-500 text-sm mt-2 inline-block">Try regenerating the content.</span>
+            <span className="text-sm mt-2 inline-block opacity-80">Try regenerating the content.</span>
           </p>
         </div>
       </div>
@@ -403,11 +412,11 @@ export default function MdxEditorComponent({
 
         .mdx-editor-content a {
           text-decoration: underline;
-          color: #4b96e6;
+          color: var(--color-gold-700);
         }
 
         .mdx-editor-content a:hover {
-          color: #1f70de;
+          color: var(--color-gold-500);
         }
 
         .mdx-editor-content .task-list-item {
@@ -439,7 +448,7 @@ export default function MdxEditorComponent({
         }
       `}</style>
       
-      <div className={`border border-gray-300 rounded-lg overflow-hidden ${className}`}>
+      <div className={wrapperClass}>
         <MDXEditor
           markdown={processedMarkdown}
           onChange={handleChange}
