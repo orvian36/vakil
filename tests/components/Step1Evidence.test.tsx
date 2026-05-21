@@ -1,5 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
+
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({ push: () => {}, back: () => {} }),
+}));
+
 import Step1Evidence from "@/components/steps/Step1Evidence";
 
 beforeEach(() => {
