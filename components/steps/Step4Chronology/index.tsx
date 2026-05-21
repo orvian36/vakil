@@ -7,7 +7,6 @@ import Citation from "@/components/Citation";
 import MdxEditorComponent from "@/components/MdxEditor";
 import { SectionHeader, Card, Shimmer, Button } from "@/components/ui";
 import { RegenerateDialog } from "@/components/modals/RegenerateDialog";
-import { InsufficientBalanceDialog } from "@/components/modals/InsufficientBalanceDialog";
 import { DocumentToolbar } from "../Step3Particulars/DocumentToolbar";
 
 interface Step4ChronologyProps {
@@ -35,7 +34,6 @@ export default function Step4Chronology({
   const [isSaving, setIsSaving] = useState(false);
   const [isLoadingFromDatabase, setIsLoadingFromDatabase] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [showInsufficientBalanceDialog, setShowInsufficientBalanceDialog] = useState(false);
   const editorRef = useRef<any>(null);
 
   const loadChronologyFromDatabase = useCallback(async () => {
@@ -70,16 +68,6 @@ export default function Step4Chronology({
       onGeneratingStateChange?.(true);
 
       try {
-        const verifyTokenResponse = await fetch("/api/tokens/verify", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ estimateTokens: 1 }),
-        });
-        const result = await verifyTokenResponse.json();
-        if (!result.is_enough_balance) {
-          setShowInsufficientBalanceDialog(true);
-          return;
-        }
 
         const response = await fetch("/api/generate/chronology", {
           method: "POST",
@@ -263,11 +251,6 @@ export default function Step4Chronology({
         onConfirm={handleRegenerateConfirm}
       />
 
-      <InsufficientBalanceDialog
-        open={showInsufficientBalanceDialog}
-        onOpenChange={setShowInsufficientBalanceDialog}
-        onTopUp={() => setShowInsufficientBalanceDialog(false)}
-      />
     </div>
   );
 }

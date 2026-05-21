@@ -1,4 +1,4 @@
-﻿import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { GoogleGenAI } from '@google/genai';
 import { queryLLM } from '@/lib/llm';
 
@@ -229,12 +229,6 @@ export async function POST(request: NextRequest) {
       documentType: segment.documentType || 'Unknown'
     })) || [];
     
-    // Deduct tokens if auth token provided
-    if (authToken && result.usageMetadata) {
-      const totalTokens = result.usageMetadata.totalTokenCount || 0;
-      await deductTokens(authToken, totalTokens, 'vakil');
-    }
-    
     return NextResponse.json({
       success: true,
       data: {
@@ -433,37 +427,3 @@ Return ONLY the corrected JSON`;
   }
 }
 
-/**
- * Deduct tokens from user balance
- */
-async function deductTokens(authToken: string, amount: number, description: string): Promise<void> {
-  try {
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    if (!supabaseUrl) {
-      console.warn('[API] NEXT_PUBLIC_SUPABASE_URL not defined, skipping token deduction');
-      return;
-    }
-
-    const response = await fetch(`${supabaseUrl}/api/tokens/deduct`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${authToken}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        amount: amount,
-        description: description
-      })
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error(`[API] Failed to deduct tokens: ${response.status} - ${errorText}`);
-    } else {
-      console.log(`[API] Successfully deducted tokens for: ${description}`);
-    }
-  } catch (error) {
-    console.error('[API] Error deducting tokens:', error);
-    // Don't throw error here to avoid breaking the analysis flow
-  }
-}
