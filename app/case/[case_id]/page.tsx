@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { Case } from '@/types/case';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Files, FileCog, FileText, Clock, FileCheck } from 'lucide-react';
 import { fadeUp } from '@/lib/motion';
 
 import { CaseShell } from '@/components/wizard/CaseShell';
@@ -15,11 +15,11 @@ import Step4Chronology from '@/components/steps/Step4Chronology';
 import Step5Review from '@/components/steps/Step5Review';
 
 const STEPS = [
-  { number: 1, title: 'Evidence' },
-  { number: 2, title: 'Process' },
-  { number: 3, title: 'Particulars' },
-  { number: 4, title: 'Chronology' },
-  { number: 5, title: 'Review' },
+  { number: 1, title: 'Evidence', icon: Files },
+  { number: 2, title: 'Process', icon: FileCog },
+  { number: 3, title: 'Particulars', icon: FileText },
+  { number: 4, title: 'Chronology', icon: Clock },
+  { number: 5, title: 'Review', icon: FileCheck },
 ];
 
 export default function CaseDetailPage() {

@@ -9,10 +9,13 @@ import {
 } from "@/components/ui";
 import { cn } from "@/lib/utils/cn";
 
+import type { LucideIcon } from "lucide-react";
+
 export interface RailStep {
   number: number;
   title: string;
   meta?: string;
+  icon?: LucideIcon;
 }
 
 interface ItemProps {
@@ -37,7 +40,13 @@ export function StepRailItem({ step, state, disabled, collapsed, onClick }: Item
         state === "upcoming" && "bg-ink-700 border border-line-soft text-ink-400",
       )}
     >
-      {state === "complete" ? <Check className="h-3 w-3" /> : step.number}
+      {state === "complete" ? (
+        <Check className="h-3.5 w-3.5" />
+      ) : step.icon ? (
+        <step.icon className="h-3.5 w-3.5" />
+      ) : (
+        step.number
+      )}
     </span>
   );
 
