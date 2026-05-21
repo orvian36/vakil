@@ -10,7 +10,9 @@ interface Props {
   segments: Segment[];
   activeSegmentId: string | null;
   evidenceTypes: CaseEvidenceType[];
+  rangeErrors: Record<string, string>;
   onUpdate: (id: string, patch: Partial<Segment>) => void;
+  onPageRangeChange: (id: string, from: number, to: number) => void;
   onRemove: (id: string) => void;
   onDownload: (id: string) => void;
   onFocus: (id: string) => void;
@@ -21,7 +23,9 @@ export function SegmentRail({
   segments,
   activeSegmentId,
   evidenceTypes,
+  rangeErrors,
   onUpdate,
+  onPageRangeChange,
   onRemove,
   onDownload,
   onFocus,
@@ -53,7 +57,9 @@ export function SegmentRail({
             active={s.id === activeSegmentId}
             evidenceTypes={evidenceTypes}
             duplicateName={(duplicateNames.get(s.name.trim()) ?? 0) > 1}
+            rangeError={rangeErrors[s.id]}
             onUpdate={(patch) => onUpdate(s.id, patch)}
+            onPageRangeChange={(from, to) => onPageRangeChange(s.id, from, to)}
             onRemove={() => onRemove(s.id)}
             onDownload={() => onDownload(s.id)}
             onFocus={() => onFocus(s.id)}

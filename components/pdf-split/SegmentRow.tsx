@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { MoreHorizontal, Sparkles } from "lucide-react";
 import {
   Button,
@@ -20,7 +21,9 @@ interface Props {
   active: boolean;
   evidenceTypes: CaseEvidenceType[];
   duplicateName: boolean;
+  rangeError?: string;
   onUpdate: (patch: Partial<Segment>) => void;
+  onPageRangeChange: (fromPage: number, toPage: number) => void;
   onRemove: () => void;
   onDownload: () => void;
   onFocus: () => void;
@@ -32,11 +35,31 @@ export function SegmentRow({
   active,
   evidenceTypes,
   duplicateName,
+  rangeError,
   onUpdate,
+  onPageRangeChange,
   onRemove,
   onDownload,
   onFocus,
 }: Props) {
+  // Local draft state for the page inputs so users can type freely without
+  // every keystroke firing a recompute. Commit on blur or Enter.
+  const [fromDraft, setFromDraft] = useState(String(segment.fromPage));
+  const [toDraft, setToDraft] = useState(String(segment.toPage));
+
+  useEffect(() => {
+    setFromDraft(String(segment.fromPage));
+    setToDraft(String(segment.toPage));
+  }, [segment.fromPage, segment.toPage]);
+
+  const commitRange = (from: string, to: string) => {
+    const f = Number.parseInt(from, 10);
+    const t = Number.parseInt(to, 10);
+    if (!Number.isFinite(f) || !Number.isFinite(t)) return;
+    if (f === segment.fromPage && t === segment.toPage) return;
+    onPageRangeChange(f, t);
+  };
+
   return (
     <Card
       variant={active ? "gold-accent" : "chrome"}
@@ -45,9 +68,8 @@ export function SegmentRow({
     >
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">
-          <p className="text-xs uppercase tracking-widest text-ink-400">Segment {index + 1}</p>
-          <p className="text-xs text-ink-500 mt-0.5">
-            Pages {segment.fromPage}–{segment.toPage}
+          <p className="text-xs uppercase tracking-widest text-ink-400">
+            Segment {index + 1}
           </p>
         </div>
         <div className="flex items-center gap-1">
@@ -57,7 +79,12 @@ export function SegmentRow({
               {Math.round(segment.aiConfidence * 100)}%
             </span>
           )}
-          <Button size="icon" variant="ghost" aria-label="Segment actions" onClick={(e) => e.stopPropagation()}>
+          <Button
+            size="icon"
+            variant="ghost"
+            aria-label="Segment actions"
+            onClick={(e) => e.stopPropagation()}
+          >
             <MoreHorizontal className="h-4 w-4" />
           </Button>
         </div>
@@ -85,13 +112,65 @@ export function SegmentRow({
             ))}
           </SelectContent>
         </Select>
+
+        <div className="flex items-center gap-2">
+          <div className="flex-1">
+            <label className="block text-[10px] uppercase tracking-widest text-ink-400 mb-1">
+              From page
+            </label>
+            <Input
+              type="number"
+              min={1}
+              value={fromDraft}
+              onChange={(e) => setFromDraft(e.target.value)}
+              onBlur={() => commitRange(fromDraft, toDraft)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") (e.target as HTMLInputElement).blur();
+              }}
+              aria-label="From page"
+            />
+          </div>
+          <div className="flex-1">
+            <label className="block text-[10px] uppercase tracking-widest text-ink-400 mb-1">
+              To page
+            </label>
+            <Input
+              type="number"
+              min={1}
+              value={toDraft}
+              onChange={(e) => setToDraft(e.target.value)}
+              onBlur={() => commitRange(fromDraft, toDraft)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") (e.target as HTMLInputElement).blur();
+              }}
+              aria-label="To page"
+            />
+          </div>
+        </div>
+        {rangeError && (
+          <p className="text-xs text-rose-500">{rangeError}</p>
+        )}
       </div>
 
       <div className="flex justify-end gap-2">
-        <Button size="sm" variant="ghost" onClick={(e) => { e.stopPropagation(); onDownload(); }}>
+        <Button
+          size="sm"
+          variant="ghost"
+          onClick={(e) => {
+            e.stopPropagation();
+            onDownload();
+          }}
+        >
           Download
         </Button>
-        <Button size="sm" variant="ghost" onClick={(e) => { e.stopPropagation(); onRemove(); }}>
+        <Button
+          size="sm"
+          variant="ghost"
+          onClick={(e) => {
+            e.stopPropagation();
+            onRemove();
+          }}
+        >
           Remove
         </Button>
       </div>
