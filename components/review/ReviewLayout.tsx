@@ -80,6 +80,7 @@ export function ReviewLayout({ caseId, caseData }: ReviewLayoutProps) {
   const [showErrorDialog, setShowErrorDialog] = useState(false);
   const [bengaliMode, setBengaliMode] = useState(false);
   const [regenerateOpen, setRegenerateOpen] = useState(false);
+  const [isRailOpen, setIsRailOpen] = useState(true);
   const hasInitiatedGeneration = useRef(false);
 
   // Per-document status derived from generated content + agent statuses.
@@ -466,32 +467,39 @@ export function ReviewLayout({ caseId, caseData }: ReviewLayoutProps) {
 
   return (
     <>
-      <div className="flex min-h-[calc(100vh-12rem)]">
-        <DocumentRail
-          statuses={statuses}
-          activeId={activeId}
-          onSelect={(id) => {
-            setActiveId(id);
-            if (id !== "witness-statement") setBengaliMode(false);
-          }}
-          onRegenerateAll={handleRegenerate}
+      <div className="flex flex-col relative bg-ink-900 border border-line-soft rounded-[var(--radius-xl)]">
+        <PaperToolbar
+          documentLabel={activeDoc.label}
+          status={statuses[activeId]}
+          onRegenerate={handleRegenerate}
+          onDownload={handleDownload}
+          onCopy={handleCopy}
+          bengaliMode={showBengaliToggle ? bengaliMode : undefined}
+          onBengaliToggle={showBengaliToggle ? setBengaliMode : undefined}
+          isRailOpen={isRailOpen}
+          onToggleRail={() => setIsRailOpen(!isRailOpen)}
         />
-        <main className="flex-1 px-6 py-6 min-w-0">
-          <div className="max-w-3xl mx-auto">
-            <PaperToolbar
-              documentLabel={activeDoc.label}
-              status={statuses[activeId]}
-              onRegenerate={handleRegenerate}
-              onDownload={handleDownload}
-              onCopy={handleCopy}
-              bengaliMode={showBengaliToggle ? bengaliMode : undefined}
-              onBengaliToggle={showBengaliToggle ? setBengaliMode : undefined}
+        <div className="flex flex-1 relative">
+          <main className="flex-1 px-6 py-6 min-w-0 transition-all duration-300">
+            <div className="max-w-5xl mx-auto pb-12">
+              <PaperCanvas generating={statuses[activeId] === "generating"}>
+                {renderActiveTab()}
+              </PaperCanvas>
+            </div>
+          </main>
+          <div className="sticky top-[73px] self-start h-[calc(100vh-6rem)] z-10 flex-shrink-0">
+            <DocumentRail
+              isOpen={isRailOpen}
+              statuses={statuses}
+              activeId={activeId}
+              onSelect={(id) => {
+                setActiveId(id);
+                if (id !== "witness-statement") setBengaliMode(false);
+              }}
+              onRegenerateAll={handleRegenerate}
             />
-            <PaperCanvas generating={statuses[activeId] === "generating"}>
-              {renderActiveTab()}
-            </PaperCanvas>
           </div>
-        </main>
+        </div>
       </div>
 
       <ErrorDialog

@@ -22,7 +22,7 @@ export function PaperCanvas({ children, generating, className }: Props) {
         "relative cream-paper overflow-hidden",
         "px-10 py-12 md:px-14 md:py-16",
         "rounded-[var(--radius-xl)]",
-        "max-w-3xl mx-auto",
+        "w-full",
         className,
       )}
     >
