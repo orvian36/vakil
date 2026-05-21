@@ -1,9 +1,11 @@
 "use client";
 import { useState, Suspense } from "react";
+import { motion } from "framer-motion";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { AuthShell } from "@/components/layout/AuthShell";
 import { Button, Input } from "@/components/ui";
+import { fadeUp } from "@/lib/motion";
 
 function LoginForm() {
   const router = useRouter();
@@ -32,7 +34,13 @@ function LoginForm() {
   }
 
   return (
-    <form onSubmit={onSubmit} className="space-y-5">
+    <motion.form
+      initial="hidden"
+      animate="visible"
+      variants={fadeUp}
+      onSubmit={onSubmit}
+      className="space-y-5"
+    >
       <div className="space-y-1.5 mb-2">
         <h1 className="text-3xl font-display text-ink-100">Welcome back</h1>
         <p className="text-sm text-ink-400">Sign in to continue drafting.</p>
@@ -74,7 +82,7 @@ function LoginForm() {
           Create an account
         </Link>
       </p>
-    </form>
+    </motion.form>
   );
 }
 

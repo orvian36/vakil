@@ -1,10 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import { useAuth } from "@/hooks/useAuth";
 import { Case } from "@/types/case";
 import { useRouter } from "next/navigation";
 import { Search, Plus, Loader2 } from "lucide-react";
+import { fadeUp } from "@/lib/motion";
 import {
   Button,
   Input,
@@ -111,7 +113,12 @@ export default function Home() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-10">
+    <motion.div
+      initial="hidden"
+      animate="visible"
+      variants={fadeUp}
+      className="max-w-7xl mx-auto px-6 py-10"
+    >
       <div className="mb-8">
         <h1 className="text-4xl font-display text-ink-100 mb-1">
           Welcome back{user?.name ? `, ${user.name.split(" ")[0]}` : ""}.
@@ -206,6 +213,6 @@ export default function Home() {
         confirmLabel="Delete"
         onConfirm={handleDeleteConfirmed}
       />
-    </div>
+    </motion.div>
   );
 }
