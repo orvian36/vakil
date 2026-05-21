@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { Scissors } from "lucide-react";
 import { Case, CaseFile, CaseEvidenceType } from "@/types/case";
 import { FileSizeDialog } from "@/components/modals/FileSizeDialog";
-import { InsufficientBalanceDialog } from "@/components/modals/InsufficientBalanceDialog";
 import { SectionHeader, Button, Shimmer, EmptyState } from "@/components/ui";
 import { EvidenceTypeCard } from "./EvidenceTypeCard";
 import { AddCustomTypeRow } from "./AddCustomTypeRow";
@@ -33,7 +32,6 @@ export default function Step1Evidence({
   const [expandedKey, setExpandedKey] = useState<string | null>(null);
   const [showFileSizeDialog, setShowFileSizeDialog] = useState(false);
   const [oversizedFiles, setOversizedFiles] = useState<OversizedFile[]>([]);
-  const [showInsufficientBalanceDialog, setShowInsufficientBalanceDialog] = useState(false);
   // Keep hasPendingUploads as ref so effect below can fire without stale closures
   const [hasPendingUploads, setHasPendingUploads] = useState(false);
   const router = useRouter();
@@ -174,24 +172,6 @@ export default function Step1Evidence({
       return;
     }
 
-    // Pre-check: token balance
-    try {
-      const verifyTokenResponse = await fetch("/api/tokens/verify", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ estimateTokens: 1 }),
-      });
-      const result = await verifyTokenResponse.json();
-      console.log("verifyTokenResponse", result);
-      if (!result.is_enough_balance) {
-        setShowInsufficientBalanceDialog(true);
-        return;
-      }
-    } catch (error) {
-      console.error("Token verification failed:", error);
-      alert("Failed to verify token balance. Please try again.");
-      return;
-    }
 
     // Update UI immediately
     updateEvidenceItem(key, "files", fileArray);
@@ -383,11 +363,6 @@ export default function Step1Evidence({
         open={showFileSizeDialog}
         onOpenChange={setShowFileSizeDialog}
         files={oversizedFiles}
-      />
-      <InsufficientBalanceDialog
-        open={showInsufficientBalanceDialog}
-        onOpenChange={setShowInsufficientBalanceDialog}
-        onTopUp={() => setShowInsufficientBalanceDialog(false)}
       />
     </div>
   );

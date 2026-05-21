@@ -58,6 +58,17 @@ export default function Home() {
   }
 
   useEffect(() => {
+    const sp = new URLSearchParams(window.location.search);
+    if (sp.get("create") === "1") {
+      setCreateOpen(true);
+      // Strip the param so refresh doesn't re-open.
+      const url = new URL(window.location.href);
+      url.searchParams.delete("create");
+      window.history.replaceState({}, "", url.toString());
+    }
+  }, []);
+
+  useEffect(() => {
     if (userId) fetchCases(userId);
   }, [userId]);
 

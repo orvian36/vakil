@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 
-vi.mock("next/navigation", () => ({ usePathname: () => "/login" }));
+vi.mock("next/navigation", () => ({ usePathname: () => "/login", useRouter: () => ({ push: vi.fn(), replace: vi.fn() }) }));
 
 import { render } from "@testing-library/react";
 import { AppShell } from "@/components/layout/AppShell";

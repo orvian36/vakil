@@ -15,6 +15,7 @@ import { Footer } from "./Footer";
 import { Viewer } from "./Viewer";
 import { SegmentRail } from "./SegmentRail";
 import { Segment, AIAnalysisResult, OversizedFile } from "./types";
+import { applyPageRangeEdit } from "@/lib/pdf-split/cutsFromPageRange";
 
 type PDFDocumentProxy = {
   numPages: number;
@@ -80,6 +81,7 @@ export function Workshop({ caseData }: Props) {
   const [cuts, setCuts] = useState<Set<number>>(new Set());
   const [segments, setSegments] = useState<Segment[]>([]);
   const [activeSegmentId, setActiveSegmentId] = useState<string | null>(null);
+  const [rangeErrors, setRangeErrors] = useState<Record<string, string>>({});
 
   const [analysisResult, setAnalysisResult] = useState<AIAnalysisResult | null>(null);
   const [isAnalysing, setIsAnalysing] = useState(false);
@@ -241,6 +243,32 @@ export function Workshop({ caseData }: Props) {
   const updateSegment = useCallback((id: string, patch: Partial<Segment>) => {
     setSegments((prev) => prev.map((s) => (s.id === id ? { ...s, ...patch } : s)));
   }, []);
+
+  const handlePageRangeChange = useCallback(
+    (segmentId: string, fromPage: number, toPage: number) => {
+      if (!pdfDocument) return;
+      const result = applyPageRangeEdit(
+        segments,
+        cuts,
+        segmentId,
+        fromPage,
+        toPage,
+        pdfDocument.numPages,
+      );
+      if (result.error) {
+        setRangeErrors((prev) => ({ ...prev, [segmentId]: result.error! }));
+        return;
+      }
+      setRangeErrors((prev) => {
+        const next = { ...prev };
+        delete next[segmentId];
+        return next;
+      });
+      setCuts(result.cuts);
+      setSegments(result.segments);
+    },
+    [pdfDocument, segments, cuts],
+  );
 
   const removeSegment = useCallback(
     (id: string) => {
@@ -481,7 +509,9 @@ export function Workshop({ caseData }: Props) {
             segments={segments}
             activeSegmentId={activeSegmentId}
             evidenceTypes={evidenceTypes}
+            rangeErrors={rangeErrors}
             onUpdate={updateSegment}
+            onPageRangeChange={handlePageRangeChange}
             onRemove={removeSegment}
             onDownload={downloadOneSegment}
             onFocus={(id) => setActiveSegmentId(id)}

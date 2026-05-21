@@ -16,7 +16,6 @@ import { downloadPreActionLetterAsWord } from "@/lib/utils/exportPreActionLetter
 import { downloadWitnessAsWord } from "@/lib/utils/exportWitnessStatementToWord";
 
 import { ErrorDialog } from "@/components/modals/ErrorDialog";
-import { InsufficientBalanceDialog } from "@/components/modals/InsufficientBalanceDialog";
 import { RegenerateDialog } from "@/components/modals/RegenerateDialog";
 import { DocumentRail } from "./DocumentRail";
 import { PaperToolbar } from "./PaperToolbar";
@@ -79,7 +78,6 @@ export function ReviewLayout({ caseId, caseData }: ReviewLayoutProps) {
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showErrorDialog, setShowErrorDialog] = useState(false);
-  const [showInsufficientBalanceDialog, setShowInsufficientBalanceDialog] = useState(false);
   const [bengaliMode, setBengaliMode] = useState(false);
   const [regenerateOpen, setRegenerateOpen] = useState(false);
   const hasInitiatedGeneration = useRef(false);
@@ -175,16 +173,6 @@ export function ReviewLayout({ caseId, caseData }: ReviewLayoutProps) {
     setServerEvents([]);
 
     try {
-      const verifyTokenResponse = await fetch("/api/tokens/verify", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ estimateTokens: 1 }),
-      });
-      const result = await verifyTokenResponse.json();
-      if (!result.is_enough_balance) {
-        setShowInsufficientBalanceDialog(true);
-        return;
-      }
 
       const response = await fetch("/api/orchestration", {
         method: "POST",
@@ -485,11 +473,6 @@ export function ReviewLayout({ caseId, caseData }: ReviewLayoutProps) {
         onRetry={handleRetryGeneration}
       />
 
-      <InsufficientBalanceDialog
-        open={showInsufficientBalanceDialog}
-        onOpenChange={setShowInsufficientBalanceDialog}
-        onTopUp={() => setShowInsufficientBalanceDialog(false)}
-      />
 
       <RegenerateDialog
         open={regenerateOpen}

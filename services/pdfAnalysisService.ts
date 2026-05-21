@@ -1,4 +1,4 @@
-﻿import { GoogleGenAI } from '@google/genai';
+import { GoogleGenAI } from '@google/genai';
 import fs from 'fs';
 import path from 'path';
 
@@ -78,11 +78,6 @@ class PDFAnalysisService {
       
       console.log(`[PDFAnalysis] Analysis completed successfully`);
       
-      // Deduct tokens from user balance if auth token is provided
-      if (authToken && result.usageMetadata) {
-        const totalTokens = result.usageMetadata.totalTokenCount || 0;
-        await this.deductTokens(authToken, totalTokens, 'vakil');
-      }
       
       return {
         success: true,
@@ -161,11 +156,6 @@ class PDFAnalysisService {
 
       console.log(`[PDFAnalysis] Entity and date analysis completed successfully`);
       
-      // Deduct tokens from user balance if auth token is provided
-      if (authToken && result.usageMetadata) {
-        const totalTokens = result.usageMetadata.totalTokenCount || 0;
-        await this.deductTokens(authToken, totalTokens, 'vakil');
-      }
       
       return {
         success: true,
@@ -265,41 +255,6 @@ class PDFAnalysisService {
     }
   }
 
-  /**
-   * Deduct tokens from user balance
-   */
-  private async deductTokens(authToken: string, amount: number, description: string): Promise<void> {
-    try {
-      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-      if (!supabaseUrl) {
-        console.warn('[PDFAnalysis] NEXT_PUBLIC_SUPABASE_URL not defined, skipping token deduction');
-        return;
-      }
-
-      const response = await fetch(`${supabaseUrl}/api/tokens/deduct`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${authToken}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          amount: amount,
-          description: description
-        })
-      });
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error(`[PDFAnalysis] Failed to deduct tokens: ${response.status} - ${errorText}`);
-        throw new Error(`Token deduction failed: ${response.statusText}`);
-      }
-
-      console.log(`[PDFAnalysis] Successfully deducted tokens for: ${description}`);
-    } catch (error) {
-      console.error('[PDFAnalysis] Error deducting tokens:', error);
-      // Don't throw error here to avoid breaking the analysis flow
-    }
-  }
 
   /**
    * Create the analysis prompt for Gemini by reading from the prompt file
