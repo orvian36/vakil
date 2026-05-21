@@ -75,7 +75,7 @@ describe("EvidenceTypeCard inline edit", () => {
     );
     await u.click(screen.getByRole("button", { name: /edit type/i }));
     fireEvent.change(screen.getByLabelText(/title/i), { target: { value: "DRAFT" } });
-    await u.click(screen.getByRole("button", { name: /cancel/i }));
+    await u.click(screen.getByRole("button", { name: /^cancel$/i }));
     expect(screen.queryByLabelText(/title/i)).not.toBeInTheDocument();
     expect(screen.getByText("Witness audio")).toBeInTheDocument();
   });
