@@ -1,9 +1,11 @@
 "use client";
 import { useState } from "react";
+import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { AuthShell } from "@/components/layout/AuthShell";
 import { Button, Input } from "@/components/ui";
+import { fadeUp } from "@/lib/motion";
 
 function RegisterForm() {
   const router = useRouter();
@@ -33,7 +35,13 @@ function RegisterForm() {
   }
 
   return (
-    <form onSubmit={onSubmit} className="space-y-5">
+    <motion.form
+      initial="hidden"
+      animate="visible"
+      variants={fadeUp}
+      onSubmit={onSubmit}
+      className="space-y-5"
+    >
       <div className="space-y-1.5 mb-2">
         <h1 className="text-3xl font-display text-ink-100">Create your account</h1>
         <p className="text-sm text-ink-400">Start drafting in under a minute.</p>
@@ -91,7 +99,7 @@ function RegisterForm() {
           Sign in
         </Link>
       </p>
-    </form>
+    </motion.form>
   );
 }
 

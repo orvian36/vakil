@@ -10,15 +10,15 @@ const Editor = dynamic(
   () => import('@toast-ui/react-editor').then((mod) => mod.Editor),
   { 
     ssr: false,
-    loading: () => <div className="flex items-center justify-center h-full"><div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div></div>
+    loading: () => <div className="flex items-center justify-center h-full"><div className="w-6 h-6 border-2 border-gold-500 border-t-transparent rounded-full animate-spin"></div></div>
   }
 );
 
 const Viewer = dynamic(
   () => import('@toast-ui/react-editor').then((mod) => mod.Viewer),
-  { 
+  {
     ssr: false,
-    loading: () => <div className="flex items-center justify-center h-full"><div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div></div>
+    loading: () => <div className="flex items-center justify-center h-full"><div className="w-6 h-6 border-2 border-gold-500 border-t-transparent rounded-full animate-spin"></div></div>
   }
 );
 
@@ -288,9 +288,9 @@ export default function PDFViewerModal({ isOpen, onClose, files, startIndex, onS
   if (!currentFile && !isLoadingFile) {
     return (
       <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[9999] flex items-center justify-center">
-        <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4 text-center">
-          <div className="w-12 h-12 border-3 border-gray-300 border-t-blue-600 rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-gray-600">Loading file...</p>
+        <div className="bg-ink-800 rounded-lg p-6 max-w-md w-full mx-4 text-center">
+          <div className="w-12 h-12 border-3 border-ink-700 border-t-gold-500 rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-ink-300">Loading file...</p>
         </div>
       </div>
     );
@@ -326,17 +326,17 @@ export default function PDFViewerModal({ isOpen, onClose, files, startIndex, onS
       
       <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[9999] flex flex-col">
         {/* Header */}
-        <div className="flex-none bg-white border-b border-gray-200 shadow-sm">
+        <div className="flex-none bg-ink-900 border-b border-line-soft shadow-sm">
           <div className="flex items-center justify-between px-6 py-4">
             <div className="flex items-center space-x-4 flex-1 min-w-0">
               <div className="flex-1 min-w-0">
                 <h2 
-                  className="text-lg font-semibold text-gray-900 truncate"
+                  className="text-lg font-semibold text-ink-100 truncate"
                   title={currentFile?.fileName || 'Loading...'}
                 >
                   {currentFile?.fileName || 'Loading...'}
                 </h2>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-ink-400">
                   File {index + 1} of {files?.length || 0}
                 </p>
               </div>
@@ -348,7 +348,7 @@ export default function PDFViewerModal({ isOpen, onClose, files, startIndex, onS
                 <button
                   disabled={!canNavigatePrev || isLoadingFile}
                   onClick={() => setIndex(i => i - 1)}
-                  className="p-2 rounded-lg border border-gray-300 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors text-black"
+                  className="p-2 rounded-lg border border-line-strong disabled:opacity-40 disabled:cursor-not-allowed hover:bg-ink-700 transition-colors text-ink-100"
                   aria-label="Previous file"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -358,7 +358,7 @@ export default function PDFViewerModal({ isOpen, onClose, files, startIndex, onS
                 <button
                   disabled={!canNavigateNext || isLoadingFile}
                   onClick={() => setIndex(i => i + 1)}
-                  className="p-2 rounded-lg border border-gray-300 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors text-black"
+                  className="p-2 rounded-lg border border-line-strong disabled:opacity-40 disabled:cursor-not-allowed hover:bg-ink-700 transition-colors text-ink-100"
                   aria-label="Next file"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -374,14 +374,14 @@ export default function PDFViewerModal({ isOpen, onClose, files, startIndex, onS
                     <button
                       onClick={handleCancel}
                       disabled={isSaving}
-                      className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 transition-colors"
+                      className="px-4 py-2 text-sm font-medium text-ink-300 bg-ink-800 border border-line-strong rounded-lg hover:bg-ink-700 disabled:opacity-50 transition-colors"
                     >
                       Cancel
                     </button>
                     <button
                       onClick={handleSave}
                       disabled={isSaving}
-                      className="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors flex items-center space-x-2"
+                      className="px-4 py-2 text-sm font-medium text-white bg-gold-500 border border-transparent rounded-lg hover:bg-gold-300 disabled:opacity-50 transition-colors flex items-center space-x-2"
                     >
                       {isSaving && (
                         <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -392,7 +392,7 @@ export default function PDFViewerModal({ isOpen, onClose, files, startIndex, onS
                 ) : (
                   <button
                     onClick={handleEdit}
-                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors flex items-center space-x-2"
+                    className="px-4 py-2 text-sm font-medium text-ink-300 bg-ink-800 border border-line-strong rounded-lg hover:bg-ink-700 transition-colors flex items-center space-x-2"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -400,11 +400,11 @@ export default function PDFViewerModal({ isOpen, onClose, files, startIndex, onS
                     <span>Edit Summary</span>
                   </button>
                 )}
-                
+
                 <button
                   onClick={handleRegenerate}
                   disabled={isRegenerating}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 transition-colors flex items-center space-x-2"
+                  className="px-4 py-2 text-sm font-medium text-ink-300 bg-ink-800 border border-line-strong rounded-lg hover:bg-ink-700 disabled:opacity-50 transition-colors flex items-center space-x-2"
                   aria-label="Regenerate"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -417,7 +417,7 @@ export default function PDFViewerModal({ isOpen, onClose, files, startIndex, onS
               {/* Close button */}
               <button
                 onClick={onClose}
-                className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
+                className="p-2 text-ink-400 hover:text-ink-100 transition-colors"
                 aria-label="Close viewer"
               >
                 <X className="w-6 h-6" />
@@ -427,27 +427,27 @@ export default function PDFViewerModal({ isOpen, onClose, files, startIndex, onS
         </div>
 
         {/* Content Area */}
-        <div className="flex-1 flex min-h-0 bg-gray-50">
+        <div className="flex-1 flex min-h-0 bg-ink-800">
           {/* PDF Panel */}
-          <div className="flex-1 flex flex-col bg-white border-r border-gray-200">
-            <div className="flex-none px-4 py-3 bg-gray-50 border-b border-gray-200">
-              <h3 className="text-sm font-medium text-gray-700">Document Preview</h3>
+          <div className="flex-1 flex flex-col bg-ink-900 border-r border-line-soft">
+            <div className="flex-none px-4 py-3 bg-ink-800 border-b border-line-soft">
+              <h3 className="text-sm font-medium text-ink-300">Document Preview</h3>
             </div>
             <div className="flex-1 relative">
               {isLoadingFile ? (
-                <div className="absolute inset-0 flex items-center justify-center bg-gray-50">
+                <div className="absolute inset-0 flex items-center justify-center bg-ink-800">
                   <div className="flex flex-col items-center space-y-3">
-                    <div className="w-8 h-8 border-3 border-gray-300 border-t-blue-600 rounded-full animate-spin" />
-                    <p className="text-sm text-gray-500">Loading file...</p>
+                    <div className="w-8 h-8 border-3 border-ink-700 border-t-gold-500 rounded-full animate-spin" />
+                    <p className="text-sm text-ink-400">Loading file...</p>
                   </div>
                 </div>
               ) : isPdfAvailable ? (
                 <div className="absolute inset-0">
                   {isPdfLoading && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-gray-50 z-10">
+                    <div className="absolute inset-0 flex items-center justify-center bg-ink-800 z-10">
                       <div className="flex flex-col items-center space-y-3">
-                        <div className="w-8 h-8 border-3 border-gray-300 border-t-blue-600 rounded-full animate-spin" />
-                        <p className="text-sm text-gray-500">Loading PDF...</p>
+                        <div className="w-8 h-8 border-3 border-ink-700 border-t-gold-500 rounded-full animate-spin" />
+                        <p className="text-sm text-ink-400">Loading PDF...</p>
                       </div>
                     </div>
                   )}
@@ -460,12 +460,12 @@ export default function PDFViewerModal({ isOpen, onClose, files, startIndex, onS
                     title={`PDF Viewer - ${currentFile?.fileName || 'Document'}`}
                   />
                   {/* Fallback for browsers that don't support iframe PDF viewing */}
-                  <div className="absolute bottom-2 right-2 bg-white bg-opacity-90 rounded-lg p-2 shadow-sm">
-                    <a 
-                      href={pdfUrl} 
-                      target="_blank" 
+                  <div className="absolute bottom-2 right-2 bg-ink-800 bg-opacity-90 rounded-lg p-2 shadow-sm">
+                    <a
+                      href={pdfUrl}
+                      target="_blank"
                       rel="noopener noreferrer"
-                      className="text-xs text-blue-600 hover:text-blue-800 flex items-center space-x-1"
+                      className="text-xs text-gold-500 hover:text-gold-300 flex items-center space-x-1"
                     >
                       <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
@@ -475,13 +475,13 @@ export default function PDFViewerModal({ isOpen, onClose, files, startIndex, onS
                   </div>
                 </div>
               ) : (
-                <div className="absolute inset-0 flex items-center justify-center bg-gray-50">
+                <div className="absolute inset-0 flex items-center justify-center bg-ink-800">
                   <div className="text-center py-8 px-6">
-                    <svg className="w-16 h-16 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-16 h-16 mx-auto mb-4 text-ink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
-                    <h3 className="text-lg font-medium text-gray-900 mb-2">PDF Not Available</h3>
-                    <p className="text-sm text-gray-600 mb-4">
+                    <h3 className="text-lg font-medium text-ink-100 mb-2">PDF Not Available</h3>
+                    <p className="text-sm text-ink-300 mb-4">
                       The PDF file is not available for preview at this time. The document content has been extracted and is available in the summary panel.
                     </p>
                   </div>
@@ -489,19 +489,19 @@ export default function PDFViewerModal({ isOpen, onClose, files, startIndex, onS
               )}
               
               {pdfError && (
-                <div className="absolute inset-0 flex items-center justify-center bg-white">
+                <div className="absolute inset-0 flex items-center justify-center bg-ink-900">
                   <div className="text-center py-8 px-6">
-                    <AlertCircle className="w-16 h-16 mx-auto mb-4 text-red-400" />
-                    <h3 className="text-lg font-medium text-gray-900 mb-2">PDF Loading Error</h3>
-                    <p className="text-sm text-gray-600 mb-4">{pdfError}</p>
-                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-                      <p className="text-xs text-blue-800">
+                    <AlertCircle className="w-16 h-16 mx-auto mb-4 text-rose-500" />
+                    <h3 className="text-lg font-medium text-ink-100 mb-2">PDF Loading Error</h3>
+                    <p className="text-sm text-ink-300 mb-4">{pdfError}</p>
+                    <div className="bg-gold-500/10 border border-line-gold rounded-lg p-3">
+                      <p className="text-xs text-gold-300">
                         <strong>Note:</strong> The document summary is still available in the panel on the right.
                       </p>
                     </div>
                     <button
                       onClick={() => currentFile && loadPDF(currentFile)}
-                      className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                      className="mt-4 px-4 py-2 bg-gold-500 text-white rounded-md hover:bg-gold-300 transition-colors"
                     >
                       Try Again
                     </button>
@@ -512,17 +512,17 @@ export default function PDFViewerModal({ isOpen, onClose, files, startIndex, onS
           </div>
 
           {/* Summary Panel */}
-          <div className="flex-1 flex flex-col bg-white">
-            <div className="flex-none px-4 py-3 bg-gray-50 border-b border-gray-200">
-              <h3 className="text-sm font-medium text-gray-700">File Summary</h3>
+          <div className="flex-1 flex flex-col bg-ink-900">
+            <div className="flex-none px-4 py-3 bg-ink-800 border-b border-line-soft">
+              <h3 className="text-sm font-medium text-ink-300">File Summary</h3>
             </div>
             
             <div className="flex-1 relative">
               {isLoadingFile ? (
-                <div className="absolute inset-0 flex items-center justify-center bg-white">
+                <div className="absolute inset-0 flex items-center justify-center bg-ink-900">
                   <div className="flex flex-col items-center space-y-3">
-                    <div className="w-8 h-8 border-3 border-gray-300 border-t-blue-600 rounded-full animate-spin" />
-                    <p className="text-sm text-gray-500">Loading file data...</p>
+                    <div className="w-8 h-8 border-3 border-ink-700 border-t-gold-500 rounded-full animate-spin" />
+                    <p className="text-sm text-ink-400">Loading file data...</p>
                   </div>
                 </div>
               ) : isEditing ? (
@@ -554,8 +554,8 @@ export default function PDFViewerModal({ isOpen, onClose, files, startIndex, onS
                       {editableSummary ? (
                         <Viewer key={`viewer-${currentFile?.id}-${regenerationKey}`} initialValue={editableSummary} />
                       ) : (
-                      <div className="flex flex-col items-center justify-center h-32 text-gray-500">
-                        <svg className="w-12 h-12 mb-3 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <div className="flex flex-col items-center justify-center h-32 text-ink-400">
+                        <svg className="w-12 h-12 mb-3 text-ink-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                         </svg>
                         <p className="text-sm">No summary available for this document.</p>
@@ -569,12 +569,12 @@ export default function PDFViewerModal({ isOpen, onClose, files, startIndex, onS
         </div>
 
         {/* Keyboard shortcuts hint */}
-        <div className="flex-none px-6 py-2 bg-gray-50 border-t border-gray-200">
-          <p className="text-xs text-gray-500 text-center">
+        <div className="flex-none px-6 py-2 bg-ink-800 border-t border-line-soft">
+          <p className="text-xs text-ink-400 text-center">
             {isEditing ? (
-              <>Use <kbd className="px-1 py-0.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded">Esc</kbd> to cancel editing</>
+              <>Use <kbd className="px-1 py-0.5 text-xs font-semibold text-ink-100 bg-ink-700 border border-line-soft rounded">Esc</kbd> to cancel editing</>
             ) : (
-              <>Use <kbd className="px-1 py-0.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded">←</kbd> <kbd className="px-1 py-0.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded">→</kbd> to navigate • <kbd className="px-1 py-0.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded">Esc</kbd> to close</>
+              <>Use <kbd className="px-1 py-0.5 text-xs font-semibold text-ink-100 bg-ink-700 border border-line-soft rounded">←</kbd> <kbd className="px-1 py-0.5 text-xs font-semibold text-ink-100 bg-ink-700 border border-line-soft rounded">→</kbd> to navigate • <kbd className="px-1 py-0.5 text-xs font-semibold text-ink-100 bg-ink-700 border border-line-soft rounded">Esc</kbd> to close</>
             )}
           </p>
         </div>
@@ -582,56 +582,56 @@ export default function PDFViewerModal({ isOpen, onClose, files, startIndex, onS
 
       {/* Regenerate Modal */}
       {isRegenerateModalOpen && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[10000] flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg shadow-xl max-w-md w-full">
+        <div className="fixed inset-0 bg-ink-950/72 backdrop-blur-sm z-[10000] flex items-center justify-center p-4">
+          <div className="bg-ink-900 border border-line-strong rounded-lg shadow-xl max-w-md w-full">
             {/* Modal Header */}
-            <div className="flex items-center space-x-3 px-6 py-4 border-b border-gray-200">
-              <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="flex items-center space-x-3 px-6 py-4 border-b border-line-soft">
+              <div className="w-10 h-10 bg-gold-500/15 rounded-full flex items-center justify-center">
+                <svg className="w-5 h-5 text-gold-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold text-gray-900">Regenerate Summary</h3>
+              <h3 className="text-lg font-semibold text-ink-100">Regenerate Summary</h3>
             </div>
 
             {/* Modal Content */}
             <div className="px-6 py-4">
-              <p className="text-sm text-gray-600 mb-4">Provide specific instructions for reanalysis</p>
-              
+              <p className="text-sm text-ink-300 mb-4">Provide specific instructions for reanalysis</p>
+
               <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Document:</label>
-                <p className="text-sm text-gray-900 font-medium">{currentFile?.fileName || 'Unknown Document'}</p>
+                <label className="block text-sm font-medium text-ink-300 mb-1">Document:</label>
+                <p className="text-sm text-ink-100 font-medium">{currentFile?.fileName || 'Unknown Document'}</p>
               </div>
 
               <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">Additional Instructions (Optional)</label>
+                <label className="block text-sm font-medium text-ink-300 mb-2">Additional Instructions (Optional)</label>
                 <textarea
                   value={regenerateInstructions}
                   onChange={(e) => setRegenerateInstructions(e.target.value)}
                   placeholder="e.g., 'Focus on medical injuries and treatment details', 'Look for pain and suffering evidence', 'Check for lost wages and future medical costs'"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none text-black"
+                  className="w-full px-3 py-2 border border-line-strong rounded-md bg-ink-800 text-ink-100 placeholder:text-ink-400 focus-gold resize-none"
                   rows={4}
                 />
-                <p className="text-xs text-gray-500 mt-1">Your message will be used to guide the AI analysis with higher priority.</p>
+                <p className="text-xs text-ink-400 mt-1">Your message will be used to guide the AI analysis with higher priority.</p>
               </div>
             </div>
 
             {/* Modal Footer */}
-            <div className="flex items-center justify-end space-x-3 px-6 py-4 bg-gray-50 rounded-b-lg">
+            <div className="flex items-center justify-end space-x-3 px-6 py-4 bg-ink-800 border-t border-line-soft rounded-b-lg">
               <button
                 onClick={handleRegenerateModalClose}
                 disabled={isRegenerating}
-                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 transition-colors"
+                className="px-4 py-2 text-sm font-medium text-ink-300 bg-ink-800 border border-line-strong rounded-md hover:bg-ink-700 disabled:opacity-50 transition-colors"
               >
                 Cancel
               </button>
               <button
                 onClick={handleStartRegeneration}
                 disabled={isRegenerating}
-                className="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 disabled:opacity-50 transition-colors flex items-center space-x-2"
+                className="px-4 py-2 text-sm font-medium text-ink-950 bg-gold-500 border border-transparent rounded-md hover:bg-gold-300 disabled:opacity-50 transition-colors flex items-center space-x-2"
               >
                 {isRegenerating && (
-                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  <div className="w-4 h-4 border-2 border-ink-950/30 border-t-ink-950 rounded-full animate-spin" />
                 )}
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />

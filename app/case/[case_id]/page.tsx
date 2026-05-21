@@ -1,9 +1,11 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { Case } from '@/types/case';
 import { Loader2 } from 'lucide-react';
+import { fadeUp } from '@/lib/motion';
 
 import { CaseShell } from '@/components/wizard/CaseShell';
 import Step1Evidence from '@/components/steps/Step1Evidence';
@@ -145,6 +147,7 @@ export default function CaseDetailPage() {
   }));
 
   return (
+    <motion.div initial="hidden" animate="visible" variants={fadeUp}>
     <CaseShell
       caseData={caseData}
       steps={stepsWithMeta}
@@ -194,5 +197,6 @@ export default function CaseDetailPage() {
       )}
       {currentStep === 5 && <Step5Review caseId={caseId} caseData={caseData} />}
     </CaseShell>
+    </motion.div>
   );
 }

@@ -1,10 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import { useParams } from "next/navigation";
 import { Case } from "@/types/case";
 import { Loader2 } from "lucide-react";
 import { Workshop } from "@/components/pdf-split/Workshop";
+import { fadeUp } from "@/lib/motion";
 
 export default function SplitPdfPage() {
   const params = useParams();
@@ -47,5 +49,9 @@ export default function SplitPdfPage() {
     );
   }
 
-  return <Workshop caseData={caseData} />;
+  return (
+    <motion.div initial="hidden" animate="visible" variants={fadeUp}>
+      <Workshop caseData={caseData} />
+    </motion.div>
+  );
 }

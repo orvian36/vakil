@@ -66,7 +66,7 @@ export default function Citation({ reference, children }: CitationProps) {
       <button 
         type="button"
         onClick={openDrawer} 
-        className="text-blue-500 italic font-bold hover:text-blue-700 cursor-pointer"
+        className="text-gold-700 italic font-bold hover:text-gold-500 cursor-pointer"
       >
         {children}
       </button>
@@ -82,16 +82,16 @@ export default function Citation({ reference, children }: CitationProps) {
 
           {/* Drawer */}
           <aside
-            className={`fixed right-0 top-0 h-dvh w-[80vw] max-w-[95vw] bg-white shadow-xl z-50 transform transition-transform duration-300 ease-out flex flex-col ${show ? 'translate-x-0' : 'translate-x-full'}`}
+            className={`fixed right-0 top-0 h-dvh w-[80vw] max-w-[95vw] bg-ink-900 shadow-xl z-50 transform transition-transform duration-300 ease-out flex flex-col border-l border-line-strong ${show ? 'translate-x-0' : 'translate-x-full'}`}
             role="dialog"
             aria-modal="true"
           >
-            <div className="flex items-center justify-between px-4 py-3 border-b">
-              <h3 className="text-base text-black font-semibold">Source Reference</h3>
+            <div className="flex items-center justify-between px-4 py-3 border-b border-line-soft">
+              <h3 className="text-base text-ink-100 font-semibold">Source Reference</h3>
               <button
                 onClick={closeDrawer}
                 aria-label="Close drawer"
-                className="text-gray-500 hover:text-gray-700"
+                className="text-ink-400 hover:text-ink-100"
               >
                 ✕
               </button>
@@ -101,27 +101,27 @@ export default function Citation({ reference, children }: CitationProps) {
               {/* PDF Viewer */}
               <div className="flex-1 relative min-h-0">
                 {isLoadingPdf ? (
-                  <div className="absolute inset-0 flex items-center justify-center bg-gray-50">
+                  <div className="absolute inset-0 flex items-center justify-center bg-ink-800">
                     <div className="flex flex-col items-center space-y-3">
-                      <div className="w-8 h-8 border-3 border-gray-300 border-t-blue-600 rounded-full animate-spin" />
-                      <p className="text-sm text-gray-500">Loading PDF...</p>
+                      <div className="w-8 h-8 border-2 border-line-soft border-t-gold-500 rounded-full animate-spin" />
+                      <p className="text-sm text-ink-400">Loading PDF...</p>
                     </div>
                   </div>
                 ) : pdfUrl ? (
                   <div className="absolute inset-0">
-                    <iframe 
+                    <iframe
                       src={pdfUrl}
                       className="w-full h-full border-0"
                       style={{ minHeight: '100%' }}
                       title={`PDF Viewer - Document ${reference}`}
                     />
                     {/* Fallback for browsers that don't support iframe PDF viewing */}
-                    <div className="absolute bottom-2 right-2 bg-white bg-opacity-90 rounded-lg p-2 shadow-sm">
-                      <a 
-                        href={pdfUrl} 
-                        target="_blank" 
+                    <div className="absolute bottom-2 right-2 bg-ink-900/90 rounded-lg p-2 shadow-sm border border-line-soft">
+                      <a
+                        href={pdfUrl}
+                        target="_blank"
                         rel="noopener noreferrer"
-                        className="text-xs text-blue-600 hover:text-blue-800 flex items-center space-x-1"
+                        className="text-xs text-gold-500 hover:text-gold-300 flex items-center space-x-1"
                       >
                         <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
@@ -131,29 +131,29 @@ export default function Citation({ reference, children }: CitationProps) {
                     </div>
                   </div>
                 ) : pdfError ? (
-                  <div className="absolute inset-0 flex items-center justify-center bg-gray-50">
+                  <div className="absolute inset-0 flex items-center justify-center bg-ink-800">
                     <div className="text-center py-8 px-6">
-                      <svg className="w-16 h-16 mx-auto mb-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-16 h-16 mx-auto mb-4 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
                       </svg>
-                      <h3 className="text-lg font-medium text-gray-900 mb-2">PDF Loading Error</h3>
-                      <p className="text-sm text-gray-600 mb-4">{pdfError}</p>
+                      <h3 className="text-lg font-medium text-ink-100 mb-2">PDF Loading Error</h3>
+                      <p className="text-sm text-ink-400 mb-4">{pdfError}</p>
                       <button
                         onClick={loadPDF}
-                        className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                        className="px-4 py-2 bg-gold-500 text-ink-950 font-medium rounded-md hover:bg-gold-300 transition-colors"
                       >
                         Try Again
                       </button>
                     </div>
                   </div>
                 ) : (
-                  <div className="absolute inset-0 flex items-center justify-center bg-gray-50">
+                  <div className="absolute inset-0 flex items-center justify-center bg-ink-800">
                     <div className="text-center py-8 px-6">
-                      <svg className="w-16 h-16 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-16 h-16 mx-auto mb-4 text-ink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                       </svg>
-                      <h3 className="text-lg font-medium text-gray-900 mb-2">Document Preview</h3>
-                      <p className="text-sm text-gray-600 mb-4">
+                      <h3 className="text-lg font-medium text-ink-100 mb-2">Document Preview</h3>
+                      <p className="text-sm text-ink-400 mb-4">
                         Document ID: {reference}
                       </p>
                     </div>

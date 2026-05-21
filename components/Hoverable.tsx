@@ -9,12 +9,15 @@ interface HoverableProps {
   children: React.ReactNode;
   searchText: string;
   highlightClassName?: string;
+  /** "paper" (default) targets cream document surfaces. */
+  variant?: "paper" | "ink";
 }
 
-export default function Hoverable({ 
-  children, 
+export default function Hoverable({
+  children,
   searchText,
-  highlightClassName = "highlighted-text"
+  highlightClassName = "highlighted-text",
+  variant = "paper",
 }: HoverableProps) {
   const [showTooltip, setShowTooltip] = useState(false);
   const [isTooltipPinned, setIsTooltipPinned] = useState(false);
@@ -111,10 +114,22 @@ export default function Hoverable({
     };
   }, [showTooltip, isTooltipPinned]);
 
+  const surfaceClass = variant === "paper"
+    ? "bg-cream-50 border border-line-paper text-paper-ink"
+    : "bg-ink-800 border border-line-strong text-ink-100";
+  const metaTextClass = variant === "paper" ? "text-paper-ink/70" : "text-ink-400";
+  const accentTextClass = "text-gold-700";
+  const closeButtonClass = variant === "paper"
+    ? "text-paper-ink/50 hover:text-paper-ink"
+    : "text-ink-400 hover:text-ink-100";
+  const triggerClass = variant === "paper"
+    ? "cursor-pointer hover:bg-gold-500/15 px-1 rounded transition-colors inline-block underline italic hover:text-gold-700"
+    : "cursor-pointer hover:bg-gold-500/15 px-1 rounded transition-colors inline-block underline italic hover:text-gold-500";
+
   const tooltipContent = showTooltip && (
     <div
       ref={tooltipRef}
-      className="fixed z-50 bg-white border border-gray-300 rounded-lg shadow-xl p-4 max-h-80 overflow-auto"
+      className={`fixed z-50 rounded-lg shadow-xl p-4 max-h-80 overflow-auto ${surfaceClass}`}
       style={{
         left: `${tooltipPosition.x}px`,
         top: `${tooltipPosition.y}px`,
@@ -124,12 +139,12 @@ export default function Hoverable({
       }}
     >
       <div className="flex justify-between items-center mb-2">
-        <div className="text-sm text-gray-600 font-medium">
-          Search results for: <span className="text-blue-600">"{searchText}"</span>
+        <div className={`text-sm font-medium ${metaTextClass}`}>
+          Search results for: <span className={accentTextClass}>"{searchText}"</span>
         </div>
         <button
           onClick={closeTooltip}
-          className="text-gray-400 hover:text-gray-600 text-lg leading-none"
+          className={`${closeButtonClass} text-lg leading-none`}
           aria-label="Close tooltip"
         >
           ×
@@ -137,8 +152,8 @@ export default function Hoverable({
       </div>
       <div className="text-xs border-t pt-2">
         <div className="tooltip-content">
-          <HighlightedMdxRenderer 
-            source={mdxSource} 
+          <HighlightedMdxRenderer
+            source={mdxSource}
             searchText={searchText}
             highlightClassName={highlightClassName}
             components={{ Citation }}
@@ -151,7 +166,7 @@ export default function Hoverable({
   return (
     <>
       <span
-        className="cursor-pointer hover:bg-yellow-50 px-1 rounded transition-colors inline-block underline italic hover:text-blue-700"
+        className={triggerClass}
         onMouseEnter={handleHover}
         onMouseLeave={handleLeave}
         onClick={handleClick}

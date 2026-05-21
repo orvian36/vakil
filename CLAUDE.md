@@ -115,6 +115,7 @@ Five steps in `components/steps/`: Evidence → Process → Particulars → Chro
 - **Motion:** Use the presets in `lib/motion.ts` (`springSoft`, `springStage`, `springPaper`, `fadeUp`, `stageReveal`, `staggerChildren`) and the duration tokens in `globals.css`. Always respect `prefers-reduced-motion`.
 - **Markdown post-processing:** LLM output goes through `utils/remarkFixVoidTags.ts` (`preProcessMD`) and `utils/verify_markdown.ts` before saving. Bypassing these lets malformed MDX reach the editor.
 - **Conventional Commits.** Branch per phase / per feature; no force-pushes to `main`.
+- **Editorial Court (dark theme):** The app's visual language is locked to ink (chrome) + gold (accent) + cream (document surfaces). All new screens compose `components/ui/*` primitives over the layout shells (`AppShell`, `AuthShell`, `CaseShell`). The only shadow in the app belongs to cream-paper documents — it is the signature elevation. Never re-introduce raw Tailwind palette colors (`bg-blue-*`, `text-gray-*`, etc.) — extend the design tokens in `app/globals.css` if a new shade is needed.
 
 ## Where to add things
 
