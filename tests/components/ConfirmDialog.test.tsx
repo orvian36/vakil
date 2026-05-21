@@ -13,7 +13,7 @@ describe("ConfirmDialog", () => {
         onOpenChange={() => {}}
         title="Delete case?"
         confirmLabel="Delete"
-        onConfirm={() => (confirmed = true)}
+        onConfirm={() => { confirmed = true; }}
       />,
     );
     await user.click(screen.getByRole("button", { name: "Delete" }));

@@ -18,7 +18,7 @@ export async function generateStatementOfDamages(
   const llm = makeLLM({ task: "generate-statement-of-damages" });
   const res = await llm.invoke(prompt);
   const content = stripCodeFence(String(res.content));
-  await SocService.upsertSocAnalysis(state.caseId, { statementOfDamages: content });
+  await SocService.upsertByCaseId(state.caseId, { statementOfDamages: content });
   await writeDebugOutput("generateStatementOfDamages", { content }, { caseId: state.caseId });
   return { statementOfDamages: content };
 }

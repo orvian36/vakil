@@ -1,4 +1,4 @@
-﻿import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { queryLLM } from "@/lib/llm";
 import { cookies } from "next/headers";
 import { promises as fsPromises } from 'fs';
@@ -56,7 +56,7 @@ ${ocrData}`;
         const statementOfClaim = await pdfAnalysisService.parseJSONWithRetry(content);
 
         // Update the summary in the database
-        await SocService.upsertSocAnalysis(caseId, { statementOfClaim: statementOfClaim.content });
+        await SocService.upsertByCaseId(caseId, { statementOfClaim: statementOfClaim.content });
 
 
         return NextResponse.json({statementOfClaim});

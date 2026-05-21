@@ -18,7 +18,7 @@ export async function generateStatementOfClaim(
   const llm = makeLLM({ task: "generate-statement-of-claim" });
   const res = await llm.invoke(prompt);
   const content = stripCodeFence(String(res.content));
-  await SocService.upsertSocAnalysis(state.caseId, { statementOfClaim: content });
+  await SocService.upsertByCaseId(state.caseId, { statementOfClaim: content });
   await writeDebugOutput("generateStatementOfClaim", { content }, { caseId: state.caseId });
   return { statementOfClaim: content };
 }

@@ -17,7 +17,7 @@ export async function translateWitnessStatement(
   const res = await llm.invoke(prompt);
   const content = stripCodeFence(String(res.content));
 
-  await SocService.upsertSocAnalysis(state.caseId, { witnessStatementBengali: content });
+  await SocService.upsertByCaseId(state.caseId, { witnessStatementBengali: content });
   await writeDebugOutput("translateWitnessStatement", { content }, { caseId: state.caseId });
   return { witnessStatementBengali: content };
 }

@@ -22,7 +22,7 @@ export async function generateWritOfSummons(
   const llm = makeLLM({ task: "generate-writ-of-summons" });
   const res = await llm.invoke(prompt);
   const content = stripCodeFence(String(res.content));
-  await SocService.upsertSocAnalysis(state.caseId, { writOfSummons: content });
+  await SocService.upsertByCaseId(state.caseId, { writOfSummons: content });
   await writeDebugOutput("generateWritOfSummons", { content }, { caseId: state.caseId });
   return { writOfSummons: content };
 }

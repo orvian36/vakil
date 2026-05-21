@@ -6,7 +6,7 @@ export function saveSocFieldFactory(
 ) {
   return async (state: SingleDocStateType): Promise<Partial<SingleDocStateType>> => {
     if (!state.content || !state.valid) return {};
-    await SocService.upsertSocAnalysis(state.caseId, {
+    await SocService.upsertByCaseId(state.caseId, {
       [field]: state.content,
     } as any);
     return {};

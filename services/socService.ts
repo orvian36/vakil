@@ -36,7 +36,34 @@ export class SocService {
     });
   }
 
+  static async getByCaseId(caseId: string) {
+    const caseAnalysis = await prisma.caseAnalysis.findFirst({
+      where: { caseId, analysisType: "soc" },
+    });
+    if (!caseAnalysis) return null;
+    return prisma.socAnalysis.findUnique({ where: { caseAnalysisId: caseAnalysis.id } });
+  }
+
   static async deleteSocAnalysis(caseAnalysisId: string) {
     await prisma.socAnalysis.delete({ where: { caseAnalysisId } });
+  }
+
+  static async upsertByCaseId(
+    caseId: string,
+    details: Omit<Prisma.SocAnalysisUncheckedCreateInput, "caseAnalysisId">,
+  ) {
+    let caseAnalysis = await prisma.caseAnalysis.findFirst({
+      where: { caseId, analysisType: "soc" },
+    });
+    if (!caseAnalysis) {
+      caseAnalysis = await prisma.caseAnalysis.create({
+        data: { caseId, analysisType: "soc", analysisStatus: "completed" },
+      });
+    }
+    return prisma.socAnalysis.upsert({
+      where: { caseAnalysisId: caseAnalysis.id },
+      create: { ...details, caseAnalysisId: caseAnalysis.id },
+      update: details,
+    });
   }
 }

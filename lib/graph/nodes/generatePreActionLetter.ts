@@ -18,7 +18,7 @@ export async function generatePreActionLetter(
   const llm = makeLLM({ task: "generate-pre-action-letter" });
   const res = await llm.invoke(prompt);
   const content = stripCodeFence(String(res.content));
-  await SocService.upsertSocAnalysis(state.caseId, { preActionLetter: content });
+  await SocService.upsertByCaseId(state.caseId, { preActionLetter: content });
   await writeDebugOutput("generatePreActionLetter", { content }, { caseId: state.caseId });
   return { preActionLetter: content };
 }
