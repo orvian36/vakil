@@ -1,6 +1,6 @@
 "use client";
 
-import { CheckCircle2, Loader2, AlertCircle, Circle, RefreshCw, Eye } from "lucide-react";
+import { CheckCircle2, Loader2, AlertCircle, Circle, RefreshCw, Eye, Trash2 } from "lucide-react";
 import { CaseFile } from "@/types/case";
 import { Button, ScanLine } from "@/components/ui";
 import { cn } from "@/lib/utils/cn";
@@ -12,6 +12,7 @@ interface Props {
   documentTypeLabel: string;
   onRegenerate: (file: CaseFile) => void;
   onView: (file: CaseFile) => void;
+  onDelete: (file: CaseFile) => void;
 }
 
 function statusOf(file: CaseFile): Status {
@@ -47,7 +48,7 @@ function statusLabel(status: Status): string {
   }
 }
 
-export function FileTimelineRow({ file, documentTypeLabel, onRegenerate, onView }: Props) {
+export function FileTimelineRow({ file, documentTypeLabel, onRegenerate, onView, onDelete }: Props) {
   const status = statusOf(file);
   const isProcessing = status === "processing";
 
@@ -82,23 +83,34 @@ export function FileTimelineRow({ file, documentTypeLabel, onRegenerate, onView 
           </p>
         </div>
         <div className="flex items-center gap-1 shrink-0">
-          {status === "failed" && (
-            <Button
-              variant="ghost"
-              size="sm"
-              leftIcon={<RefreshCw className="h-4 w-4" />}
-              onClick={() => onRegenerate(file)}
-            >
-              Retry
-            </Button>
-          )}
+          <Button
+            variant="ghost"
+            size="icon"
+            aria-label="Retry processing"
+            title="Retry processing"
+            disabled={status === "processing" || status === "pending"}
+            onClick={() => onRegenerate(file)}
+          >
+            <RefreshCw className="h-4 w-4" />
+          </Button>
           <Button
             variant="ghost"
             size="icon"
             aria-label="View file"
+            title="View file"
             onClick={() => onView(file)}
           >
             <Eye className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            aria-label="Delete file"
+            title="Delete file"
+            className="text-rose-400 hover:text-rose-300 hover:bg-rose-500/10"
+            onClick={() => onDelete(file)}
+          >
+            <Trash2 className="h-4 w-4" />
           </Button>
         </div>
       </div>

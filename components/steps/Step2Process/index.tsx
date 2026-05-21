@@ -160,6 +160,22 @@ export default function Step2Process({
     startPolling();
   };
 
+  const handleDelete = async (file: CaseFile) => {
+    if (!confirm(`Are you sure you want to delete "${file.fileName}"?`)) return;
+    try {
+      const response = await fetch(`/api/files/${file.id}`, { method: "DELETE" });
+      if (response.ok) {
+        setFiles((prev) => prev.filter((f) => f.id !== file.id));
+      } else {
+        const errorData = await response.json();
+        alert(errorData.error || "Failed to delete file");
+      }
+    } catch (err) {
+      console.error("Failed to delete file:", err);
+      alert("Failed to delete file");
+    }
+  };
+
   const handleFileClick = (file: CaseFile) => {
     setSelectedFile(file);
     setIsPDFModalOpen(true);
@@ -287,6 +303,7 @@ export default function Step2Process({
                   documentTypeLabel={getDocumentType(file.type)}
                   onRegenerate={handleRegenerate}
                   onView={handleFileClick}
+                  onDelete={handleDelete}
                 />
               ))
             )}
