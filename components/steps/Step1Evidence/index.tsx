@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { Scissors } from "lucide-react";
 import { Case, CaseFile, CaseEvidenceType } from "@/types/case";
-import PdfSplitDrawer from "@/components/PdfSplitDrawer";
 import { FileSizeDialog } from "@/components/modals/FileSizeDialog";
 import { InsufficientBalanceDialog } from "@/components/modals/InsufficientBalanceDialog";
 import { SectionHeader, Button, Shimmer, EmptyState } from "@/components/ui";
@@ -34,9 +34,9 @@ export default function Step1Evidence({
   const [showFileSizeDialog, setShowFileSizeDialog] = useState(false);
   const [oversizedFiles, setOversizedFiles] = useState<OversizedFile[]>([]);
   const [showInsufficientBalanceDialog, setShowInsufficientBalanceDialog] = useState(false);
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   // Keep hasPendingUploads as ref so effect below can fire without stale closures
   const [hasPendingUploads, setHasPendingUploads] = useState(false);
+  const router = useRouter();
   const timeoutRefs = useRef<Map<string, NodeJS.Timeout>>(new Map());
 
   // ── Fetch evidence types ──────────────────────────────────────────────────
@@ -319,28 +319,6 @@ export default function Step1Evidence({
     }
   };
 
-  // ── handleFilesUploaded (PdfSplitDrawer callback) ─────────────────────────
-  const handleFilesUploaded = (evidenceType: string, files: { id: string; type: string; fileName: string; fileKey: string }[]) => {
-    const currentUploadedFiles = evidenceData[evidenceType]?.uploadedFiles || [];
-    const newCaseFiles = files.map((file) => ({
-      id: file.id,
-      type: file.type,
-      fileName: file.fileName,
-      fileKey: file.fileKey,
-      caseId: caseData.id,
-    }));
-
-    updateEvidenceItem(evidenceType, "uploadedFiles", [...currentUploadedFiles, ...newCaseFiles]);
-    updateEvidenceItem(evidenceType, "showSuccess", true);
-
-    const timeoutId = setTimeout(() => {
-      updateEvidenceItem(evidenceType, "showSuccess", false);
-    }, 3000);
-    timeoutRefs.current.set(evidenceType, timeoutId);
-
-    console.log(`Successfully added ${files.length} split file(s) to ${evidenceType}`);
-  };
-
   // ── JSX ───────────────────────────────────────────────────────────────────
   return (
     <div>
@@ -352,7 +330,7 @@ export default function Step1Evidence({
             variant="ghost"
             className="border border-line-gold text-gold-500 hover:bg-gold-500/10"
             leftIcon={<Scissors className="h-4 w-4" />}
-            onClick={() => setIsDrawerOpen(true)}
+            onClick={() => router.push(`/case/${caseData.id}/split`)}
           >
             AI Split PDF
           </Button>
@@ -401,12 +379,6 @@ export default function Step1Evidence({
         </>
       )}
 
-      <PdfSplitDrawer
-        isOpen={isDrawerOpen}
-        onClose={() => setIsDrawerOpen(false)}
-        caseData={caseData}
-        onFilesUploaded={handleFilesUploaded}
-      />
       <FileSizeDialog
         open={showFileSizeDialog}
         onOpenChange={setShowFileSizeDialog}
