@@ -128,9 +128,6 @@ UI components and seed scripts have no unit tests — verified by `npm run build
 - **OCR queue worker** so wizard step 2 doesn't block the UI on large PDFs.
 - **Polish the remaining wizard step internals + modals** — Phase 5 of the rebrand stopped at the dashboard/auth/wizard-shell because the step internals are deep components; their interior color palette still uses the pre-rebrand blue/gray.
 
-## Repo history
-
-This repo was built across six PRs ([#1](https://github.com/orvian36/vakil/pull/1)–[#6](https://github.com/orvian36/vakil/pull/6)), each one a discrete phase: Prisma migration → JWT auth + Gemini → LangGraph orchestration → Bengali + brand → UI design system → demo seed + this README. The planning docs that drove the work live under `docs/superpowers/`.
 
 ## License
 
