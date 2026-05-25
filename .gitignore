@@ -58,3 +58,8 @@ uploads/
 #debug
 lib/orchestration/agents/debug
 lib/graph/debug/
+
+
+.agents
+.agent 
+.claude
