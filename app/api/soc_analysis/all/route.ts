@@ -19,18 +19,21 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    if (socAnalysis.statementOfClaim) {
-      return NextResponse.json({
-        success: true,
-        data: { statementOfClaim: socAnalysis.statementOfClaim },
-      });
-    }
-
-    return NextResponse.json({ success: true, data: null });
+    return NextResponse.json({
+      success: true,
+      data: {
+        writOfSummons: socAnalysis.writOfSummons || "",
+        witnessStatement: socAnalysis.witnessStatement || "",
+        witnessStatementBengali: socAnalysis.witnessStatementBengali || "",
+        statementOfClaim: socAnalysis.statementOfClaim || "",
+        statementOfDamages: socAnalysis.statementOfDamages || "",
+        preActionLetter: socAnalysis.preActionLetter || "",
+      },
+    });
   } catch (error) {
-    console.error("Error fetching statement of claim data:", error);
+    console.error("Error fetching all soc analysis data:", error);
     return NextResponse.json(
-      { error: "Failed to fetch statement of claim data" },
+      { error: "Failed to fetch soc analysis data" },
       { status: 500 },
     );
   }

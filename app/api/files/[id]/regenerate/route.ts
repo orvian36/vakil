@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { documentQueue } from "@/services/documentQueueService";
 import { cookies } from "next/headers";
+import { getCurrentUser } from "@/lib/auth/session";
 
 export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id: fileId } = await params;
@@ -25,14 +26,13 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
       return NextResponse.json({ error: "File not found" }, { status: 404 });
     }
 
-    const userContext = req.headers.get("X-user-Context");
-    if (!userContext) {
+    const user = await getCurrentUser();
+    if (!user) {
       return NextResponse.json(
-        { success: false, error: "X-user-Context header is missing" },
+        { success: false, error: "Unauthorized" },
         { status: 401 },
       );
     }
-    const user = JSON.parse(userContext);
     const userId = user.id;
 
     const { fileKey, caseId } = fileRecord;

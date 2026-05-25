@@ -78,3 +78,6 @@ export type { ConfirmDialogProps } from "./ConfirmDialog";
 
 export { ErrorState } from "./ErrorState";
 export type { ErrorStateProps } from "./ErrorState";
+
+export { VakilLogo } from "./VakilLogo";
+export type { VakilLogoProps } from "./VakilLogo";

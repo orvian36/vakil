@@ -1,4 +1,4 @@
-﻿import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { queryLLM } from "@/lib/llm";
 import { cookies } from "next/headers";
 import { promises as fsPromises } from 'fs';
@@ -58,7 +58,7 @@ ${ocrData}`;
         //console.log("response", content);
 
         // Update the pre-action letter in the database
-        await SocService.upsertSocAnalysis(caseId, { preActionLetter: preActionLetter.content });
+        await SocService.upsertByCaseId(caseId, { preActionLetter: preActionLetter.content });
 
         return NextResponse.json({preActionLetter});
       } catch (parseError) {

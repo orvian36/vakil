@@ -70,7 +70,7 @@ Cookies: `httpOnly`, `sameSite: lax`, `secure` in production, `Path=/`. Access t
 ```ts
 export async function queryLLM(opts: {
   prompt: string;
-  model?: string;       // default: 'gemini-2.5-flash' (verify via context7 at impl time)
+  model?: string;       // default: 'gemini-2.5-pro' (verify via context7 at impl time)
   maxTokens?: number;   // default: 60000
   task?: string;        // pass-through for logging
 }): Promise<{ success: true; content: string; thinking?: string } | { success: false; error: string }>
@@ -197,7 +197,7 @@ import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 
 export function makeLLM(opts: { task: string }) {
   return new ChatGoogleGenerativeAI({
-    model: process.env.LLM_MODEL ?? "gemini-2.5-flash",
+    model: process.env.LLM_MODEL ?? "gemini-2.5-pro",
     apiKey: process.env.GEMINI_API_KEY,
     maxOutputTokens: 60000,
     metadata: { task: opts.task },

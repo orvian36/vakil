@@ -1,6 +1,6 @@
 import { SocService } from "@/services/socService";
 import { makeLLM } from "../llm";
-import { loadPrompt, stripCodeFence } from "../util";
+import { loadPrompt, extractContentFromLlmResponse } from "../util";
 import { writeDebugOutput } from "../debug";
 import type { DocumentsStateType } from "../state";
 
@@ -17,8 +17,8 @@ export async function generatePreActionLetter(
   }
   const llm = makeLLM({ task: "generate-pre-action-letter" });
   const res = await llm.invoke(prompt);
-  const content = stripCodeFence(String(res.content));
-  await SocService.upsertSocAnalysis(state.caseId, { preActionLetter: content });
+  const content = extractContentFromLlmResponse(String(res.content));
+  await SocService.upsertByCaseId(state.caseId, { preActionLetter: content });
   await writeDebugOutput("generatePreActionLetter", { content }, { caseId: state.caseId });
   return { preActionLetter: content };
 }

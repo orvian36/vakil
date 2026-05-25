@@ -26,9 +26,8 @@ describe("documents graph end-to-end", () => {
       },
     });
 
-    // The graph's fetchChronology/fetchParticulars look up by caseAnalysisId via SocService.
-    // Pass ca.id (which is the caseAnalysisId for SocService).
-    const result = await documentsGraph.invoke({ caseId: ca.id, userId: "u1" });
+    // The graph's fetchContext correctly looks up by caseId via SocService.getByCaseId.
+    const result = await documentsGraph.invoke({ caseId: c.id, userId: "u1" });
 
     expect(result.writOfSummons).toContain("writ-of-summons");
     expect(result.witnessStatement).toContain("witness-statement");

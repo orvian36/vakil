@@ -6,7 +6,7 @@ export function makeLLM(opts: { task: string; model?: string; maxTokens?: number
 
   return new ChatGoogleGenerativeAI({
     apiKey,
-    model: opts.model ?? process.env.LLM_MODEL ?? "gemini-2.5-flash",
+    model: opts.model ?? process.env.LLM_MODEL ?? "gemini-2.5-pro",
     maxOutputTokens: opts.maxTokens ?? 60000,
     metadata: { task: opts.task },
   });

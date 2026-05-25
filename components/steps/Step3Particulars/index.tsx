@@ -181,7 +181,7 @@ export default function Step3Particulars({
           title="Particulars"
           meta="AI extracted from your evidence · review before drafting"
         />
-        <Card variant="cream-paper" className="px-10 py-12 max-w-3xl mx-auto">
+        <Card variant="cream-paper" className="px-10 py-12 w-full">
           <h1 className="font-display text-3xl text-paper-ink mb-6">
             {isLoadingFromDatabase ? "Loading Particulars" : "Drafting Particulars…"}
           </h1>
@@ -226,7 +226,7 @@ export default function Step3Particulars({
         </div>
       )}
 
-      <Card variant="cream-paper" className="px-10 py-12 max-w-3xl mx-auto">
+      <Card variant="cream-paper" className="px-10 py-12 w-full">
         {isEditing ? (
           <MdxEditorComponent
             initialMarkdown={particularsContent}

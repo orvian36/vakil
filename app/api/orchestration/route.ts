@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 import { documentsGraph } from "@/lib/graph/graphs/documents";
-import { emitWorkflowComplete, makeSseAdapter } from "@/lib/graph/sse";
+import { emitWorkflowComplete, makeSseAdapter, emitAgentRegistered } from "@/lib/graph/sse";
 import { getCurrentUser } from "@/lib/auth/session";
 
 export async function POST(req: NextRequest) {
@@ -18,13 +18,18 @@ export async function POST(req: NextRequest) {
 
       const handle = makeSseAdapter(send);
       try {
+        emitAgentRegistered(send);
+        let finalState: any = null;
         for await (const ev of documentsGraph.streamEvents(
           { caseId, userId: user.id, userComment },
           { version: "v2" },
         )) {
+          if (ev.event === "on_chain_end" && !ev.metadata?.langgraph_node) {
+            finalState = ev.data.output;
+          }
           await handle(ev);
         }
-        emitWorkflowComplete(send);
+        emitWorkflowComplete(send, finalState);
       } catch (err) {
         send({ type: "agent_error", message: String(err) });
       } finally {

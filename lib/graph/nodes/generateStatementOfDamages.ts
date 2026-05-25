@@ -1,6 +1,6 @@
 import { SocService } from "@/services/socService";
 import { makeLLM } from "../llm";
-import { loadPrompt, stripCodeFence } from "../util";
+import { loadPrompt, extractContentFromLlmResponse } from "../util";
 import { writeDebugOutput } from "../debug";
 import type { DocumentsStateType } from "../state";
 
@@ -17,8 +17,8 @@ export async function generateStatementOfDamages(
   }
   const llm = makeLLM({ task: "generate-statement-of-damages" });
   const res = await llm.invoke(prompt);
-  const content = stripCodeFence(String(res.content));
-  await SocService.upsertSocAnalysis(state.caseId, { statementOfDamages: content });
+  const content = extractContentFromLlmResponse(String(res.content));
+  await SocService.upsertByCaseId(state.caseId, { statementOfDamages: content });
   await writeDebugOutput("generateStatementOfDamages", { content }, { caseId: state.caseId });
   return { statementOfDamages: content };
 }

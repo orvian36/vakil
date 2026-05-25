@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Update the SOC analysis with chronology data using caseId directly
-    const updatedSocAnalysis = await SocService.upsertSocAnalysis(caseId, { chronologyMarkdown: chronologyData });
+    const updatedSocAnalysis = await SocService.upsertByCaseId(caseId, { chronologyMarkdown: chronologyData });
 
     return NextResponse.json({
       success: true,
@@ -57,7 +57,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Get the SOC analysis details using caseId directly
-    const socAnalysis = await SocService.getSocAnalysis(caseId);
+    const socAnalysis = await SocService.getByCaseId(caseId);
 
     if (!socAnalysis) {
       return NextResponse.json(

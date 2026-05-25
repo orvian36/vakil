@@ -5,6 +5,7 @@ import { Search, Plus, LogOut, FileText } from "lucide-react";
 import {
   Dialog,
   DialogContent,
+  DialogTitle,
   Input,
 } from "@/components/ui";
 import { cn } from "@/lib/utils/cn";
@@ -78,6 +79,7 @@ export function CommandPalette({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent size="lg" className="p-0 overflow-hidden">
+        <DialogTitle className="sr-only">Command Palette</DialogTitle>
         <div className="p-3 border-b border-line-soft">
           <Input
             autoFocus

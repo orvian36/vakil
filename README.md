@@ -2,20 +2,36 @@
 
 > **An AI paralegal that drafts while you strategize.**
 
+![Next.js](https://img.shields.io/badge/Next.js-15-black?logo=next.js)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?logo=typescript)
+![Tests](https://img.shields.io/badge/tests-153%20passing-brightgreen?logo=vitest)
+![License](https://img.shields.io/badge/license-MIT-blue)
+
+<!-- HERO: drop docs/screenshots/hero.png here when captured -->
+
 Vakil turns case evidence into court-ready first drafts. Upload PDFs, the app OCRs them, generates particulars and a chronology, then fans out into a Writ of Summons, Statement of Claim, Statement of Damages, Pre-Action Letter, and Witness Statement — with a Bangla (বাংলা) translation of the witness statement.
 
----
+## At a glance
 
-## What this demonstrates
+**What:** AI paralegal that turns case PDFs into five court-ready first drafts (Writ of Summons, Statement of Claim, Statement of Damages, Pre-Action Letter, Witness Statement — with a Bangla translation of the witness statement).
 
-A self-contained, portfolio-grade Next.js 15 application with a meaningful multi-agent backend:
+**Who for:** Solo and small-firm lawyers in Bangladesh who spend hours producing the same template documents.
 
-- **Multi-agent orchestration with LangGraph** — a typed `StateGraph` whose topology mirrors actual data dependencies. Three DB fetches fan out in parallel from `START`. Five document generators fan out once particulars + chronology are ready. Witness translation depends on the witness statement. End-to-end wall-time on the generation pass drops substantially vs the original sequential `for`-loop orchestrator. See `lib/graph/graphs/documents.ts`.
-- **Production-pattern JWT auth** — 15-minute access JWT signed with [`jose`](https://github.com/panva/jose) (Edge-compatible), 7-day rotating refresh token stored hashed (SHA-256) in the database, bcrypt password hashing, refresh-token reuse detection. Hand-written under `lib/auth/`. No external auth provider.
-- **Prisma + SQLite, fully tested** — service layer is a thin Prisma wrapper, each method covered by Vitest unit tests against a real SQLite test database. Schema in `prisma/schema.prisma`.
-- **Google Gemini direct** — `lib/llm/index.ts` and `lib/graph/llm.ts` use `@google/genai`. No proxy, no third-party LLM gateway.
-- **Mistral OCR** — `lib/ocr/index.ts` for evidence PDFs.
-- **Demo-ready** — `npm run prisma:seed` populates one demo user and one fully-populated case, so the app is immediately useful on first run.
+**Why it's interesting:** Real multi-agent orchestration (LangGraph DAG, not a chain), hand-written Edge-runtime JWT auth, and a test suite that hits a real database.
+
+## Engineering highlights
+
+1. **Parallel LangGraph DAG for document generation.** Three DB-fetch nodes fan out from `START`; five generators fan out once their inputs land. Replaces a sequential `for`-loop orchestrator — wall-time scales with the slowest branch, not the sum. → `lib/graph/graphs/documents.ts`
+
+2. **Declarative retry on invalid LLM output.** Per-document graphs (`particularsGraph`, `chronologyGraph`) wrap each generation in `generate → verify-markdown → save` with `addConditionalEdges` retrying up to 3× on invalid Markdown. No imperative retry loops in node code. → `lib/graph/graphs/particulars.ts`
+
+3. **Edge-runtime JWT auth, hand-written.** 15-min access JWT signed via `jose` (Edge-compatible — `jsonwebtoken` isn't), 7-day refresh tokens stored hashed (SHA-256), rotation is transactional, reuse of a revoked token returns 401 as a real attack signal. No NextAuth, no third-party provider. → `lib/auth/`, `middleware.ts`
+
+4. **Streaming server events from the graph to the UI.** `documentsGraph.streamEvents(v2)` is mapped to a stable legacy SSE shape so the frontend kept working through the orchestrator rewrite. → `lib/graph/sse.ts`, `app/api/orchestration/route.ts`
+
+5. **Real-DB Vitest, not mocks.** Service-layer + auth-flow tests hit a real SQLite DB; the DAG test runs end-to-end with a mocked LLM and asserts every output column lands on `SocAnalysis`. `fileParallelism: false` because SQLite races the truncate. → `tests/`, `vitest.config.ts`
+
+6. **Config-driven document tabs.** Adding a new generated document = one column on `SocAnalysis`, one prompt file, one graph node, one entry in `config/tabs.json`. The UI doesn't change. → `config/tabs.json`, `components/tabs/`
 
 ## Architecture
 
@@ -55,20 +71,18 @@ cp .env.example .env
 #   GEMINI_API_KEY     — from https://aistudio.google.com/
 
 npm install
-npm run prisma:migrate     # apply migrations, create prisma/dev.db
-npm run prisma:seed        # populate the demo user + case
+npm run prisma:migrate
+npm run prisma:seed
 npm run dev
 ```
 
-Open <http://localhost:3000> and sign in:
+Sign in at <http://localhost:3000>:
 
 | Email | Password |
 |---|---|
 | `demo@vakil.app` | `demo1234` |
 
-You'll land on the dashboard with one pre-populated case ("Khan v. Pacific Logistics Ltd."). Open it, walk through the wizard, view all five generated documents in the Review step, and toggle the Witness Statement to **বাংলা**.
-
-> Live OCR additionally needs `MISTRAL_API_KEY` and `DO_SPACES_*` (S3-compatible object store). The seeded demo case bypasses both — its OCR text is pre-populated so reviewers can experience the full flow without any of those credentials.
+The seeded "Khan v. Pacific Logistics Ltd." case is pre-populated with OCR text, so the live OCR credentials (`MISTRAL_API_KEY`, `DO_SPACES_*`) are **not** required to experience the full flow.
 
 ## Stack
 
@@ -76,13 +90,7 @@ Next.js 15 (App Router) · React 19 · TypeScript · Tailwind v4 · Prisma · SQ
 
 ## Tests
 
-```bash
-npm test            # vitest run (32 tests across 11 files)
-npm run test:watch
-npm run test:cov
-```
-
-Coverage focuses on the security-critical and integration-heavy paths:
+`npm test` runs 153 Vitest tests covering the security-critical and integration-heavy paths:
 
 - `lib/auth/password` — bcrypt round-trip
 - `lib/auth/tokens` — JWT sign/verify, refresh-token mint, rotation, reuse detection, expiry, mass revoke
@@ -112,6 +120,7 @@ UI components and seed scripts have no unit tests — verified by `npm run build
 
 ## What I'd build next
 
+- **GitHub Actions CI** running `npm test` + `npm run build` on every push, with a real status badge replacing the static one above.
 - **Vercel deployment** with Turso (libSQL) replacing local SQLite — `libsql` speaks the same query syntax, so the Prisma swap is a driver adapter change.
 - **Email verification + password reset** via Resend.
 - **OAuth (Google)** via Auth.js, sharing the existing `User`/`RefreshToken` tables.
@@ -119,10 +128,7 @@ UI components and seed scripts have no unit tests — verified by `npm run build
 - **OCR queue worker** so wizard step 2 doesn't block the UI on large PDFs.
 - **Polish the remaining wizard step internals + modals** — Phase 5 of the rebrand stopped at the dashboard/auth/wizard-shell because the step internals are deep components; their interior color palette still uses the pre-rebrand blue/gray.
 
-## Repo history
-
-This repo was built across six PRs ([#1](https://github.com/orvian36/vakil/pull/1)–[#6](https://github.com/orvian36/vakil/pull/6)), each one a discrete phase: Prisma migration → JWT auth + Gemini → LangGraph orchestration → Bengali + brand → UI design system → demo seed + this README. The planning docs that drove the work live under `docs/superpowers/`.
 
 ## License
 
-MIT. Built by [Habibur Rahman](https://github.com/orvian36).
+MIT — see [`LICENSE`](./LICENSE). Built by [Habibur Rahman](https://github.com/orvian36).

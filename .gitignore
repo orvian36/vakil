@@ -45,7 +45,6 @@ prisma/test.db
 prisma/test.db-journal
 
 # Claude Code local state
-.claude/settings.local.json
 skills-lock.json
 
 # typescript
@@ -58,3 +57,9 @@ uploads/
 #debug
 lib/orchestration/agents/debug
 lib/graph/debug/
+
+
+# local agent/claude state
+.agent
+.agents
+.claude

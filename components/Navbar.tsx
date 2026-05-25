@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Search } from "lucide-react";
 import { User } from "@/types/auth";
-import { KeyboardHint } from "@/components/ui";
+import { KeyboardHint, VakilLogo } from "@/components/ui";
 
 interface NavbarProps {
   user?: User | null;
@@ -43,9 +43,10 @@ export default function Navbar({
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between gap-4">
         <Link
           href="/"
-          className="text-2xl tracking-tight text-ink-100 font-display"
+          aria-label="Vakil — home"
+          className="flex items-center text-ink-100 hover:text-ink-100/90 transition-colors focus-gold rounded-[var(--radius-md)]"
         >
-          Vakil
+          <VakilLogo className="h-9 w-auto" />
         </Link>
 
         {isAuthenticated && user && (

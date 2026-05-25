@@ -70,6 +70,30 @@ function cleanContentForDocx(content: string): string {
     .replace(/<\/Hoverable>/gi, "");
 }
 
+function ensureString(val: any): string {
+  if (typeof val === "string") {
+    let clean = val.trim();
+    if (clean.startsWith("```")) {
+      clean = clean.replace(/^```(?:markdown|json|md)?\n?/, "").replace(/\n```$/, "");
+    }
+    try {
+      const parsed = JSON.parse(clean);
+      if (parsed && typeof parsed === "object" && "content" in parsed) {
+        return String(parsed.content);
+      }
+    } catch {
+      // ignore
+    }
+    return val;
+  }
+  if (val == null) return "";
+  try {
+    return JSON.stringify(val, null, 2);
+  } catch {
+    return "";
+  }
+}
+
 export function ReviewLayout({ caseId, caseData }: ReviewLayoutProps) {
   const [activeId, setActiveId] = useState<DocumentId>(DOCUMENT_ORDER[0]);
   const [generatedContent, setGeneratedContent] = useState<GeneratedContent>({});
@@ -80,6 +104,7 @@ export function ReviewLayout({ caseId, caseData }: ReviewLayoutProps) {
   const [showErrorDialog, setShowErrorDialog] = useState(false);
   const [bengaliMode, setBengaliMode] = useState(false);
   const [regenerateOpen, setRegenerateOpen] = useState(false);
+  const [isRailOpen, setIsRailOpen] = useState(true);
   const hasInitiatedGeneration = useRef(false);
 
   // Per-document status derived from generated content + agent statuses.
@@ -141,13 +166,13 @@ export function ReviewLayout({ caseId, caseData }: ReviewLayoutProps) {
         case "complete":
           if (data.result) {
             const newContent: GeneratedContent = {
-              writOfSummons: data.result.writ_of_summons || "",
-              witnessStatement: data.result.witness_statement || "",
+              writOfSummons: data.result.writ_of_summons || data.result.writOfSummons || "",
+              witnessStatement: data.result.witness_statement || data.result.witnessStatement || "",
               witnessStatementBengali:
                 data.result.witness_statement_bengali || data.result.witnessStatementBengali || "",
-              statementOfClaim: data.result.statement_of_claim || "",
-              statementOfDamages: data.result.statement_of_damages || "",
-              preActionLetter: data.result.pre_action_letter || "",
+              statementOfClaim: data.result.statement_of_claim || data.result.statementOfClaim || "",
+              statementOfDamages: data.result.statement_of_damages || data.result.statementOfDamages || "",
+              preActionLetter: data.result.pre_action_letter || data.result.preActionLetter || "",
             };
             setGeneratedContent(newContent);
             localStorage.setItem(
@@ -166,7 +191,7 @@ export function ReviewLayout({ caseId, caseData }: ReviewLayoutProps) {
     [caseId],
   );
 
-  const generateContent = useCallback(async () => {
+  const generateContent = useCallback(async (userComment?: string) => {
     setIsGenerating(true);
     setError(null);
     setAgentStatuses([]);
@@ -177,7 +202,7 @@ export function ReviewLayout({ caseId, caseData }: ReviewLayoutProps) {
       const response = await fetch("/api/orchestration", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ caseId }),
+        body: JSON.stringify({ caseId, userComment }),
       });
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
@@ -215,20 +240,52 @@ export function ReviewLayout({ caseId, caseData }: ReviewLayoutProps) {
 
   // Load cached content on mount; only generate if no cache.
   useEffect(() => {
+    let mounted = true;
     hasInitiatedGeneration.current = false;
-    const cached = localStorage.getItem(`orchestration_content_${caseId}`);
-    if (cached) {
+
+    const checkExistingContent = async () => {
       try {
-        setGeneratedContent(JSON.parse(cached));
-        return;
-      } catch (err) {
-        console.error("Error parsing cached content:", err);
+        const res = await fetch(`/api/soc_analysis/all?caseId=${caseId}`);
+        if (res.ok) {
+          const json = await res.json();
+          if (json.success && json.data) {
+            const data = json.data;
+            const hasAnyContent = Object.values(data).some(v => Boolean(v));
+            if (hasAnyContent && mounted) {
+              setGeneratedContent(data);
+              localStorage.setItem(`orchestration_content_${caseId}`, JSON.stringify(data));
+              return;
+            }
+          }
+        }
+      } catch (e) {
+        console.error("Failed to fetch existing analysis", e);
       }
-    }
-    if (!hasInitiatedGeneration.current && !isGenerating) {
-      hasInitiatedGeneration.current = true;
-      generateContent();
-    }
+
+      if (!mounted) return;
+
+      const cached = localStorage.getItem(`orchestration_content_${caseId}`);
+      if (cached) {
+        try {
+          const parsed = JSON.parse(cached);
+          const hasAnyContent = Object.values(parsed).some(v => Boolean(v));
+          if (hasAnyContent) {
+            setGeneratedContent(parsed);
+            return;
+          }
+        } catch (err) {
+          console.error("Error parsing cached content:", err);
+        }
+      }
+
+      if (!hasInitiatedGeneration.current && !isGenerating) {
+        hasInitiatedGeneration.current = true;
+        generateContent();
+      }
+    };
+
+    checkExistingContent();
+    return () => { mounted = false; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [caseId]);
 
@@ -246,7 +303,7 @@ export function ReviewLayout({ caseId, caseData }: ReviewLayoutProps) {
   const handleRegenerateConfirm = async (_userComment: string) => {
     setRegenerateOpen(false);
     hasInitiatedGeneration.current = false;
-    await generateContent();
+    await generateContent(_userComment);
   };
 
   const handleCopy = async () => {
@@ -406,21 +463,21 @@ export function ReviewLayout({ caseId, caseData }: ReviewLayoutProps) {
     };
     switch (activeId) {
       case "writ-of-summons":
-        return <WritOfSummonsTab {...props} content={generatedContent.writOfSummons || ""} />;
+        return <WritOfSummonsTab {...props} content={ensureString(generatedContent.writOfSummons)} />;
       case "statement-of-claim":
-        return <StatementOfClaimTab {...props} content={generatedContent.statementOfClaim || ""} />;
+        return <StatementOfClaimTab {...props} content={ensureString(generatedContent.statementOfClaim)} />;
       case "statement-of-damages":
         return (
-          <StatementOfDamagesTab {...props} content={generatedContent.statementOfDamages || ""} />
+          <StatementOfDamagesTab {...props} content={ensureString(generatedContent.statementOfDamages)} />
         );
       case "pre-action-letter":
-        return <PreActionLetterTab {...props} content={generatedContent.preActionLetter || ""} />;
+        return <PreActionLetterTab {...props} content={ensureString(generatedContent.preActionLetter)} />;
       case "witness-statement":
         return (
           <WitnessStatementTab
             {...props}
-            content={generatedContent.witnessStatement || ""}
-            bengaliContent={generatedContent.witnessStatementBengali || ""}
+            content={ensureString(generatedContent.witnessStatement)}
+            bengaliContent={ensureString(generatedContent.witnessStatementBengali)}
             bengaliMode={bengaliMode}
           />
         );
@@ -434,32 +491,39 @@ export function ReviewLayout({ caseId, caseData }: ReviewLayoutProps) {
 
   return (
     <>
-      <div className="flex min-h-[calc(100vh-12rem)]">
-        <DocumentRail
-          statuses={statuses}
-          activeId={activeId}
-          onSelect={(id) => {
-            setActiveId(id);
-            if (id !== "witness-statement") setBengaliMode(false);
-          }}
-          onRegenerateAll={handleRegenerate}
+      <div className="flex flex-col relative bg-ink-900 border border-line-soft rounded-[var(--radius-xl)]">
+        <PaperToolbar
+          documentLabel={activeDoc.label}
+          status={statuses[activeId]}
+          onRegenerate={handleRegenerate}
+          onDownload={handleDownload}
+          onCopy={handleCopy}
+          bengaliMode={showBengaliToggle ? bengaliMode : undefined}
+          onBengaliToggle={showBengaliToggle ? setBengaliMode : undefined}
+          isRailOpen={isRailOpen}
+          onToggleRail={() => setIsRailOpen(!isRailOpen)}
         />
-        <main className="flex-1 px-6 py-6 min-w-0">
-          <div className="max-w-3xl mx-auto">
-            <PaperToolbar
-              documentLabel={activeDoc.label}
-              status={statuses[activeId]}
-              onRegenerate={handleRegenerate}
-              onDownload={handleDownload}
-              onCopy={handleCopy}
-              bengaliMode={showBengaliToggle ? bengaliMode : undefined}
-              onBengaliToggle={showBengaliToggle ? setBengaliMode : undefined}
+        <div className="flex flex-1 relative">
+          <main className="flex-1 px-6 py-6 min-w-0 transition-all duration-300">
+            <div className="max-w-5xl mx-auto pb-12">
+              <PaperCanvas generating={statuses[activeId] === "generating"}>
+                {renderActiveTab()}
+              </PaperCanvas>
+            </div>
+          </main>
+          <div className="sticky top-[73px] self-start h-[calc(100vh-6rem)] z-10 flex-shrink-0">
+            <DocumentRail
+              isOpen={isRailOpen}
+              statuses={statuses}
+              activeId={activeId}
+              onSelect={(id) => {
+                setActiveId(id);
+                if (id !== "witness-statement") setBengaliMode(false);
+              }}
+              onRegenerateAll={handleRegenerate}
             />
-            <PaperCanvas generating={statuses[activeId] === "generating"}>
-              {renderActiveTab()}
-            </PaperCanvas>
           </div>
-        </main>
+        </div>
       </div>
 
       <ErrorDialog

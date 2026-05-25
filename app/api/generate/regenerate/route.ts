@@ -1,4 +1,4 @@
-﻿import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { queryLLM } from "@/lib/llm";
 import { cookies } from "next/headers";
 import { promises as fsPromises } from 'fs';
@@ -89,7 +89,7 @@ Please incorporate these modifications into the generated content while maintain
 
 
         // Update the regenerated content in the database
-        await SocService.upsertSocAnalysis(caseId, { [fieldMap[documentType]]: result.content });
+        await SocService.upsertByCaseId(caseId, { [fieldMap[documentType]]: result.content });
 
         return NextResponse.json({
           content: result.content,

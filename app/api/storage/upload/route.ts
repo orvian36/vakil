@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { v4 as uuidv4 } from "uuid";
 import { cookies } from "next/headers";
 import { documentQueue } from "@/services/documentQueueService";
+import { getCurrentUser } from "@/lib/auth/session";
 
 const { FileService } = await import("@/services/fileService");
 const { uploadFile } = await import("@/lib/storage/upload");
@@ -62,15 +63,14 @@ export async function POST(request: NextRequest) {
       evidenceType
     );
 
-    // Extract userId from X-user-Context header
-    const userContext = request.headers.get("X-user-Context");
-    if (!userContext) {
+    // Extract userId from session
+    const user = await getCurrentUser();
+    if (!user) {
       return NextResponse.json(
-        { success: false, error: "X-user-Context header is missing" },
+        { success: false, error: "Unauthorized" },
         { status: 401 }
       );
     }
-    const user = JSON.parse(userContext);
     const userId = user.id;
 
     // Push to document queue

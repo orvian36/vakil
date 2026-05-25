@@ -386,7 +386,7 @@ Return ONLY the corrected JSON`;
       // Call LLM to fix the JSON
       const llmResponse = await queryLLM({
         prompt: fixPrompt,
-        model: "gemini-2.5-flash",
+        model: "gemini-2.5-pro",
         max_tokens: 4000,
         appName: "vakil",
         task: "fix-split-json-format",
