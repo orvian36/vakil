@@ -1,0 +1,5 @@
+# Tell GitHub Linguist to ignore vendored/generated files for language stats.
+# Docs: https://github.com/github-linguist/linguist/blob/main/docs/overrides.md
+
+# PDF.js worker is a third-party minified library, not our code.
+public/pdf.worker.mjs linguist-vendored
